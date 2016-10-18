@@ -7,11 +7,15 @@ import couchdb
 import os,sys,time
 
 def update_status(p_db,p_usr,p_pwd,tok_id,status):
+    '''Updates the status field of the token with the string held in status
+	and logs the time at which the status changed with the times field as a dictionary
+	If the token is marked as done, the progress field is set as 1
+    '''
     server = couchdb.Server(url="https://picas-lofar.grid.sara.nl:6984")
     server.resource.credentials = (p_usr,p_pwd)
     db = server[p_db]
     token=db[tok_id] 
-    token['status']=status
+    token['status']=status #TODO: create these fields if there's an IndexError
     token['times'][status]=time.time()
     if status=='done':
         try:
