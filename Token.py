@@ -1,9 +1,11 @@
 import sys
 import os
 import ConfigParser
+
 if not 'couchdb' in sys.modules:
     import couchdb
 from couchdb.design import ViewDefinition
+
 import pdb
 import itertools
 
@@ -110,14 +112,20 @@ function(doc) {
        if (doc.lock == 0 && doc.done == 0){
           emit('todo', 1);
        }
-       if(doc.lock > 0 && doc.done == 0) {
-          emit('locked', 1);
+       if(doc.lock > 0 && doc.status=='downloading') {
+          emit('downloading', 1);
        }
-       if(doc.lock > 0 && doc.done > 0 && doc.output == 0) {
+       if(doc.lock > 0 && doc.status=='done') {
           emit('done', 1);
        }
-       if(doc.lock > 0 && doc.done > 0 && doc.output > 0) {
+       if(doc.lock > 0 && doc.status=='error') {
           emit('error', 1);
+       }
+       if(doc.lock > 0 && doc.status=='launched') {
+          emit('waiting', 1);
+       }
+       if(doc.lock > 0 && "starting_generic_pipeline" in doc.times) {
+          emit('running', 1);
        }
    }
 }
@@ -167,6 +175,11 @@ function (key, values, rereduce) {
             if key[0]!="" and document[key[0]]!=key[1]: #make it not just equal
                 continue                        
 
+
+            try:
+                document['status']='todo'
+            except KeyError:
+                pass
             document['lock'] = 0
             document['done'] = 0
             document['scrub_count'] += 1
