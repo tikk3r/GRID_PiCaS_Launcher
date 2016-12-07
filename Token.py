@@ -1,3 +1,20 @@
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2016 Alexandar P. Mechev
+# All rights reserved.
+#
+# This software is licensed as described in the file LICENSE.md, which
+# you should have received as part of this distribution.
+
+"""Python Token Class
+
+>>> th=Token_Handler( t_type="token", srv="https://picas-lofar.grid.sara.nl:6984", uname="apmechev", pwd="alex", dbn="testdb")) 
+>>> th.load_views()
+>>> th.views
+>>> th.reset_tokens(view_name='error')
+>>> th.set_view_to_status(view_name='done','processed')
+"""
+
 import sys
 import os
 import ConfigParser
@@ -10,7 +27,7 @@ from couchdb.design import ViewDefinition
 
 
 __author__ = "Alexandar P. Mechev"
-__copyright__ = ""
+__copyright__ = "2016 Alexandar P. Mechev"
 __credits__ = ["Alexandar P. Mechev", "Natalie Danezi"]
 __license__ = "GPL"
 __version__ = "3.0.0"
@@ -73,7 +90,7 @@ class Token_Handler:
     def append_id(self, keys, app=""):
         keys["_id"] += app
 
-    def get_views(self):
+    def load_views(self):
         """Helper function to get the current views on the database
         """
         db_views = self.db.get("_design/"+self.t_type)
@@ -152,13 +169,13 @@ function (key, values, rereduce) {
         self.views['overview_total'] = overview_total_view
         overview_total_view.sync(self.db)
 
-    def del_view(self, v_name="test_view"):
+    def del_view(self, view_name="test_view"):
         '''Deletes the view with view name from the _design/${token_type} document
             and from the token_Handler's dict of views
         '''
         db_views = self.db.get("_design/"+self.t_type)
-        db_views["views"].pop(v_name, None)
-        self.views.pop(v_name, None)
+        db_views["views"].pop(view_name, None)
+        self.views.pop(view_name, None)
         self.db.update([db_views])
 
     def remove_Error(self):
@@ -220,7 +237,7 @@ function (key, values, rereduce) {
         return os.path.abspath(filename)
 
     def list_tokens_from_view(self, view_name):
-        self.get_views()
+        self.load_views()
         if view_name in self.views:
             view = self.views[view_name]
         else:
@@ -229,11 +246,11 @@ function (key, values, rereduce) {
         v = self.db.view(self.t_type+"/"+view_name)
         return v
 
-    def set_view_to_status(self, view, status):
+    def set_view_to_status(self, view_name, status):
         """Sets the status to all tokens in 'view' to 'status
             eg. Set all locked tokens to error or all error tokens to todo
         """
-        v = self.list_tokens_from_view(view)
+        v = self.list_tokens_from_view(view_name)
         to_update = []
         for x in v:
             document = self.db[x['key']]
