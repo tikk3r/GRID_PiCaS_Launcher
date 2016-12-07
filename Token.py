@@ -10,7 +10,7 @@
 
 >>> th=Token_Handler( t_type="token", srv="https://picas-lofar.grid.sara.nl:6984", uname="apmechev", pwd="alex", dbn="testdb")) 
 >>> th.load_views()
->>> th.views
+>>> th.views.keys()
 >>> th.reset_tokens(view_name='error')
 >>> th.set_view_to_status(view_name='done','processed')
 """
@@ -94,6 +94,9 @@ class Token_Handler:
         """Helper function to get the current views on the database
         """
         db_views = self.db.get("_design/"+self.t_type)
+        if db_views == None:
+            print "No views found in design document"
+            return
         self.views = db_views["views"]
 
     def delete_tokens(self, view_name="test_view", key=["", ""]):
