@@ -12,15 +12,16 @@ def update_status(p_db,p_usr,p_pwd):
     db = server[p_db]
     statuses=[]
     
+    get_dl = '''function(doc) {
+if (doc.status == 'downloading')
+   emit(doc._id, doc._id);
+}'''
 
     while True:
         statuses=[]
         try:
-            for i in db:
-                try:
-                    statuses.append(db[i]['status'])
-                except KeyError:
-                    pass  
+            for row in db.query(get_dl):
+		statuses.append(row.key)
             if len(filter(lambda x: x=='downloading',statuses))<50:
                 sys.exit()
             else:
