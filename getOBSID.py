@@ -33,8 +33,11 @@ class ExampleActor(RunActor):
 
     def process_token(self, key, token):
 	# Print token information
-	location="gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/spectroscopy-migrated/sandbox/sandbox_"+str(sys.argv[2])+"_"+str(token['OBSID'])+".tar"
-	print location
+	if 'SBXloc' in token.keys():
+		location=token['SBXloc']
+	else:
+		location="gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/spectroscopy-migrated/sandbox/sandbox_"+str(sys.argv[2])+"_"+str(token['OBSID'])+".tar"
+	print("Sandbox Location= "+location)
 
 	## TODO: If no globus-tools, use wget
         subprocess.call(["globus-url-copy", location, "sandbox.tar"])
