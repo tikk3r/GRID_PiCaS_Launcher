@@ -10,6 +10,12 @@ def get_token_field(p_db,p_usr,p_pwd,tok_id,fieldname):
 
 
 if __name__ == '__main__':
-    value=get_token_field(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],sys.argv[5])
+    try:
+        dbn=os.environ['PICAS_DB']
+        usr=os.environ['PICAS_USR']
+        passw=os.environ['PICAS_USR_PWD']
+        value=get_token_field(dbn,usr,passw,sys.argv[-2],sys.argv[-1])
+    except:
+       value=get_token_field(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],sys.argv[5])
     print value
  
