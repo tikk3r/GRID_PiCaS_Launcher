@@ -1,7 +1,8 @@
 import couchdb
-import os,sys,time
+import os,sys
+ 
 
-def get_token_field(p_db,p_usr,p_pwd,tok_id,fieldname):
+def get_token_field(tok_id,fieldname,p_db,p_usr,p_pwd):
     server = couchdb.Server(url="https://picas-lofar.grid.sara.nl:6984")
     server.resource.credentials = (p_usr,p_pwd)
     db = server[p_db]
@@ -14,8 +15,8 @@ if __name__ == '__main__':
         dbn=os.environ['PICAS_DB']
         usr=os.environ['PICAS_USR']
         passw=os.environ['PICAS_USR_PWD']
-        value=get_token_field(dbn,usr,passw,sys.argv[-2],sys.argv[-1])
+        value=get_token_field(sys.argv[-2],sys.argv[-1],dbn,usr,passw)
     except:
-       value=get_token_field(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],sys.argv[5])
+       value=get_token_field(sys.argv[4],sys.argv[5],sys.argv[1],sys.argv[2],sys.argv[3])
     print value
  
