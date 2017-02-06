@@ -51,7 +51,7 @@ class ExampleActor(RunActor):
         print("Sandbox Location= "+location)
     
         ## TODO: If no globus-tools, use wget
-            subprocess.call(["globus-url-copy", location, "sandbox.tar"])
+        subprocess.call(["globus-url-copy", location, "sandbox.tar"])
         subprocess.call(["tar", "-xf", "sandbox.tar","-C",".","--strip-components=1"])
         subprocess.call(["chmod","a+x","master.sh"])
     
