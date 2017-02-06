@@ -12,7 +12,7 @@
 # ===================================================================================== #
 
 #python imports
-import sys
+import sys,os
 import time
 import couchdb
 import subprocess
