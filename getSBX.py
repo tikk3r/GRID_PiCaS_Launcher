@@ -52,7 +52,7 @@ class ExampleActor(RunActor):
     
         ## TODO: If no globus-tools, use wget
         subprocess.call(["globus-url-copy", location, "sandbox.tar"])
-        subprocess.call(["tar", "-xf", "sandbox.tar","-C",".","--strip-components=1"])
+        subprocess.call(["tar", "-xf", "sandbox.tar"])
         subprocess.call(["chmod","a+x","master.sh"])
     
         print "Working on token: " + token['_id']
