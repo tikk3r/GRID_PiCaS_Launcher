@@ -21,8 +21,8 @@ import ConfigParser
 import pdb
 import itertools
 
-if 'couchdb' not in sys.modules:
-    import couchdb
+
+import couchdb
 from couchdb.design import ViewDefinition
 
 
