@@ -1,6 +1,7 @@
 #!/bin/env python 
 import sys,os
 import Token
+import couchdb
 from get_token_field import get_token_field
 
 try:
