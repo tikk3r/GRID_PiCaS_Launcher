@@ -38,7 +38,6 @@ class ExampleActor(RunActor):
 
     def process_token(self, key, token):
     # Print token information
-
     os.environ['PICAS_DB']=str(sys.argv[1])
     os.environ['PICAS_USR']=str(sys.argv[2])
     os.environ['PICAS_USR_PWD']=str(sys.argv[3])
