@@ -70,6 +70,8 @@ class ExampleActor(RunActor):
         
         out = execute(command,shell=True)
         print 'exit status is ',out
+        set_token_field(tok_id=token['_id'],fieldname='output',value=out[0],p_db=os.environ['PICAS_DB'],p_usr=os.environ['PICAS_USR'],p_pwd=os.environ['PICAS_USR_PWD'])
+
         curdate=time.strftime("%d/%m/%Y_%H:%M:%S_")
         try:
            logsout = "logs_out"
@@ -81,6 +83,20 @@ class ExampleActor(RunActor):
         except:
            pass
 
+        #Just attaches all png files in the working directory to the token
+        sols_search=subprocess.Popen(["find",".","-name","*.png"],stdout=subprocess.PIPE)
+        result=sols_search.communicate()[0]
+
+        for png in result.split():
+            try:
+                self.client.db.put_attachment(token,open(os.path.basename(png),'r'),os.path.split(png)[1])
+                time.sleep(10)
+            except:
+                print "error attaching "+png
+        #try reuploading the last png (for some reason last png corrupts>)
+        #self.client.db.put_attachment(token,open(os.path.basename(png),'r'),os.path.split(png)[1])
+        # Attach logs in token
+	self.modifier.close()
         return
 
         
