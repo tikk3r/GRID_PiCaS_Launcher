@@ -70,7 +70,17 @@ class ExampleActor(RunActor):
         
         out = execute(command,shell=True)
         print 'exit status is ',out
-    
+        curdate=time.strftime("%d/%m/%Y_%H:%M:%S_")
+        try:
+           logsout = "logs_out"
+           log_handle = open(logsout, 'rb')
+           self.client.db.put_attachment(token,log_handle,curdate+logsout)
+           logserr = "logs_.err"
+           log_handle = open(logserr, 'rb')
+           self.client.db.put_attachment(token,log_handle,curdate+logserr)
+        except:
+           pass
+
         return
 
         
