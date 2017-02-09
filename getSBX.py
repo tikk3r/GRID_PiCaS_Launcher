@@ -73,6 +73,9 @@ class ExampleActor(RunActor):
         set_token_field(tok_id=token['_id'],fieldname='output',value=out[0],p_db=os.environ['PICAS_DB'],p_usr=os.environ['PICAS_USR'],p_pwd=os.environ['PICAS_USR_PWD'])
         if out[0]=='0':
             set_token_field(tok_id=token['_id'],fieldname='status',value='done',p_db=os.environ['PICAS_DB'],p_usr=os.environ['PICAS_USR'],p_pwd=os.environ['PICAS_USR_PWD'])
+        else:
+            set_token_field(tok_id=token['_id'],fieldname='status',value='error',p_db=os.environ['PICAS_DB'],p_usr=os.environ['PICAS_USR'],p_pwd=os.environ['PICAS_USR_PWD'])
+
         curdate=time.strftime("%d/%m/%Y_%H:%M:%S_")
         try:
            logsout = "logs_out"
