@@ -71,7 +71,8 @@ class ExampleActor(RunActor):
         out = execute(command,shell=True)
         print 'exit status is ',out
         set_token_field(tok_id=token['_id'],fieldname='output',value=out[0],p_db=os.environ['PICAS_DB'],p_usr=os.environ['PICAS_USR'],p_pwd=os.environ['PICAS_USR_PWD'])
-
+        if out[0]=='0':
+            set_token_field(tok_id=token['_id'],fieldname='status',value='done',p_db=os.environ['PICAS_DB'],p_usr=os.environ['PICAS_USR'],p_pwd=os.environ['PICAS_USR_PWD'])
         curdate=time.strftime("%d/%m/%Y_%H:%M:%S_")
         try:
            logsout = "logs_out"
@@ -96,7 +97,7 @@ class ExampleActor(RunActor):
         #try reuploading the last png (for some reason last png corrupts>)
         #self.client.db.put_attachment(token,open(os.path.basename(png),'r'),os.path.split(png)[1])
         # Attach logs in token
-	self.modifier.close()
+    self.modifier.close()
         return
 
         
