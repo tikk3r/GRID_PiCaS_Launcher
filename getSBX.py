@@ -42,7 +42,8 @@ class ExampleActor(RunActor):
         os.environ['PICAS_USR']=str(sys.argv[2])
         os.environ['PICAS_USR_PWD']=str(sys.argv[3])
         os.environ['TOKEN']=token['_id']
-    
+        
+        token_name=token['_id'] 
         if 'SBXloc' in token.keys():
             location=token['SBXloc']
         else:
@@ -80,10 +81,10 @@ class ExampleActor(RunActor):
         try:
            logsout = "logs_out"
            log_handle = open(logsout, 'rb')
-           self.client.db.put_attachment(token,log_handle,curdate+logsout)
+           self.client.db.put_attachment(token_name,log_handle,curdate+logsout)
            logserr = "logs_.err"
            log_handle = open(logserr, 'rb')
-           self.client.db.put_attachment(token,log_handle,curdate+logserr)
+           self.client.db.put_attachment(token_name,log_handle,curdate+logserr)
         except:
            pass
 
@@ -93,14 +94,14 @@ class ExampleActor(RunActor):
 
         for png in result.split():
             try:
-                self.client.db.put_attachment(token,open(os.path.basename(png),'r'),os.path.split(png)[1])
+                self.client.db.put_attachment(token_name,open(os.path.basename(png),'r'),os.path.split(png)[1])
                 time.sleep(10)
             except:
                 print "error attaching "+png
         #try reuploading the last png (for some reason last png corrupts>)
         #self.client.db.put_attachment(token,open(os.path.basename(png),'r'),os.path.split(png)[1])
         # Attach logs in token
-        self.modifier.close()
+        self.modifier.close(token)
         return
 
         
