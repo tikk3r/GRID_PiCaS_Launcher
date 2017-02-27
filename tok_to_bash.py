@@ -17,7 +17,7 @@ def export_tok_keys(cfgfile='tokvar.cfg'):
     pwd=os.environ['PICAS_USR_PWD']
     for key in tokvar:
         if isinstance(tokvar[key],basestring):
-            picas_val=srt(get_token_field(os.environ['TOKEN'],key,db,un,pwd))
+            picas_val=str(get_token_field(os.environ['TOKEN'],key,db,un,pwd))
             os.environ[tokvar[key].split('$')[1]]=picas_val
         elif key=='_attachments':
             t_type=get_token_field(os.environ['TOKEN'],'type',db,un,pwd)
