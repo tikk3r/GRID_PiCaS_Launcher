@@ -27,9 +27,11 @@ from picas.executers import execute
 
 from update_token_status import update_status
 from set_token_field import set_token_field
+from upload_attachment import upload_attachment
 
 from tok_to_bash import  export_tok_keys
 
+import pdb
 class ExampleActor(RunActor):
     def __init__(self, iterator, modifier):
         self.iterator = iterator
@@ -42,7 +44,10 @@ class ExampleActor(RunActor):
         os.environ['PICAS_USR']=str(sys.argv[2])
         os.environ['PICAS_USR_PWD']=str(sys.argv[3])
         os.environ['TOKEN']=token['_id']
-        
+
+        p_db=os.environ['PICAS_DB']
+        p_usr=os.environ['PICAS_USR']
+        p_pwd=os.environ['PICAS_USR_PWD']
         token_name=token['_id'] 
         if 'SBXloc' in token.keys():
             location=token['SBXloc']
@@ -62,7 +67,7 @@ class ExampleActor(RunActor):
         export_tok_keys('tokvar.cfg')
     
         ## Read tokvar values from token and write to bash variables if not already exist! Save attachments and export abs filename to variable
-        set_token_field(tok_id=token['_id'],fieldname='status',value='launched',p_db=os.environ['PICAS_DB'],p_usr=os.environ['PICAS_USR'],p_pwd=os.environ['PICAS_USR_PWD'])
+        set_token_field(token['_id'],'status','launched',p_db,p_usr,p_pwd)
     
         #The launched script is simply master.sh with token and picas authen stored in env vars
         #master.sh takes the variables straight from the token. 
@@ -71,22 +76,19 @@ class ExampleActor(RunActor):
         
         out = execute(command,shell=True)
         print 'exit status is ',out
-        set_token_field(tok_id=token['_id'],fieldname='output',value=out[0],p_db=os.environ['PICAS_DB'],p_usr=os.environ['PICAS_USR'],p_pwd=os.environ['PICAS_USR_PWD'])
+        set_token_field(token['_id'],'output',out[0],p_db,p_usr,p_pwd)
         if out[0]==0:
-            set_token_field(tok_id=token['_id'],fieldname='status',value='done',p_db=os.environ['PICAS_DB'],p_usr=os.environ['PICAS_USR'],p_pwd=os.environ['PICAS_USR_PWD'])
+            set_token_field(token['_id'],'status','done',p_db,p_usr,p_pwd)
         else:
-            set_token_field(tok_id=token['_id'],fieldname='status',value='error',p_db=os.environ['PICAS_DB'],p_usr=os.environ['PICAS_USR'],p_pwd=os.environ['PICAS_USR_PWD'])
-
-        curdate=time.strftime("%d/%m/%Y_%H:%M:%S_")
+            set_token_field(token['_id'],'status','error',p_db,p_usr,p_pwd)
+        pdb.set_trace()
         try:
            logsout = "logs_out"
-           log_handle = open(logsout, 'rb')
-           self.client.db.put_attachment(token_name,log_handle,curdate+logsout)
+           upload_attachment(token['id'],logsout,p_db,p_usr,p_pwd)
            logserr = "logs_.err"
-           log_handle = open(logserr, 'rb')
-           self.client.db.put_attachment(token_name,log_handle,curdate+logserr)
+           upload_attachment(token['id'],logserr,p_db,p_usr,p_pwd)
         except:
-           pass
+           print "uploading of logs failed"
 
         #Just attaches all png files in the working directory to the token
         sols_search=subprocess.Popen(["find",".","-name","*.png"],stdout=subprocess.PIPE)
@@ -94,8 +96,8 @@ class ExampleActor(RunActor):
 
         for png in result.split():
             try:
-                self.client.db.put_attachment(token_name,open(os.path.basename(png),'r'),os.path.split(png)[1])
-                time.sleep(10)
+                upload_attachment(token['id'],png,p_db,p_usr,p_pwd)
+                time.sleep(2)
             except:
                 print "error attaching "+png
         #try reuploading the last png (for some reason last png corrupts>)
