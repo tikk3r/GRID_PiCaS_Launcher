@@ -81,14 +81,14 @@ class ExampleActor(RunActor):
             set_token_field(token['_id'],'status','done',p_db,p_usr,p_pwd)
         else:
             set_token_field(token['_id'],'status','error',p_db,p_usr,p_pwd)
-        pdb.set_trace()
+        
         try:
            logsout = "logs_out"
            upload_attachment(token['_id'],logsout,p_db,p_usr,p_pwd)
            logserr = "logs_.err"
            upload_attachment(token['_id'],logserr,p_db,p_usr,p_pwd)
         except:
-           pdb.set_trace()
+           pass
 
         #Just attaches all png files in the working directory to the token
         sols_search=subprocess.Popen(["find",".","-name","*.png"],stdout=subprocess.PIPE)
