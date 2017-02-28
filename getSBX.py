@@ -84,11 +84,11 @@ class ExampleActor(RunActor):
         pdb.set_trace()
         try:
            logsout = "logs_out"
-           upload_attachment(token['id'],logsout,p_db,p_usr,p_pwd)
+           upload_attachment(token['_id'],logsout,p_db,p_usr,p_pwd)
            logserr = "logs_.err"
-           upload_attachment(token['id'],logserr,p_db,p_usr,p_pwd)
+           upload_attachment(token['_id'],logserr,p_db,p_usr,p_pwd)
         except:
-           print "uploading of logs failed"
+           pdb.set_trace()
 
         #Just attaches all png files in the working directory to the token
         sols_search=subprocess.Popen(["find",".","-name","*.png"],stdout=subprocess.PIPE)
@@ -96,7 +96,7 @@ class ExampleActor(RunActor):
 
         for png in result.split():
             try:
-                upload_attachment(token['id'],png,p_db,p_usr,p_pwd)
+                upload_attachment(token['_id'],png,p_db,p_usr,p_pwd)
                 time.sleep(2)
             except:
                 print "error attaching "+png

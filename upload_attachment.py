@@ -1,5 +1,7 @@
 import couchdb
 import os,sys,time
+from picas.clients import CouchClient
+
 
 def upload_attachment(tok_id,attachment,p_db,p_usr,p_pwd):
     server = couchdb.Server(url="https://picas-lofar.grid.sara.nl:6984")
@@ -7,8 +9,9 @@ def upload_attachment(tok_id,attachment,p_db,p_usr,p_pwd):
     db = server[p_db]
     token=db[tok_id]
     currdate=time.strftime("%d/%m/%Y_%H.%M.%S_")
-    self.client.db.put_attachment(token,open(attachment,'rb'),currdate+attachment)
-    db.update([token])
+    client = CouchClient(url="https://picas-lofar.grid.sara.nl:6984", db=p_db, username=p_usr, password=p_pwd)
+    client.db.put_attachment(token,open(attachment,'rb'),currdate+attachment)
+
 
 
 if __name__ == '__main__':
