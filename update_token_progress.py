@@ -32,7 +32,7 @@ def progress_loop(db,uname,paswd,tok_id,outfile='ouptput',parset="Pre-Facet-Cali
 
 
 def get_steps(outfile='output'):
-    p_grep=subprocess.Popen(['grep','Launching',outfile],stdout=subprocess.PIPE)
+    p_grep=subprocess.Popen(['grep','Beginning',outfile],stdout=subprocess.PIPE)
     grep_results=p_grep.communicate()[0].split('\n')
     results=[]
     for line in grep_results:
