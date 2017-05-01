@@ -86,12 +86,10 @@ class ExampleActor(RunActor):
         
 	
 	os.chdir(RUNDIR)
-        curdate=time.strftime("%d/%m/%Y_%H.%M.%S_")
-
         try:
-           logsout = curdate+"logs_out"
+           logsout = "logs_out"
            upload_attachment(token['_id'],logsout,p_db,p_usr,p_pwd)
-           logserr = curdate+"logs_.err"
+           logserr = "logs_.err"
            upload_attachment(token['_id'],logserr,p_db,p_usr,p_pwd)
         except:
            pass
