@@ -67,8 +67,10 @@ class ExampleActor(RunActor):
         export_tok_keys('tokvar.cfg')
     
         ## Read tokvar values from token and write to bash variables if not already exist! Save attachments and export abs filename to variable
+
         set_token_field(token['_id'],'status','launched',p_db,p_usr,p_pwd)
-    
+	RUNDIR=os.getcdw()    
+
         #The launched script is simply master.sh with token and picas authen stored in env vars
         #master.sh takes the variables straight from the token. 
         command = "/usr/bin/time -v ./master.sh 2> logs_.err 1> logs_out"
@@ -82,16 +84,20 @@ class ExampleActor(RunActor):
         else:
             set_token_field(token['_id'],'status','error',p_db,p_usr,p_pwd)
         
+	
+	os.chdir(RUNDIR)
+        curdate=time.strftime("%d/%m/%Y_%H.%M.%S_")
+
         try:
-           logsout = "logs_out"
+           logsout = curdate+"logs_out"
            upload_attachment(token['_id'],logsout,p_db,p_usr,p_pwd)
-           logserr = "logs_.err"
+           logserr = curdate+"logs_.err"
            upload_attachment(token['_id'],logserr,p_db,p_usr,p_pwd)
         except:
            pass
 
         #Just attaches all png files in the working directory to the token
-        sols_search=subprocess.Popen(["find",".","-name","*.png"],stdout=subprocess.PIPE)
+        sols_search=subprocess.Popen(["find",".","-name","'*.png'","-o","-name","'*.fits'"],stdout=subprocess.PIPE)
         result=sols_search.communicate()[0]
 
         for png in result.split():
