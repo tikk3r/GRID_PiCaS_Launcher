@@ -69,7 +69,7 @@ class ExampleActor(RunActor):
         ## Read tokvar values from token and write to bash variables if not already exist! Save attachments and export abs filename to variable
 
         set_token_field(token['_id'],'status','launched',p_db,p_usr,p_pwd)
-	RUNDIR=os.getcdw()    
+	RUNDIR=os.getcwd()    
 
         #The launched script is simply master.sh with token and picas authen stored in env vars
         #master.sh takes the variables straight from the token. 
