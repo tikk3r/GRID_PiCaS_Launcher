@@ -37,7 +37,7 @@ import urllib
 
 try:    
     from urlparse import urlsplit, urlunsplit
-except ImportErrorL
+except ImportError:
     from urllib.parse import urlsplit, urlunsplit
 
 from email.Utils import parsedate
