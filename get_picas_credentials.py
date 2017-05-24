@@ -53,7 +53,7 @@ class picas_cred():
         if self.database:
             environ['PICAS_DB']=self.database
         else: environ['PICAS_DB']=self.database
-        return self.get_picas_creds()
+        return #self.get_picas_creds()
 
     def put_creds_in_file(self,pic_file="~/.picasrc"):
         with open(expanduser(pic_file),'w') as file:
