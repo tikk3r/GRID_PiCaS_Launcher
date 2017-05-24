@@ -5,19 +5,22 @@ from os import environ, chmod
 class picas_cred():
 
     def __init__(self,source=None,usr=None,pwd=None,dbn=None):
-        if usr==None or pwd==None and dbn!=None:
-            if isfile(expanduser('~/.picasrc')):
-                self.get_picas_creds()
-            else:
-                if source:
-                    self.get_picas_creds_from_file(source)
+        if source:
+            self.get_picas_creds_from_file(pic_file=source) 
+        elif usr==None or pwd==None and dbn!=None:
+                if isfile(expanduser('~/.picasrc')):
+                    self.get_picas_creds()
                 else:
                     self.get_picas_creds_from_env()
+        else:
+            self.user=usr
+            self.passw=pwd
+            self.database=dbn
 
 
     def get_picas_creds_from_file(self,pic_file='~/.picasrc'):
         with open(expanduser(pic_file),'r') as file:
-            print(datetime.datetime.now(), "picas_credentials: Parsing user credentials from", expanduser("~/.picasrc"))
+            print(datetime.datetime.now(), "picas_credentials: Parsing user credentials from", expanduser(pic_file))
             for line in file:
                 if line.startswith("user"):
                     self.user = line.split('=')[1].strip()
@@ -30,7 +33,7 @@ class picas_cred():
         try:
             self.user=environ['PICAS_USR']
             self.passw=environ['PICAS_USR_PWD']
-            self.database=environ['PICAS_USR_DB']
+            self.database=environ['PICAS_DB']
         except KeyError:
             print("PICAS Variable not in ENV!") 
    
@@ -41,14 +44,16 @@ class picas_cred():
             return self.get_picas_creds_from_file()
     
     def put_picas_creds_in_env(self,picas_db=None):
-        creds=get_picas_creds()
+#        creds=self.get_picas_creds()  #Possibly breaks
         if picas_db:
             self.database=picas_db
             creds['PICAS_DB']=picas_db
         environ['PICAS_USR']=self.user
         environ['PICAS_USR_PWD']=self.passw
-        environ['PICAS_DB']=self.database if self.database else creds['PICAS_DB']
-        return get_picas_creds()
+        if self.database:
+            environ['PICAS_DB']=self.database
+        else: environ['PICAS_DB']=self.database
+        return self.get_picas_creds()
 
     def put_creds_in_file(self,pic_file="~/.picasrc"):
         with open(expanduser(pic_file),'w') as file:
