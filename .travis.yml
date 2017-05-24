@@ -6,14 +6,6 @@ python:
   - "3.4"
   - "3.5"
 # command to install dependencies
-install:
-  - pip install -U pip codacy-coverage
-  - pip install -U ".[test]"
 script:
   - nosetests
-  - coverage run -m pytest --flake8
-after_script:
-  - coverage report
-  - coverage xml
-  - python-codacy-coverage -r coverage.xml
 # # command to run tests
