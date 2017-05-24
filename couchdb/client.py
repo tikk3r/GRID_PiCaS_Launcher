@@ -39,7 +39,7 @@ __docformat__ = 'restructuredtext en'
 
 
 DEFAULT_BASE_URL = os.environ.get('COUCHDB_URL', 'http://localhost:5984/')
-
+#DEFAULT_BASE_URL = "https://picas-lofar.grid.sara.nl:6984"
 
 class Server(object):
     """Representation of a CouchDB server.

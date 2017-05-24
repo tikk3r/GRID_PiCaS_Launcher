@@ -87,7 +87,7 @@ class MultiKeyViewIterator(ViewIterator):
     def get_view_keys(self):
         try:
             self.keys = self.key_iterator.next()
-            print self.keys
+            print(self.keys)
         except:
             raise StopIteration
     

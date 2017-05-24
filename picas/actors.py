@@ -58,7 +58,7 @@ class RunActor(object):
         """
         modification = ()
         for k, v in token.iteritems():
-            print k, v
+            print(k, v)
         raise NotImplementedError
         return modification
 
