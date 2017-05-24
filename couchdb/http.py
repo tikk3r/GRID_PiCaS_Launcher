@@ -42,8 +42,10 @@ try:
     from urlparse import urlsplit, urlunsplit
 except ImportError:
     from urllib.parse import urlsplit, urlunsplit
-
-from email.Utils import parsedate
+try:
+    from email.Utils import parsedate
+except ImportError:
+    from email.utils import parsedate
 
 from couchdb import json
 
