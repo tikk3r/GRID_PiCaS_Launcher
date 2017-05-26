@@ -595,7 +595,11 @@ def extract_credentials(url):
 
 def basic_auth(credentials):
     if credentials:
-        return 'Basic %s' % b64encode('%s:%s' % credentials)
+        if bytes!=str:
+            creds=bytes(credentials)
+        else :
+            creds=credentials
+        return 'Basic %s' % b64encode('%s:%s' % creds)
 
 
 def quote(string, safe=''):
