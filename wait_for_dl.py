@@ -27,7 +27,7 @@ if (doc.status == 'downloading')
             else:
                 time.sleep(39.87654321)
         except couchdb.http.ServerError:
-            print "couchDB threw ServerError"
+            print("couchDB threw ServerError")
             time.sleep(30)
 
 if __name__ == '__main__':

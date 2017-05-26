@@ -22,7 +22,7 @@ def update_freq(p_db,p_usr,p_pwd,tok_id,freq):
         token['FREQ']=freq
     token['ABN']=A_SBN
     db.update([token]) 
-    print A_SBN
+    print(A_SBN)
 
 if __name__ == '__main__':
     update_freq(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],sys.argv[5])

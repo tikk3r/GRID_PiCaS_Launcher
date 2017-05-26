@@ -63,7 +63,7 @@ class ExampleActor(RunActor):
         subprocess.call(["tar", "-xf", "sandbox.tar"])
         subprocess.call(["chmod","a+x","master.sh"])
     
-        print "Working on token: " + token['_id']
+        print("Working on token: " + token['_id'])
     
         tok_att=token["_attachments"].keys()
         export_tok_keys('tokvar.cfg')
@@ -76,10 +76,10 @@ class ExampleActor(RunActor):
         #The launched script is simply master.sh with token and picas authen stored in env vars
         #master.sh takes the variables straight from the token. 
         command = "/usr/bin/time -v ./master.sh 2> logs_.err 1> logs_out"
-        print command
+        print("executing "+command)
         
         out = execute(command,shell=True)
-        print 'exit status is ',out
+        print('exit status is '+out)
         set_token_field(token['_id'],'output',out[0],p_db,p_usr,p_pwd)
         if out[0]==0:
             set_token_field(token['_id'],'status','done',p_db,p_usr,p_pwd)
@@ -105,7 +105,7 @@ class ExampleActor(RunActor):
                 upload_attachment(token['_id'],png,p_db,p_usr,p_pwd)
                 time.sleep(2)
             except:
-                print "error attaching "+png
+                print("error attaching "+png)
         #try reuploading the last png (for some reason last png corrupts>)
         #self.client.db.put_attachment(token,open(os.path.basename(png),'r'),os.path.split(png)[1])
         # Attach logs in token

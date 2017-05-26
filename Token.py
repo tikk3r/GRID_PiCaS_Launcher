@@ -95,7 +95,7 @@ class Token_Handler:
         """
         db_views = self.db.get("_design/"+self.t_type)
         if db_views == None:
-            print "No views found in design document"
+            print("No views found in design document")
             return
         self.views = db_views["views"]
 
@@ -114,7 +114,7 @@ class Token_Handler:
             else:
                 if not document[key[0]] == key[1]:
                     continue
-            print "Deleting Token "+x['id']
+            print("Deleting Token "+x['id'])
             self.db.delete(document)
         #    self.tokens.pop(x['id'])
         # TODO:Pop tokens from self
@@ -228,7 +228,7 @@ function (key, values, rereduce) {
         try:
             attach = self.db.get_attachment(token, filename).read()
         except AttributeError:
-            print "error getting attachment"
+            print("error getting attachment")
             return ""
         if "/" in filename:
             savename = filename.replace("/", "_")
@@ -244,7 +244,7 @@ function (key, values, rereduce) {
         if view_name in self.views:
             view = self.views[view_name]
         else:
-            print "View Named "+view_name+" Doesn't exist"
+            print("View Named "+view_name+" Doesn't exist")
             return
         v = self.db.view(self.t_type+"/"+view_name)
         return v

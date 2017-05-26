@@ -18,7 +18,7 @@ def progress_loop(db,uname,paswd,tok_id,outfile='ouptput',parset="Pre-Facet-Cali
     p=subprocess.Popen(['pgrep','-u',os.environ["USER"],'-f','genericpipeline.py'],stdout=subprocess.PIPE)
     running=p.communicate()[0]
     finished_steps=[]
-    print start
+    print(start)
     while len(running)>0 or time.time()-start<60:
         time.sleep(10)
         steps=get_steps(outfile)
