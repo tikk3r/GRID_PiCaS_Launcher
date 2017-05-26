@@ -8,6 +8,7 @@ try:
     import yaml
 except ImportError:
     sys.path.append('compat')
+    sys.path.append('compat/yaml')
     import yaml
 
 def export_tok_keys(cfgfile='tokvar.cfg',token=None):
