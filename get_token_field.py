@@ -18,5 +18,5 @@ if __name__ == '__main__':
         value=get_token_field(sys.argv[-2],sys.argv[-1],dbn,usr,passw)
     except:
        value=get_token_field(sys.argv[4],sys.argv[5],sys.argv[1],sys.argv[2],sys.argv[3])
-    print value
+    print(value)
  
