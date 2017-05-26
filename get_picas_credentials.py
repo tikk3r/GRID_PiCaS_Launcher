@@ -14,7 +14,7 @@ class picas_cred():
                     self.get_picas_creds_from_env()
         else:
             self.user=usr
-            self.passw=pwd
+            self.password=pwd
             self.database=dbn
 
 
@@ -25,14 +25,14 @@ class picas_cred():
                 if line.startswith("user"):
                     self.user = line.split('=')[1].strip()
                 if line.startswith("password"):
-                    self.passw = line.split('=')[1].strip()
+                    self.password = line.split('=')[1].strip()
                 if line.startswith("database"):
                     self.database = line.split('=')[1].strip()
     
     def get_picas_creds_from_env(self):
         try:
             self.user=environ['PICAS_USR']
-            self.passw=environ['PICAS_USR_PWD']
+            self.password=environ['PICAS_USR_PWD']
             self.database=environ['PICAS_DB']
         except KeyError:
             print("PICAS Variable not in ENV!") 
@@ -49,7 +49,7 @@ class picas_cred():
             self.database=picas_db
             creds['PICAS_DB']=picas_db
         environ['PICAS_USR']=self.user
-        environ['PICAS_USR_PWD']=self.passw
+        environ['PICAS_USR_PWD']=self.password
         if self.database:
             environ['PICAS_DB']=self.database
         else: environ['PICAS_DB']=self.database
@@ -58,10 +58,10 @@ class picas_cred():
     def put_creds_in_file(self,pic_file="~/.picasrc"):
         with open(expanduser(pic_file),'w') as file:
             file.write("user="+str(self.user)+"\n")
-            file.write("password="+str(self.passw)+"\n")
+            file.write("password="+str(self.password)+"\n")
             file.write("database="+str(self.database)+"\n")
         chmod(expanduser(pic_file),384)
 
     def return_credentials(self):
-        return {'user':self.user, 'password':self.passw,'database':self.database}
+        return {'user':self.user, 'password':self.password,'database':self.database}
         
