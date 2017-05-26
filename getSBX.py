@@ -25,11 +25,12 @@ from picas.iterators import BasicViewIterator
 from picas.modifiers import BasicTokenModifier
 from picas.executers import execute
 
+#token imports
 from update_token_status import update_status
 from set_token_field import set_token_field
 from upload_attachment import upload_attachment
 
-from tok_to_bash import  export_tok_keys
+#from tok_to_bash import  export_tok_keys
 
 import pdb
 class ExampleActor(RunActor):
@@ -44,6 +45,7 @@ class ExampleActor(RunActor):
         os.environ['PICAS_USR']=str(sys.argv[2])
         os.environ['PICAS_USR_PWD']=str(sys.argv[3])
         os.environ['TOKEN']=token['_id']
+        from tok_to_bash import  export_tok_keys
 
         p_db=os.environ['PICAS_DB']
         p_usr=os.environ['PICAS_USR']
