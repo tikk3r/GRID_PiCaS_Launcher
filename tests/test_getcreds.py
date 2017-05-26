@@ -31,7 +31,7 @@ class getcredstest(unittest.TestCase):
         pc1=pc.picas_cred()
         pc1.get_picas_creds_from_env()
         self.assertTrue(pc1.user==self.d_usr)
-        self.assertTrue(pc1.passw==self.d_pwd)
+        self.assertTrue(pc1.password==self.d_pwd)
         self.assertTrue(pc1.database==self.d_dbn)
 
     def test_readfile_vars(self):
@@ -43,7 +43,7 @@ class getcredstest(unittest.TestCase):
         pc2=pc.picas_cred(source=testfile)
         pc2.get_picas_creds_from_file(testfile)
         self.assertTrue(pc2.user==self.d_usr)
-        self.assertTrue(pc2.passw==self.d_pwd)
+        self.assertTrue(pc2.password==self.d_pwd)
         self.assertTrue(pc2.database==self.d_dbn)
 
     def test_put_creds_in_env(self):
@@ -62,7 +62,7 @@ class getcredstest(unittest.TestCase):
         pc2.put_creds_in_file(testfile)
         pc3=pc.picas_cred(source=testfile)  
         self.assertTrue(pc3.user==self.d_usr)
-        self.assertTrue(pc3.passw==self.d_pwd)
+        self.assertTrue(pc3.password==self.d_pwd)
         self.assertTrue(pc3.database==self.d_dbn)
         self.orig_pc.put_creds_in_file()
 
