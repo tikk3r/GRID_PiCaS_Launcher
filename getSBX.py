@@ -79,7 +79,7 @@ class ExampleActor(RunActor):
         print("executing "+command)
         
         out = execute(command,shell=True)
-        print('exit status is '+out)
+        print('exit status is '+str(out))
         set_token_field(token['_id'],'output',out[0],p_db,p_usr,p_pwd)
         if out[0]==0:
             set_token_field(token['_id'],'status','done',p_db,p_usr,p_pwd)
