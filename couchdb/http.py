@@ -36,7 +36,10 @@ try:
 except ImportError:
     from dummy_threading import Lock
 
-import urllib
+try: 
+    import urllib.parse as urllib
+except ImportError:
+    import urllib
 
 try:    
     from urlparse import urlsplit, urlunsplit
