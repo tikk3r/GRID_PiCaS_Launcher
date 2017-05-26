@@ -597,9 +597,10 @@ def basic_auth(credentials):
     if credentials:
         if bytes!=str:
             creds=(bytearray(credentials[0],'utf-8'),bytearray(credentials[1],'utf-8'))
+            return 'Basic %s' % b64encode('%s:%s' % creds)
         else :
             creds=credentials
-        return 'Basic %s' % b64encode('%s:%s' % creds)
+            return 'Basic %s' % b64encode(('%s:%s' % creds).encode())
 
 
 def quote(string, safe=''):
