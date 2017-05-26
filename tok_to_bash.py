@@ -23,7 +23,7 @@ def export_tok_keys(cfgfile='tokvar.cfg',token=None):
             t_type=get_token_field(token['_id'],'type',db,un,pwd)
             th=Token.Token_Handler(t_type=t_type,uname=un,pwd=pwd,dbn=db)
             for att_file in tokvar['_attachments']:
-                th.get_attachment(token['_id'],att_file,savename=att_file) 
+                th.get_attachment(token,att_file,savename=att_file) 
                 if '$' in tokvar['_attachments'][att_file]:
                     os.environ[tokvar['_attachments'][att_file].split('$')[1]]=att_file
 
