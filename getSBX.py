@@ -66,7 +66,7 @@ class ExampleActor(RunActor):
         print("Working on token: " + token['_id'])
     
         tok_att=token["_attachments"].keys()
-        export_tok_keys('tokvar.cfg')
+        export_tok_keys('tokvar.cfg',token)
     
         ## Read tokvar values from token and write to bash variables if not already exist! Save attachments and export abs filename to variable
 
