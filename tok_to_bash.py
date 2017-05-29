@@ -1,6 +1,5 @@
 #!/bin/env python 
 import sys,os
-import Token
 import couchdb
 from get_token_field import get_token_field
 
@@ -11,20 +10,37 @@ except ImportError:
     sys.path.append('compat/yaml')
     import yaml
 
+def get_attachment(db,token, filename, savename=None):
+    try:
+        attach = db.get_attachment(token, filename).read()
+    except AttributeError:
+        print("error getting attachment")
+        return ""
+    if "/" in filename:
+        savename = filename.replace("/", "_")
+    if not savename:
+        savename = filename
+    with open(savename, 'w') as f:
+        for line in attach:
+            f.write(line)
+    return os.path.abspath(filename)
+
+
 def export_tok_keys(cfgfile='tokvar.cfg',token=None):
     tokvar=yaml.load(open(cfgfile,'rb'))
-    db=os.environ['PICAS_DB']
+    dbn=os.environ['PICAS_DB']
     un=os.environ['PICAS_USR']
     pwd=os.environ['PICAS_USR_PWD']
+    server = couchdb.Server("https://picas-lofar.grid.sara.nl:6984")
+    server.resource.credentials = (un, pwd)
+    db = server[dbn]
     for key in tokvar:
         if isinstance(tokvar[key],str):
-            picas_val=str(get_token_field(token['_id'],key,db,un,pwd))
+            picas_val=str(get_token_field(token['_id'],key,dbn,un,pwd))
             os.environ[tokvar[key].split('$')[1]]=picas_val
         elif key=='_attachments':
-            t_type=get_token_field(token['_id'],'type',db,un,pwd)
-            th=Token.Token_Handler(t_type=t_type,uname=un,pwd=pwd,dbn=db)
             for att_file in tokvar['_attachments']:
-                th.get_attachment(token,att_file,savename=att_file) 
+                get_attachment(db,token,att_file,savename=att_file) 
                 if '$' in tokvar['_attachments'][att_file]:
                     os.environ[tokvar['_attachments'][att_file].split('$')[1]]=att_file
 
