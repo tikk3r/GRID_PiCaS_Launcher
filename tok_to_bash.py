@@ -22,7 +22,7 @@ def get_attachment(db,token, filename, savename=None):
         savename = filename
     with open(savename, 'w') as f:
         for line in attach:
-            f.write(line)
+            f.write(str(line))
     return os.path.abspath(filename)
 
 
