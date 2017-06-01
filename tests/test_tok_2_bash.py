@@ -3,6 +3,7 @@ import get_picas_credentials as gpc
 from get_token_field import get_token_field
 from set_token_field import set_token_field
 import os
+from time import sleep
 import couchdb
 from tok_to_bash import export_tok_keys
 
@@ -51,7 +52,7 @@ class tok2bashtest(unittest.TestCase):
         try:
             self.db.put_attachment(self.db[self.token_id], open('tests/test_attachment.txt','r'), 'test_attachment')
         except: 
-            time.sleep(1)
+            sleep(1)
             self.db.put_attachment(self.db[self.token_id], open('tests/test_attachment.txt','r'), 'test_attachment')
         token=self.db[self.token_id]
         export_tok_keys(self.test_tokvarile,token)
@@ -61,7 +62,7 @@ class tok2bashtest(unittest.TestCase):
         try:
             self.db.put_attachment(self.db[self.token_id], open('tests/test_attachment.txt','r'), 'test_attachment2')
         except:
-            time.sleep(1)
+            sleep(1)
             self.db.put_attachment(self.db[self.token_id], open('tests/test_attachment.txt','r'), 'test_attachment2')
         token=self.db[self.token_id]
         export_tok_keys(self.test_tokvarile,token)
