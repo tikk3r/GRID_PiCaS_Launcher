@@ -38,7 +38,7 @@ class tok2bashtest(unittest.TestCase):
             try:
                 self.db.put_attachment(self.db[self.token_id], att_file,att_tok)
                 fail=0
-            except ResourceConflict:
+            except HTTPError.ResourceConflict:
                 sleep(1)
 
 
