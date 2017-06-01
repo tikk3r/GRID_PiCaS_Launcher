@@ -48,13 +48,21 @@ class tok2bashtest(unittest.TestCase):
         self.assertTrue(os.environ['INT1']=='1234')
 
     def test_dl_attach(self):
-        self.db.put_attachment(self.db[self.token_id], open('tests/test_attachment.txt','r'), 'test_attachment')
+        try:
+            self.db.put_attachment(self.db[self.token_id], open('tests/test_attachment.txt','r'), 'test_attachment')
+        except: 
+            time.sleep(1)
+            self.db.put_attachment(self.db[self.token_id], open('tests/test_attachment.txt','r'), 'test_attachment')
         token=self.db[self.token_id]
         export_tok_keys(self.test_tokvarile,token)
         self.assertTrue(os.path.isfile('test_attachment'))
 
     def test_dl_attach_var(self):
-        self.db.put_attachment(self.db[self.token_id], open('tests/test_attachment.txt','r'), 'test_attachment2')
+        try:
+            self.db.put_attachment(self.db[self.token_id], open('tests/test_attachment.txt','r'), 'test_attachment2')
+        except:
+            time.sleep(1)
+            self.db.put_attachment(self.db[self.token_id], open('tests/test_attachment.txt','r'), 'test_attachment2')
         token=self.db[self.token_id]
         export_tok_keys(self.test_tokvarile,token)
         self.assertTrue(os.path.isfile('test_attachment2'))
