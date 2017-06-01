@@ -32,6 +32,16 @@ class tok2bashtest(unittest.TestCase):
         set_token_field(self.token_id,'integer1',1234,self.dbn,self.usr,self.pwd)
         if os.path.isfile('test_attachment'): os.remove('test_attachment')
 
+    def travis_safe_upload(self,att_file,att_tok):
+        fail=1
+        while(fail==1):
+            try:
+                self.db.put_attachment(self.db[self.token_id], att_file,att_tok)
+                fail=0
+            except ResourceConflict:
+                sleep(1)
+
+
     def tearDown(self):
         if os.path.isfile('test_attachment'): os.remove('test_attachment')
         if os.path.isfile('test_attachment2'): os.remove('test_attachment2')
@@ -49,21 +59,13 @@ class tok2bashtest(unittest.TestCase):
         self.assertTrue(os.environ['INT1']=='1234')
 
     def test_dl_attach(self):
-        try:
-            self.db.put_attachment(self.db[self.token_id], open('tests/test_attachment.txt','r'), 'test_attachment')
-        except: 
-            sleep(1)
-            self.db.put_attachment(self.db[self.token_id], open('tests/test_attachment.txt','r'), 'test_attachment')
+        self.travis_safe_upload(open('tests/test_attachment.txt','r'), 'test_attachment')
         token=self.db[self.token_id]
         export_tok_keys(self.test_tokvarile,token)
         self.assertTrue(os.path.isfile('test_attachment'))
 
     def test_dl_attach_var(self):
-        try:
-            self.db.put_attachment(self.db[self.token_id], open('tests/test_attachment.txt','r'), 'test_attachment2')
-        except:
-            sleep(1)
-            self.db.put_attachment(self.db[self.token_id], open('tests/test_attachment.txt','r'), 'test_attachment2')
+        self.travis_safe_upload(open('tests/test_attachment.txt','r'), 'test_attachment2')
         token=self.db[self.token_id]
         export_tok_keys(self.test_tokvarile,token)
         self.assertTrue(os.path.isfile('test_attachment2'))
