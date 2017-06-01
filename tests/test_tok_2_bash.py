@@ -7,9 +7,9 @@ from time import sleep
 import couchdb
 from tok_to_bash import export_tok_keys
 try:
-    from http.client import BadStatusLine, HTTPConnection, HTTPSConnection
+    from http.client import HTTPError
 except ImportError:
-    from httplib import BadStatusLine, HTTPConnection, HTTPSConnection
+    from httplib import HTTPError
 
 
 class tok2bashtest(unittest.TestCase):
