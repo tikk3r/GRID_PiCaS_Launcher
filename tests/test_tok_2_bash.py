@@ -6,7 +6,7 @@ import os
 from time import sleep
 import couchdb
 from tok_to_bash import export_tok_keys
-
+from couchdb import http
 
 class tok2bashtest(unittest.TestCase):
 
