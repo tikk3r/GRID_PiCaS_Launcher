@@ -6,7 +6,6 @@ import os
 from time import sleep
 import couchdb
 from tok_to_bash import export_tok_keys
-from couchdb.http import HTTPError
 
 
 class tok2bashtest(unittest.TestCase):
@@ -39,7 +38,7 @@ class tok2bashtest(unittest.TestCase):
             try:
                 self.db.put_attachment(self.db[self.token_id], att_file,att_tok)
                 fail=0
-            except ResourceConflict:
+            except couchdb.http.ResourceConflict:
                 sleep(1)
 
 
