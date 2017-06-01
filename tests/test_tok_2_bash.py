@@ -40,6 +40,7 @@ class tok2bashtest(unittest.TestCase):
                 fail=0
             except couchdb.http.ResourceConflict:
                 sleep(1)
+                fail=1
 
 
     def tearDown(self):
