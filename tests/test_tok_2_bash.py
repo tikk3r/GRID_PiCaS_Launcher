@@ -6,10 +6,7 @@ import os
 from time import sleep
 import couchdb
 from tok_to_bash import export_tok_keys
-try:
-    from http.client import HTTPError
-except ImportError:
-    from httplib import HTTPError
+from couchdb.http import HTTPError
 
 
 class tok2bashtest(unittest.TestCase):
