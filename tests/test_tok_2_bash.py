@@ -26,6 +26,23 @@ class tok2bashtest(unittest.TestCase):
             f.write('integer1: $INT1'+'\n')
         set_token_field(self.token_id,'string1','test_string',self.dbn,self.usr,self.pwd)
         set_token_field(self.token_id,'integer1',1234,self.dbn,self.usr,self.pwd)
+        if os.path.isfile('test_attachment'): os.remove('test_attachment')
+
+    def travis_safe_upload(self,att_file,att_tok):
+        fail=1
+        while(fail==1):
+            try:
+                self.db.put_attachment(self.db[self.token_id], att_file,att_tok)
+                fail=0
+            except couchdb.http.ResourceConflict:
+                sleep(5)
+                fail=1
+
+
+    def tearDown(self):
+        if os.path.isfile('test_attachment'): os.remove('test_attachment')
+        if os.path.isfile('test_attachment2'): os.remove('test_attachment2')
+
 
     def test_read_string(self):
         os.environ['TOKEN']=self.token_id

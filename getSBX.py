@@ -39,6 +39,10 @@ class ExampleActor(RunActor):
         self.modifier = modifier
         self.client = iterator.client
 
+    def download_sandbox(self,command,location):
+        subprocess.call([command, location, "sandbox.tar"])
+
+
     def process_token(self, key, token):
     # Print token information
         os.environ['PICAS_DB']=str(sys.argv[1])
@@ -59,7 +63,12 @@ class ExampleActor(RunActor):
         print("Sandbox Location= "+location)
     
         ## TODO: If no globus-tools, use wget
-        subprocess.call(["globus-url-copy", location, "sandbox.tar"])
+#        subprocess.call(["globus-url-copy", location, "sandbox.tar"])
+        if "gsiftp" in location:
+            command="globus-url-copy"
+        else:
+            command="wget"
+        self.download_sandbox("globus-url-copy",location)
         subprocess.call(["tar", "-xf", "sandbox.tar"])
         subprocess.call(["chmod","a+x","master.sh"])
     
