@@ -40,8 +40,10 @@ class ExampleActor(RunActor):
         self.client = iterator.client
 
     def download_sandbox(self,command,location):
-        subprocess.call([command, location, "sandbox.tar"])
-
+        if command=='globus-url-copy':
+            subprocess.call([command, location, "sandbox.tar"])
+        elif command=='wget':
+            subprocess.call([command, location, "-O sandbox.tar"])
 
     def process_token(self, key, token):
     # Print token information
