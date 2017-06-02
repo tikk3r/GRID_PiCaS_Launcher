@@ -43,7 +43,7 @@ class ExampleActor(RunActor):
         if command=='globus-url-copy':
             subprocess.call([command, location, "sandbox.tar"])
         elif command=='wget':
-            subprocess.call([command, location, "-O sandbox.tar"])
+            subprocess.call([command, location, "-O","sandbox.tar"])
 
     def process_token(self, key, token):
     # Print token information
@@ -70,7 +70,7 @@ class ExampleActor(RunActor):
             command="globus-url-copy"
         else:
             command="wget"
-        self.download_sandbox("globus-url-copy",location)
+        self.download_sandbox(command,location)
         subprocess.call(["tar", "-xf", "sandbox.tar"])
         subprocess.call(["chmod","a+x","master.sh"])
     
