@@ -40,10 +40,12 @@ class ExampleActor(RunActor):
         self.client = iterator.client
 
     def download_sandbox(self,command,location):
+        if os.path.isfile("sandbox.tar"): os.remove("sandbox.tar")
         if command=='globus-url-copy':
             subprocess.call([command, location, "sandbox.tar"])
         elif command=='wget':
             subprocess.call([command, location, "-O","sandbox.tar"])
+        if not os.path.isfile("sandbox.tar"): raise Exception("Sandbox failed to download!")
 
     def process_token(self, key, token):
     # Print token information
@@ -68,15 +70,15 @@ class ExampleActor(RunActor):
 #        subprocess.call(["globus-url-copy", location, "sandbox.tar"])
         if "gsiftp" in location:
             command="globus-url-copy"
-        else:
+        elif "ftp://ftp.strw.leidenuniv.nl" in location:
             command="wget"
+        else:
+            raise Exception("Sandbox not in trusted ftp!")
         self.download_sandbox(command,location)
         subprocess.call(["tar", "-xf", "sandbox.tar"])
         subprocess.call(["chmod","a+x","master.sh"])
     
         print("Working on token: " + token['_id'])
-    
-        tok_att=token["_attachments"].keys()
         export_tok_keys('tokvar.cfg',token)
     
         ## Read tokvar values from token and write to bash variables if not already exist! Save attachments and export abs filename to variable
@@ -136,7 +138,12 @@ def main():
     # Create actor, takes one token from todo view
     actor = ExampleActor(iterator, modifier)
     # Start work!
-    actor.run()
+    try:
+        actor.run()
+    except Exception as e:
+        print(str(e.args))
+        set_token_field(token['_id'],'status','error',p_db,p_usr,p_pwd)
+
 
 if __name__ == '__main__':
     main()
