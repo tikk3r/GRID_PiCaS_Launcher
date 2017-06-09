@@ -3,6 +3,7 @@ import sys,os
 import Token
 import couchdb
 from get_token_field import get_token_field
+from set_token_field import set_token_field
 
 try:
     import yaml
@@ -11,11 +12,15 @@ except ImportError:
     sys.path.append('compat/yaml')
     import yaml
 
-def export_tok_keys(cfgfile='tokvar.cfg',token=None):
-    tokvar=yaml.load(open(cfgfile,'rb'))
+def export_tok_keys(cfgfile='tokvar.cfg',token=None): 
     db=os.environ['PICAS_DB']
     un=os.environ['PICAS_USR']
     pwd=os.environ['PICAS_USR_PWD']
+    try:
+        tokvar=yaml.load(open(cfgfile,'rb'))
+    except IOError:
+        set_token_field(token['_id'],'output',-2,db,un,pwd)
+        raise Exception("tokvar missing")
     for key in tokvar:
         if isinstance(tokvar[key],str):
             picas_val=str(get_token_field(token['_id'],key,db,un,pwd))

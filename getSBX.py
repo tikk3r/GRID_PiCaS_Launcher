@@ -45,7 +45,7 @@ class ExampleActor(RunActor):
             subprocess.call([command, location, "sandbox.tar"])
         elif command=='wget':
             subprocess.call([command, location, "-O","sandbox.tar"])
-        if not os.path.isfile("sandbox.tar"): raise Exception("Sandbox failed to download!")
+        if os.stat("sandbox.tar").st_size == 0: raise Exception("Sandbox failed to download!")
 
     def process_token(self, key, token):
     # Print token information
@@ -92,7 +92,7 @@ class ExampleActor(RunActor):
         print("executing "+command)
         
         out = execute(command,shell=True)
-        print('exit status is '+out)
+        print('exit status is '+str(out))
         set_token_field(token['_id'],'output',out[0],p_db,p_usr,p_pwd)
         if out[0]==0:
             set_token_field(token['_id'],'status','done',p_db,p_usr,p_pwd)
@@ -142,7 +142,7 @@ def main():
         actor.run()
     except Exception as e:
         print(str(e.args))
-        set_token_field(token['_id'],'status','error',p_db,p_usr,p_pwd)
+        set_token_field(token['_id'],'status','launcher_error',p_db,p_usr,p_pwd)
 
 
 if __name__ == '__main__':
