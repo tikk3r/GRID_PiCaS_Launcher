@@ -99,8 +99,7 @@ class ExampleActor(RunActor):
         else:
             set_token_field(token['_id'],'status','error',p_db,p_usr,p_pwd)
         
-	
-	os.chdir(RUNDIR)
+        os.chdir(RUNDIR)
         try:
            logsout = "logs_out"
            upload_attachment(token['_id'],logsout,p_db,p_usr,p_pwd)
