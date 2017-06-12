@@ -34,6 +34,8 @@ class ViewIterator(object):
             raise StopIteration
         raise StopIteration
 
+    __next__ = next
+
 class BasicViewIterator(ViewIterator):
     """Iterator object to fetch tokens while available.
     """
@@ -127,3 +129,5 @@ class ViewKeyIterator(object):
             }
         else:
             raise StopIteration
+
+    __next__ = next
