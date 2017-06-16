@@ -117,7 +117,7 @@ class ExampleActor(RunActor):
                 upload_attachment(token['_id'],png,p_db,p_usr,p_pwd,name=png)
                 time.sleep(2)
             except:
-                print("error attaching "+png)
+                print("error attaching "+str(png))
         #try reuploading the last png (for some reason last png corrupts>)
         #self.client.db.put_attachment(token,open(os.path.basename(png),'r'),os.path.split(png)[1])
         # Attach logs in token
