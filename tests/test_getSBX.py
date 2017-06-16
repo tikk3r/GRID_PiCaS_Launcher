@@ -42,6 +42,7 @@ class getSBXtest(unittest.TestCase):
         server.resource.credentials = (self.usr,self.pwd)
         self.db= server[self.dbn]
         set_token_field(self.token,'lock',0,self.dbn,self.usr,self.pwd)
+        set_token_field(self.token,'string1','1234',self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'done',0,self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'status','todo',self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'SBXloc','ftp://ftp.strw.leidenuniv.nl/pub/apmechev/travis_ci_tests/sandbox_travis.tar',self.dbn,self.usr,self.pwd)
@@ -60,12 +61,19 @@ class getSBXtest(unittest.TestCase):
                 sleep(1)
                 fail=1
 
+    def find_and_delete(self,string):
+        for att in self.db[self.token]['_attachments']:
+            if string in att:
+                self.db.delete_attachment(self.db[self.token],att)
+
     def tearDown(self):
         set_token_field(self.token,'lock',0,self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'done',0,self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'status','todo',self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'hostname','',self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'output',0,self.dbn,self.usr,self.pwd)
+        set_token_field(self.token,'string1','1234',self.dbn,self.usr,self.pwd)
+        self.find_and_delete("png")
 
     def test_lock_token(self):
         self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)==0)
@@ -76,7 +84,6 @@ class getSBXtest(unittest.TestCase):
             self.key=e.args[0]
             self.tok=e.args[1]
         self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)>0)
-        
 
     def test_failed_sbx(self):
         set_token_field(self.token,'SBXloc','ftp://ftp.strw.leidenuniv.nl/pub/apmechev/travis_ci_tests/sanddbox_travis.tar',self.dbn,self.usr,self.pwd) 
@@ -86,12 +93,28 @@ class getSBXtest(unittest.TestCase):
         except Exception as e:
             self.assertTrue(str(e)=='Sandbox failed to download!')
 
-
     def test_missing_tokvar(self): #TODO
         from tok_to_bash import  export_tok_keys
         try:
-            export_tok_keys('tokvar.cfg',{'_id':self.token})
+            export_tok_keys('xtokvar.cfg',{'_id':self.token})
         except Exception as e:
             self.assertTrue(str(e)=='tokvar missing')
             self.assertTrue(get_token_field(self.token,'output',self.dbn,self.usr,self.pwd)==-2)
 
+    def test_failed_sbx(self):
+        tok=self.db[self.token]
+        _=tok.pop('string1')
+        self.db.update([tok])
+        try:
+            self.Ex.process_token(self.token,tok)
+        except Exception as e:
+            print(str(e))
+
+    def test_uploadpng(self):
+        self.find_and_delete("test.png")
+        open('test.png','a').close()
+        self.Ex.run()
+        for att in self.db[self.token]['_attachments']:
+            if "test.png" in att:
+                return
+        raise Exception("test.png does not exist!")

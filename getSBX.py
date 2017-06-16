@@ -114,7 +114,7 @@ class ExampleActor(RunActor):
 
         for png in result.split():
             try:
-                upload_attachment(token['_id'],png,p_db,p_usr,p_pwd)
+                upload_attachment(token['_id'],png,p_db,p_usr,p_pwd,name=png)
                 time.sleep(2)
             except:
                 print("error attaching "+png)
