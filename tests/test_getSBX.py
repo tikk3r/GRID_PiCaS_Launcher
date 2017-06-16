@@ -29,18 +29,24 @@ class getSBXtest(unittest.TestCase):
 
     def setUp(self):
         self.t_type="travis_ci_test"
-        self.token="travis_getSBX_test"
+        token="travis_getSBX_test"
         pc=gpc.picas_cred()
         creds=pc.return_credentials()
         self.usr=creds['user']
         self.pwd=creds['password']
         self.dbn=creds['database']
         sys.argv=["dummy", self.dbn,self.usr,self.pwd]
-
+        self.token="travis_getSBX_test"+str(sys.version_info[0])
         server = couchdb.Server("https://picas-lofar.grid.sara.nl:6984")
         self.client = CouchClient(url="https://picas-lofar.grid.sara.nl:6984", db=self.dbn, username=self.usr, password=self.pwd)
         server.resource.credentials = (self.usr,self.pwd)
         self.db= server[self.dbn]
+        tok=self.db[token]
+        vers=".".join([str(i) for i in sys.version_info])
+        tok['_id']="travis_getSBX_test"+vers
+        _=tok.pop("_attachments")
+        self.db.update([tok])
+        self.token="travis_getSBX_test"+vers
         set_token_field(self.token,'lock',0,self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'string1','1234',self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'done',0,self.dbn,self.usr,self.pwd)
@@ -80,7 +86,7 @@ class getSBXtest(unittest.TestCase):
         try:
             self.TestActor.run() 
         except Exception as e:
-            self.assertTrue(e.args[0]=='travis_getSBX_test')
+            self.assertTrue(e.args[0]==self.token)
             self.key=e.args[0]
             self.tok=e.args[1]
         self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)>0)
