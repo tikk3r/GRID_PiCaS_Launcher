@@ -44,7 +44,7 @@ class ExampleActor(RunActor):
         if command=='globus-url-copy':
             subprocess.call([command, location, "sandbox.tar"])
         elif command=='wget':
-            subprocess.call([command, location, "-O","sandbox.tar"])
+            subprocess.call([command, location, "-O",'sandbox.tar','-q'])
         if os.stat("sandbox.tar").st_size == 0: raise Exception("Sandbox failed to download!")
 
     def process_token(self, key, token):
