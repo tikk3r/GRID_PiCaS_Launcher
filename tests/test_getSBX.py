@@ -28,44 +28,46 @@ class TestActor(RunActor):
 class getSBXtest(unittest.TestCase):
 
     def setUp(self):
-        self.t_type="travis_ci_test"
-        token="travis_getSBX_test"
+        vers=str(sys.version_info[0])+"."+str(sys.version_info[1])
+        self.t_type="travis_ci_test"+vers
+        token="travis_getSBX_test"+vers
         pc=gpc.picas_cred()
         creds=pc.return_credentials()
         self.usr=creds['user']
         self.pwd=creds['password']
-        self.dbn=creds['database']
+        self.dbn="sksp_unittest"
         sys.argv=["dummy", self.dbn,self.usr,self.pwd]
-        self.token="travis_getSBX_test"+str(sys.version_info[0])
+        self.token="travis_getSBX_test"+vers
         server = couchdb.Server("https://picas-lofar.grid.sara.nl:6984")
         self.client = CouchClient(url="https://picas-lofar.grid.sara.nl:6984", db=self.dbn, username=self.usr, password=self.pwd)
         server.resource.credentials = (self.usr,self.pwd)
         self.db= server[self.dbn]
-        tok=self.db[token]
+        tok={'type':self.token}
         vers=".".join([str(i) for i in sys.version_info])
-        tok['_id']="travis_getSBX_test"+vers
-        _=tok.pop("_attachments")
+        tok['_id']=self.token
+        if '_attachments' in tok.keys():
+            _=tok.pop("_attachments")
         self.db.update([tok])
-        self.token="travis_getSBX_test"+vers
         set_token_field(self.token,'lock',0,self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'string1','1234',self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'done',0,self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'status','todo',self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'SBXloc','ftp://ftp.strw.leidenuniv.nl/pub/apmechev/travis_ci_tests/sandbox_travis.tar',self.dbn,self.usr,self.pwd)
         modifier = BasicTokenModifier()
-        iterator = BasicViewIterator(self.client, self.t_type+"/todo", modifier)
+        iterator = BasicViewIterator(self.client, self.token+"/todo", modifier)
         self.TestActor = TestActor(iterator, modifier)
         self.Ex=ExampleActor(iterator, modifier)
 
-    def travis_safe_upload(self,att_file,att_tok):
+    def travis_safe_upload(self,att,att_tok):
         fail=1
-        while(fail==1):
-            try:
-                self.db.put_attachment(self.db[self.token], att_file,att_tok)
-                fail=0
-            except couchdb.http.ResourceConflict:
-                sleep(1)
-                fail=1
+        with open(att,'r') as att_file:
+            while(fail==1):
+                try:
+                    self.db.put_attachment(self.db[self.token], att_file,att_tok)
+                    fail=0
+                except couchdb.http.ResourceConflict:
+                    sleep(1)
+                    fail=1
 
     def find_and_delete(self,string):
         for att in self.db[self.token]['_attachments']:
@@ -99,7 +101,7 @@ class getSBXtest(unittest.TestCase):
         except Exception as e:
             self.assertTrue(str(e)=='Sandbox failed to download!')
 
-    def test_missing_tokvar(self): #TODO
+    def test_missing_tokvar(self): 
         from tok_to_bash import  export_tok_keys
         try:
             export_tok_keys('xtokvar.cfg',{'_id':self.token})
@@ -121,6 +123,6 @@ class getSBXtest(unittest.TestCase):
         open('test.png','a').close()
         self.Ex.run()
         for att in self.db[self.token]['_attachments']:
-            if "test.png" in att:
+            if "png" in att:
                 return
         raise Exception("test.png does not exist!")
