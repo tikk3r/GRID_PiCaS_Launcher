@@ -39,6 +39,7 @@ class ExampleActor(RunActor):
         self.modifier = modifier
         self.client = iterator.client
 
+
     def download_sandbox(self,command,location):
         if os.path.isfile("sandbox.tar"): os.remove("sandbox.tar")
         if command=='globus-url-copy':
@@ -68,13 +69,16 @@ class ExampleActor(RunActor):
     
         ## TODO: If no globus-tools, use wget
 #        subprocess.call(["globus-url-copy", location, "sandbox.tar"])
-        if "gsiftp" in location:
-            command="globus-url-copy"
-        elif "ftp://ftp.strw.leidenuniv.nl" in location:
-            command="wget"
+        rc = subprocess.call(['which', 'globus-url-copy'])
+        if rc == 0:
+            if 'gsiftp' not in location:
+                location='gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/sandbox/'+location
+            self.download_sandbox('globus-url-copy',location)
         else:
-            raise Exception("Sandbox not in trusted ftp!")
-        self.download_sandbox(command,location)
+            if 'gsiftp' in location:
+                location='/',join(location.split('/')[-2:])
+            location='ftp://ftp.strw.leidenuniv.nl/pub/apmechev/sandbox/'+location
+            self.download_sandbox('wget',location)
         subprocess.call(["tar", "-xf", "sandbox.tar"])
         subprocess.call(["chmod","a+x","master.sh"])
     
