@@ -75,7 +75,7 @@ class ExampleActor(RunActor):
                 location='gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/sandbox/'+location
             self.download_sandbox('globus-url-copy',location)
         else:
-            if 'gsiftp' in location:
+            if 'strw' in location:
                 location='/',join(location.split('/')[-2:])
             location='ftp://ftp.strw.leidenuniv.nl/pub/apmechev/sandbox/'+location
             self.download_sandbox('wget',location)
