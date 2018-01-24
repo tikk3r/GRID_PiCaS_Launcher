@@ -76,7 +76,7 @@ class ExampleActor(RunActor):
             self.download_sandbox('globus-url-copy',location)
         else:
             if 'strw' in location:
-                location='/',join(location.split('/')[-2:])
+                location='/'.join(location.split('/')[-2:])
             location='ftp://ftp.strw.leidenuniv.nl/pub/apmechev/sandbox/'+location
             self.download_sandbox('wget',location)
         subprocess.call(["tar", "-xf", "sandbox.tar"])
