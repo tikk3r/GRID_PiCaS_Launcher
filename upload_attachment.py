@@ -15,7 +15,7 @@ def upload_attachment(tok_id,attachment,p_db,p_usr,p_pwd,name=None):
     else:
         name=attachment
     with open(attachment,'rb') as att:
-        client.db.put_attachment(token,att,name)
+        client.db.put_attachment(token,att,str(name))
     
 
 
