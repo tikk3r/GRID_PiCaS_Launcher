@@ -45,7 +45,7 @@ class ExampleActor(RunActor):
         if command=='globus-url-copy':
             subprocess.call([command, location, "sandbox.tar"])
         elif command=='wget':
-            subprocess.call([command, location, "-O",'sandbox.tar','-q'])
+            subprocess.call([command, location, "-O",'sandbox.tar'])
         if os.stat("sandbox.tar").st_size == 0: raise Exception("Sandbox failed to download!")
 
     def process_token(self, key, token):
@@ -71,14 +71,16 @@ class ExampleActor(RunActor):
 #        subprocess.call(["globus-url-copy", location, "sandbox.tar"])
         rc = subprocess.call(['which', 'globus-url-copy'])
         if rc == 0:
-            if 'gsiftp' not in location:
+            if 'gsiftp' not in location and 'strw' not in location:
                 location='gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/sandbox/'+location
             self.download_sandbox('globus-url-copy',location)
         else:
             if 'strw' in location:
                 location='/'.join(location.split('/')[-2:])
-            location='ftp://ftp.strw.leidenuniv.nl/pub/apmechev/sandbox/'+location
-            self.download_sandbox('wget',location)
+                location='ftp://ftp.strw.leidenuniv.nl/pub/apmechev/sandbox/'+location
+                self.download_sandbox('wget',location)
+            else:
+                self.download_sandbox('globus-url-copy',location)
         subprocess.call(["tar", "-xf", "sandbox.tar"])
         subprocess.call(["chmod","a+x","master.sh"])
     
