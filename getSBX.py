@@ -109,7 +109,7 @@ class ExampleActor(RunActor):
         #try reuploading the last png (for some reason last png corrupts>)
         #self.client.db.put_attachment(token,open(os.path.basename(png),'r'),os.path.split(png)[1])
         # Attach logs in token
-        self.modifier.close(token)
+        self.client.modify_token(self.modifier.close(self.client.db[token_name]))
         return
 
         
