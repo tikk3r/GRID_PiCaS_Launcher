@@ -65,7 +65,7 @@ class ExampleActor(RunActor):
         else:
             location="gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/spectroscopy-migrated/sandbox/sandbox_"+str(sys.argv[2])+"_"+str(token['OBSID'])+".tar"
     
-        print("Sandbox Location= "+location)
+        print("Sandbox Location= "+str(location.split('/')))
     
         ## TODO: If no globus-tools, use wget
 #        subprocess.call(["globus-url-copy", location, "sandbox.tar"])
@@ -75,7 +75,7 @@ class ExampleActor(RunActor):
                 location='gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/sandbox/'+location
             self.download_sandbox('globus-url-copy',location)
         else:
-            if 'strw' in location:
+            if 'strw' in location :
                 location='/'.join(location.split('/')[-2:])
                 location='ftp://ftp.strw.leidenuniv.nl/pub/apmechev/sandbox/'+location
                 self.download_sandbox('wget',location)
