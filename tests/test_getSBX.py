@@ -119,8 +119,6 @@ class getSBXtest(unittest.TestCase):
             print(str(e))
 
     def test_uploadpng(self):
-#        self.find_and_delete("test.png")
-#        open('test.png','a').close()
         self.Ex.run()
         for att in self.db[self.token]['_attachments']:
             if "png" in att:
