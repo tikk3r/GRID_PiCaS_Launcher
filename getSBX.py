@@ -59,7 +59,7 @@ class ExampleActor(RunActor):
         p_db=os.environ['PICAS_DB']
         p_usr=os.environ['PICAS_USR']
         p_pwd=os.environ['PICAS_USR_PWD']
-        token_name=token['_id'] 
+        self.token_name=token['_id'] 
         if 'SBXloc' in token.keys():
             location=token['SBXloc']
         else:
@@ -128,7 +128,7 @@ class ExampleActor(RunActor):
         #try reuploading the last png (for some reason last png corrupts>)
         #self.client.db.put_attachment(token,open(os.path.basename(png),'r'),os.path.split(png)[1])
         # Attach logs in token
-        self.client.modify_token(self.modifier.close(self.client.db[token_name]))
+        self.client.modify_token(self.modifier.close(self.client.db[self.token_name]))
         return
 
         
@@ -148,7 +148,7 @@ def main():
         actor.run()
     except Exception as e:
         print(str(e.args))
-        set_token_field(token['_id'],'status','launcher_error',p_db,p_usr,p_pwd)
+        set_token_field(actor.token_name,'status','launcher_error',p_db,p_usr,p_pwd)
 
 
 if __name__ == '__main__':
