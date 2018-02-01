@@ -58,7 +58,7 @@ function dl_cal1(){
    cd $PWD/Downloads
 
    for i in `ls *tar`; do tar -xf $i && rm -rf $i; done
-   cd $OLD_P
+   cd ${RUNDIR}
 
    echo "Download Done!"
 }
