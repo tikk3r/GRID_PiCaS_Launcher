@@ -17,16 +17,16 @@ echo "--------------------------------------------------------------------------
 }
 
 function generic_upload(){
-  OLD_P=$PWD
-  cd $PWD/Uploads
+
+  cd ${RUNDIR}/Uploads
   if [ "$(ls -A $PWD)" ]; then
      uberftp -mkdir ${RESULTS_DIR}/${OBSID}
-     tar -cvf tesults.tar $PWD/* 
-     globus-url-copy tesults.tar ${RESULTS_DIR}/${OBSID}/${OBSID}_SB${STARTSB}.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed
+     tar -cvf results.tar $PWD/* 
+     globus-url-copy results.tar ${RESULTS_DIR}/${PIPELINE}/${OBSID}/${OBSID}_${PICAS_USR}_SB${STARTSB}.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed
    else
     echo "$PWD is Empty"; exit 30; # exit 30 => no files to upload 
   fi
-
+  cd ${RUNDIR}
 }
 
 function upload_results_cal1(){
