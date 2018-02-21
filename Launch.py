@@ -14,7 +14,7 @@
 #python imports
 import sys,os
 import time
-import couchdb
+from GRID_PiCaS_Launcher import couchdb
 import subprocess
 import shutil
 

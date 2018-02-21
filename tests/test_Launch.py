@@ -1,5 +1,5 @@
 import unittest
-import get_picas_credentials as gpc
+from GRID_PiCaS_Launcher import get_picas_credentials as gpc
 from get_token_field import get_token_field
 from set_token_field import set_token_field
 import os,sys
@@ -30,14 +30,14 @@ class Launchtest(unittest.TestCase):
     def setUp(self):
         vers=str(sys.version_info[0])+"."+str(sys.version_info[1])
         self.t_type="travis_ci_test"+vers
-        token="travis_Launch_test"+vers
+        token="travis_getSBX_test"+vers
         pc=gpc.picas_cred()
         creds=pc.return_credentials()
         self.usr=creds['user']
         self.pwd=creds['password']
         self.dbn="sksp_unittest"
         sys.argv=["dummy", self.dbn,self.usr,self.pwd]
-        self.token="travis_Launch_test"+vers
+        self.token="travis_getSBX_test"+vers
         server = couchdb.Server("https://picas-lofar.grid.sara.nl:6984")
         self.client = CouchClient(url="https://picas-lofar.grid.sara.nl:6984", db=self.dbn, username=self.usr, password=self.pwd)
         server.resource.credentials = (self.usr,self.pwd)

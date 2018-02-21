@@ -1,5 +1,5 @@
 import unittest
-import get_picas_credentials as gpc
+from GRID_PiCaS_Launcher import get_picas_credentials as gpc
 from get_token_field import get_token_field
 from set_token_field import set_token_field
 import os
@@ -12,7 +12,7 @@ class tok2bashtest(unittest.TestCase):
 
     def setUp(self):
         vers=str(sys.version_info[0])+"."+str(sys.version_info[1])
-        self.token_id='travis_Launch_test'+vers
+        self.token_id='travis_getSBX_test'+vers
         pc=gpc.picas_cred()
         creds=pc.return_credentials()  
         self.usr=creds['user']
