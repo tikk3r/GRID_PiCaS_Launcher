@@ -1,4 +1,4 @@
-import couchdb
+from GRID_PiCaS_Launcher import couchdb
 import os,sys,time
 
 def set_token_field(tok_id,fieldname,value,p_db,p_usr,p_pwd):
