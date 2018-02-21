@@ -13,7 +13,7 @@ from picas.iterators import BasicViewIterator
 from picas.modifiers import BasicTokenModifier
 from picas.executers import execute
 
-from getSBX import ExampleActor
+from Launch import ExampleActor
 
 class TestActor(RunActor):
     def __init__(self, iterator, modifier):
@@ -25,19 +25,19 @@ class TestActor(RunActor):
         raise Exception(key,token)
         
 
-class getSBXtest(unittest.TestCase):
+class Launchtest(unittest.TestCase):
 
     def setUp(self):
         vers=str(sys.version_info[0])+"."+str(sys.version_info[1])
         self.t_type="travis_ci_test"+vers
-        token="travis_getSBX_test"+vers
+        token="travis_Launch_test"+vers
         pc=gpc.picas_cred()
         creds=pc.return_credentials()
         self.usr=creds['user']
         self.pwd=creds['password']
         self.dbn="sksp_unittest"
         sys.argv=["dummy", self.dbn,self.usr,self.pwd]
-        self.token="travis_getSBX_test"+vers
+        self.token="travis_Launch_test"+vers
         server = couchdb.Server("https://picas-lofar.grid.sara.nl:6984")
         self.client = CouchClient(url="https://picas-lofar.grid.sara.nl:6984", db=self.dbn, username=self.usr, password=self.pwd)
         server.resource.credentials = (self.usr,self.pwd)
