@@ -18,7 +18,7 @@ class tok2bashtest(unittest.TestCase):
         self.usr=creds['user']
         self.pwd=creds['password']
         self.dbn=str('sksp_unittest')
-        self.test_tokvarile='tests/test_tok_var.cfg'
+        self.test_tokvarile='GRID_PiCaS_Launcher/tests/test_tok_var.cfg'
         server = couchdb.Server("https://picas-lofar.grid.sara.nl:6984")
         server.resource.credentials = (self.usr,self.pwd)
         self.db= server[self.dbn]
