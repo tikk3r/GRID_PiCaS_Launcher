@@ -3,7 +3,7 @@
 #
 #=========
 
-import couchdb
+from GRID_PiCaS_Launcher  import couchdb
 import os,sys,time,subprocess
 from update_token_status import update_status
 

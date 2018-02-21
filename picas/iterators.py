@@ -9,7 +9,7 @@ Created on Mon May 21 16:15:25 2012
 import random
 
 # CouchDB immports
-from couchdb import ResourceConflict
+from GRID_PiCaS_Launcher.couchdb import ResourceConflict
 
 class ViewIterator(object):
     """Dummy class to show what to implement for a PICaS iterator.

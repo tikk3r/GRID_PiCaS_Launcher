@@ -3,7 +3,7 @@
 #
 #=========
 
-import couchdb
+from GRID_PiCaS_Launcher  import couchdb
 import os,sys,time
 
 def update_freq(p_db,p_usr,p_pwd,tok_id,freq):

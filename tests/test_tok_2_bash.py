@@ -4,7 +4,7 @@ from get_token_field import get_token_field
 from set_token_field import set_token_field
 import os
 from time import sleep
-import couchdb
+from GRID_PiCaS_Launcher import couchdb
 from tok_to_bash import export_tok_keys
 import sys
 

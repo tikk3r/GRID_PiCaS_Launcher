@@ -1,4 +1,4 @@
-import couchdb
+from GRID_PiCaS_Launcher  import couchdb
 import os,sys,time
 from picas.clients import CouchClient
 

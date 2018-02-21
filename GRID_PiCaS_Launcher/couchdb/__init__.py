@@ -6,8 +6,8 @@
 # This software is licensed as described in the file COPYING, which
 # you should have received as part of this distribution.
 
-from couchdb.client import Database, Document, Server
-from couchdb.http import HTTPError, PreconditionFailed, Resource, \
+from GRID_PiCaS_Launcher.couchdb.client import Database, Document, Server
+from GRID_PiCaS_Launcher.couchdb.http import HTTPError, PreconditionFailed, Resource, \
         ResourceConflict, ResourceNotFound, ServerError, Session, Unauthorized
 import warnings
 
