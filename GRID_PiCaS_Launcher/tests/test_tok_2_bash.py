@@ -63,13 +63,13 @@ class tok2bashtest(unittest.TestCase):
         self.assertTrue(os.environ['INT1']=='1234')
 
     def test_dl_attach(self):
-        self.travis_safe_upload('tests/test_attachment.txt', 'test_attachment')
+        self.travis_safe_upload('GRID_PiCaS_Launcher/tests/test_attachment.txt', 'test_attachment')
         token=self.db[self.token_id]
         export_tok_keys(self.test_tokvarile,token)
         self.assertTrue(os.path.isfile('test_attachment'))
 
     def test_dl_attach_var(self):
-        self.travis_safe_upload('tests/test_attachment.txt', 'test_attachment2')
+        self.travis_safe_upload('GRID_PiCaS_Launcher/tests/test_attachment.txt', 'test_attachment2')
         token=self.db[self.token_id]
         export_tok_keys(self.test_tokvarile,token)
         self.assertTrue(os.path.isfile('test_attachment2'))
