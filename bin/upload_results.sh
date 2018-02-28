@@ -22,6 +22,9 @@ function generic_upload(){
   if [ "$(ls -A $PWD)" ]; then
      uberftp -mkdir ${RESULTS_DIR}/${OBSID}
      tar -cvf results.tar $PWD/* 
+     echo ""
+     echo ""
+     echo " Uploading to ${RESULTS_DIR}/${PIPELINE}/${OBSID}/${OBSID}_${PICAS_USR}_SB${STARTSB}.tar"
      globus-url-copy results.tar ${RESULTS_DIR}/${PIPELINE}/${OBSID}/${OBSID}_${PICAS_USR}_SB${STARTSB}.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed
    else
     echo "$PWD is Empty"; exit 30; # exit 30 => no files to upload 
