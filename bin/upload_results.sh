@@ -5,7 +5,7 @@ $OLD_PYTHON update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${T
 echo "---------------------------------------------------------------------------"
 echo "Copy the output from the Worker Node to the Grid Storage Element"
 echo "---------------------------------------------------------------------------"
-
+ mkdir ${RUNDIR}/Output
  case "${PIPELINE}" in
     pref_cal1) upload_results_cal1 ;;
     pref_cal2) upload_results_cal2 ;;
@@ -18,7 +18,7 @@ echo "--------------------------------------------------------------------------
 
 function generic_upload(){
 
-  cd ${RUNDIR}/Uploads
+  cd ${RUNDIR}/Output
   if [ "$(ls -A $PWD)" ]; then
      uberftp -mkdir ${RESULTS_DIR}/${OBSID}
      tar -cvf results.tar $PWD/* 
