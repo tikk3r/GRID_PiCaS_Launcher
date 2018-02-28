@@ -19,8 +19,8 @@ function download_files(){
  echo "Downloading $(wc -l $1 | awk '{print $1}' ) files"
  $OLD_PYTHON update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'downloading'
 
- mkdir Downloads
- mkdir Uploads
+ mkdir ${RUNDIR}/Input
+ mkdir ${RUNDIR}/Output
 
  case "$2" in
     *cal1*) echo "Downloading cal1 files"; dl_cal1 $1 ;;
@@ -42,20 +42,20 @@ function dl_targ1(){
 function dl_cal1(){
 
    if [[ ! -z $( cat $1 | grep juelich )  ]]; then 
-     sed 's?srm://lofar-srm.fz-juelich.de:8443?gsiftp://lofar-gridftp.fz-juelich.de:2811?g' $1 | xargs -I{} globus-url-copy -st 30 -fast -v {} $PWD/Downloads/ || { echo 'downloading failed' ; exit 21; }
+     sed 's?srm://lofar-srm.fz-juelich.de:8443?gsiftp://lofar-gridftp.fz-juelich.de:2811?g' $1 | xargs -I{} globus-url-copy -st 30 -fast -v {} $PWD/Input/ || { echo 'downloading failed' ; exit 21; }
    fi
 
    if [[ ! -z $( cat $1 | grep sara )  ]]; then
-     sed 's?srm://srm.grid.sara.nl:8443?gsiftp://gridftp.grid.sara.nl:2811?g' $1 | xargs -I{} globus-url-copy -st 30 -fast -v {} $PWD/Downloads/ || { echo 'downloading failed' ; exit 21; }
+     sed 's?srm://srm.grid.sara.nl:8443?gsiftp://gridftp.grid.sara.nl:2811?g' $1 | xargs -I{} globus-url-copy -st 30 -fast -v {} $PWD/Input/ || { echo 'downloading failed' ; exit 21; }
    fi
 
    if [[ ! -z $( cat $1 | grep psnc )  ]]; then
-     sed 's?srm://lta-head.lofar.psnc.pl:8443?gsiftp://gridftp.lofar.psnc.pl:2811?g' $1 | xargs -I{} globus-url-copy -st 30 -fast -v {} $PWD/Downloads/ || { echo 'downloading failed' ; exit 21; }
+     sed 's?srm://lta-head.lofar.psnc.pl:8443?gsiftp://gridftp.lofar.psnc.pl:2811?g' $1 | xargs -I{} globus-url-copy -st 30 -fast -v {} $PWD/Input/ || { echo 'downloading failed' ; exit 21; }
    fi
 
    wait
    OLD_P=$PWD
-   cd $PWD/Downloads
+   cd ${RUNDIR}/Input
 
    for i in `ls *tar`; do tar -xf $i && rm -rf $i; done
    cd ${RUNDIR}
