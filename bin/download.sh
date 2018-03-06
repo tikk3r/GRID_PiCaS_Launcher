@@ -17,7 +17,7 @@ function download_files(){
 
 
  echo "Downloading $(wc -l $1 | awk '{print $1}' ) files"
- python  update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'downloading'
+ python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'downloading'
 
  mkdir ${RUNDIR}/Input
  mkdir ${RUNDIR}/Output

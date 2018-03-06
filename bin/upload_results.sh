@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function upload_results(){
-python update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading_results'
+python ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading_results'
 echo "---------------------------------------------------------------------------"
 echo "Copy the output from the Worker Node to the Grid Storage Element"
 echo "---------------------------------------------------------------------------"
