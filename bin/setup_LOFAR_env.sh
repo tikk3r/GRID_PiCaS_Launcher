@@ -39,7 +39,7 @@ function setup_softdrive_lofar(){
       . ${1}/init_env_release.sh
       export PYTHONPATH=${1}/local/release/lib/python2.7/site-packages/losoto-1.0.0-py2.7.egg:${1}/local/release/lib/python2.7/site-packages/losoto-1.0.0-py2.7.egg/losoto:$PYTHONPATH
       export LOFARDATAROOT=/cvmfs/softdrive.nl/wjvriend/data
-      export PYTHONHOME=${1}/local/release/lib/python2.7
+#      export PYTHONHOME=${1}/local/release/lib/python2.7
       export LOFAR_PATH=${1}
     else
         echo "setup_env: The environment script doesn't exist. check the path $1/init_env_release.sh again"
