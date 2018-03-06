@@ -20,7 +20,7 @@ function generic_upload(){
 
   cd ${RUNDIR}/Output
   if [ "$(ls -A $PWD)" ]; then
-     uberftp -mkdir ${RESULTS_DIR}/${OBSID}
+     uberftp -mkdir ${RESULTS_DIR}/${PIPELINE_STEP}/${OBSID}
      tar -cvf results.tar $PWD/* 
      echo ""
      echo ""
