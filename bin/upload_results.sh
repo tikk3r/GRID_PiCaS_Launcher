@@ -6,7 +6,7 @@ echo "--------------------------------------------------------------------------
 echo "Copy the output from the Worker Node to the Grid Storage Element"
 echo "---------------------------------------------------------------------------"
 
- case "${PIPELINE}" in
+ case "${PIPELINE_STEP}" in
     pref_cal1) upload_results_cal1 ;;
     pref_cal2) upload_results_cal2 ;;
     pref_targ1) upload_results_targ1 ;;
@@ -24,8 +24,8 @@ function generic_upload(){
      tar -cvf results.tar $PWD/* 
      echo ""
      echo ""
-     echo " Uploading to ${RESULTS_DIR}/${PIPELINE}/${OBSID}/${OBSID}_${PICAS_USR}_SB${STARTSB}.tar"
-     globus-url-copy results.tar ${RESULTS_DIR}/${PIPELINE}/${OBSID}/${OBSID}_${PICAS_USR}_SB${STARTSB}.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed
+     echo " Uploading to ${RESULTS_DIR}/${PIPELINE_STEP}/${OBSID}/${OBSID}_${PICAS_USR}_SB${STARTSB}.tar"
+     globus-url-copy results.tar ${RESULTS_DIR}/${PIPELINE_STEP}/${OBSID}/${OBSID}_${PICAS_USR}_SB${STARTSB}.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed
    else
     echo "$PWD is Empty"; exit 30; # exit 30 => no files to upload 
   fi
