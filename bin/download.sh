@@ -17,7 +17,7 @@ function download_files(){
 
 
  echo "Downloading $(wc -l $1 | awk '{print $1}' ) files"
- $OLD_PYTHON update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'downloading'
+ python  update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'downloading'
 
  mkdir ${RUNDIR}/Input
  mkdir ${RUNDIR}/Output
@@ -33,7 +33,7 @@ function download_files(){
 }
 
 function dl_targ1(){
-   $OLD_PYTHON  wait_for_dl.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD}
+   python wait_for_dl.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD}
    python ./download_srms.py $1 0 $( wc -l $1 | awk '{print $1}' ) || { echo "Download Failed!!"; exit 21; } #exit 21=> Download fails
    for i in `ls *tar`; do tar -xvf $i &&rm $i; done 
  
