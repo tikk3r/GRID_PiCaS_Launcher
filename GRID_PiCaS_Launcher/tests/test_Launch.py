@@ -102,7 +102,7 @@ class Launchtest(unittest.TestCase):
             self.assertTrue(str(e)=='Sandbox failed to download!')
 
     def test_missing_tokvar(self): 
-        from tok_to_bash import  export_tok_keys
+        from GRID_PiCaS_Launcher.tok_to_bash import  export_tok_keys
         try:
             export_tok_keys('xtokvar.cfg',{'_id':self.token})
         except Exception as e:

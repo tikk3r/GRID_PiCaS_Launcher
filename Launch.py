@@ -57,7 +57,7 @@ class ExampleActor(RunActor):
         os.environ['PICAS_USR']=str(sys.argv[2])
         os.environ['PICAS_USR_PWD']=str(sys.argv[3])
         os.environ['TOKEN']=token['_id']
-        from tok_to_bash import  export_tok_keys
+        from GRID_PiCaS_Launcher.tok_to_bash import  export_tok_keys
 
         self.p_db=os.environ['PICAS_DB']
         self.p_usr=os.environ['PICAS_USR']
