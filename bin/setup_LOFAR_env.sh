@@ -26,7 +26,7 @@ function setup_local_lofar(){
 
 
 function setup_softdrive_lofar(){
- export LD_LIBRARY_PATH=/cvmfs/softdrive.nl/apmechev/gcc-4.8.5/lib:/cvmfs/softdrive.nl/apmechev/gcc-4.8.5/lib64:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/cvmfs/softdrive.nl/apmechev/gcc-4.8.5/lib:/cvmfs/softdrive.nl/apmechev/gcc-4.8.5/lib64:$LD_LIBRARY_PATH
  if [ -z "$1" ]
   then
     echo "setup_env: Initializing default environment in /cvmfs/softdrive.nl/wjvriend/lofar_stack/2.16"
@@ -39,6 +39,7 @@ function setup_softdrive_lofar(){
       . ${1}/init_env_release.sh
       export PYTHONPATH=${1}/local/release/lib/python2.7/site-packages/losoto-1.0.0-py2.7.egg:${1}/local/release/lib/python2.7/site-packages/losoto-1.0.0-py2.7.egg/losoto:$PYTHONPATH
       export LOFARDATAROOT=/cvmfs/softdrive.nl/wjvriend/data
+      export PYTHONHOME=${1}/local/release/lib/python2.7
       export LOFAR_PATH=${1}
     else
         echo "setup_env: The environment script doesn't exist. check the path $1/init_env_release.sh again"
