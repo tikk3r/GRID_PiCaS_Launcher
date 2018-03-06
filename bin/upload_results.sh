@@ -33,14 +33,13 @@ function generic_upload(){
 }
 
 function upload_results_cal1(){
- find ${RUNDIR} -name "instrument" |xargs tar -cvf instruments_${OBSID}_${STARTSB}.tar  
- find ${RUNDIR} -iname "FIELD" |grep work |xargs tar -rvf instruments_${OBSID}_${STARTSB}.tar 
- find ${RUNDIR} -iname "ANTENNA" |grep work |xargs tar -rvf instruments_${OBSID}_${STARTSB}.tar
+ find ${RUNDIR}/Input -name "instrument" |xargs tar -cvf ${RUNDIR}/Output/instruments_${OBSID}_${STARTSB}.tar  
+ find ${RUNDIR}/Input -iname "FIELD" |grep work |xargs tar -rvf ${RUNDIR}/Output/instruments_${OBSID}_${STARTSB}.tar 
+ find ${RUNDIR}/Input -iname "ANTENNA" |grep work |xargs tar -rvf ${RUNDIR}/Output/instruments_${OBSID}_${STARTSB}.tar
 
- uberftp -mkdir gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/spectroscopy-migrated/prefactor/cal_tables/${OBSID}
+ uberftp -mkdir ${RESULTS_DIR}/${OBSID}
 
- globus-url-copy instruments_${OBSID}_${STARTSB}.tar gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/spectroscopy-migrated/prefactor/cal_tables/${OBSID}/instruments_${OBSID}_${STARTSB}.tar  || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed                         
-
+ globus-url-copy ${RUNDIR}/Output/instruments_${OBSID}_${STARTSB}.tar ${RESULTS_DIR}/${OBSID}/instruments_${OBSID}_${STARTSB}.tar  || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed   
 }
 
 function upload_results_cal2(){
