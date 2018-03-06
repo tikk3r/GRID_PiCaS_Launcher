@@ -1,11 +1,11 @@
 import unittest
 from GRID_PiCaS_Launcher import get_picas_credentials as gpc
-from get_token_field import get_token_field
-from set_token_field import set_token_field
+from GRID_PiCaS_Launcher.get_token_field import get_token_field
+from GRID_PiCaS_Launcher.set_token_field import set_token_field
 import os
 from time import sleep
 from GRID_PiCaS_Launcher import couchdb
-from tok_to_bash import export_tok_keys
+from GRID_PiCaS_Launcher.tok_to_bash import export_tok_keys
 import sys
 
 class tok2bashtest(unittest.TestCase):

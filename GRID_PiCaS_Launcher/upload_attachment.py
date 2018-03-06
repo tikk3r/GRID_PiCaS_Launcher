@@ -1,6 +1,6 @@
 from GRID_PiCaS_Launcher  import couchdb
 import os,sys,time
-from picas.clients import CouchClient
+from GRID_PiCaS_Launcher.picas.clients import CouchClient
 
 
 def upload_attachment(tok_id,attachment,p_db,p_usr,p_pwd,name=None):

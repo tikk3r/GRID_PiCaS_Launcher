@@ -1,17 +1,17 @@
 import unittest
 from GRID_PiCaS_Launcher import get_picas_credentials as gpc
-from get_token_field import get_token_field
-from set_token_field import set_token_field
+from GRID_PiCaS_Launcher.get_token_field import get_token_field
+from GRID_PiCaS_Launcher.set_token_field import set_token_field
 import os,sys
 from time import sleep
 from GRID_PiCaS_Launcher  import couchdb
-from tok_to_bash import export_tok_keys
+from GRID_PiCaS_Launcher.tok_to_bash import export_tok_keys
 
-from picas.actors import RunActor
-from picas.clients import CouchClient
-from picas.iterators import BasicViewIterator
-from picas.modifiers import BasicTokenModifier
-from picas.executers import execute
+from GRID_PiCaS_Launcher.picas.actors import RunActor
+from GRID_PiCaS_Launcher.picas.clients import CouchClient
+from GRID_PiCaS_Launcher.picas.iterators import BasicViewIterator
+from GRID_PiCaS_Launcher.picas.modifiers import BasicTokenModifier
+from GRID_PiCaS_Launcher.picas.executers import execute
 
 from Launch import ExampleActor
 

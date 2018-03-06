@@ -5,7 +5,7 @@
 
 from GRID_PiCaS_Launcher  import couchdb
 import os,sys,time,subprocess
-from update_token_status import update_status
+from GRID_PiCaS_Launcher.update_token_status import update_status
 
 start=0
 def progress_loop(db,uname,paswd,tok_id,outfile='ouptput',parset="Pre-Facet-Calibrator.parset"):
