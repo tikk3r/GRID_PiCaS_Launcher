@@ -19,20 +19,21 @@ import subprocess
 import shutil
 
 #picas imports
-from picas.actors import RunActor
-from picas.clients import CouchClient
-from picas.iterators import BasicViewIterator
-from picas.modifiers import BasicTokenModifier
-from picas.executers import execute
+from GRID_PiCaS_Launcher.picas.actors import RunActor
+from GRID_PiCaS_Launcher.picas.clients import CouchClient
+from GRID_PiCaS_Launcher.picas.iterators import BasicViewIterator
+from GRID_PiCaS_Launcher.picas.modifiers import BasicTokenModifier
+from GRID_PiCaS_Launcher.picas.executers import execute
 
 #token imports
-from update_token_status import update_status
-from set_token_field import set_token_field
-from upload_attachment import upload_attachment
+from GRID_PiCaS_Launcher.update_token_status import update_status
+from GRID_PiCaS_Launcher.set_token_field import set_token_field
+from GRID_PiCaS_Launcher.upload_attachment import upload_attachment
 
 #from tok_to_bash import  export_tok_keys
 
 import pdb
+
 class ExampleActor(RunActor):
     def __init__(self, iterator, modifier):
         self.iterator = iterator
@@ -46,7 +47,9 @@ class ExampleActor(RunActor):
             subprocess.call([command, location, "sandbox.tar"])
         elif command=='wget':
             subprocess.call([command, location, "-O",'sandbox.tar'])
-        if os.stat("sandbox.tar").st_size == 0: raise Exception("Sandbox failed to download!")
+        if os.stat("sandbox.tar").st_size == 0: 
+            set_token_field(self.token_name,'output',-2,self.p_db,self.p_usr,self.p_pwd)
+            raise Exception("Sandbox failed to download!")
 
     def process_token(self, key, token):
     # Print token information
@@ -56,9 +59,9 @@ class ExampleActor(RunActor):
         os.environ['TOKEN']=token['_id']
         from tok_to_bash import  export_tok_keys
 
-        p_db=os.environ['PICAS_DB']
-        p_usr=os.environ['PICAS_USR']
-        p_pwd=os.environ['PICAS_USR_PWD']
+        self.p_db=os.environ['PICAS_DB']
+        self.p_usr=os.environ['PICAS_USR']
+        self.p_pwd=os.environ['PICAS_USR_PWD']
         self.token_name=token['_id'] 
         if 'SBXloc' in token.keys():
             location=token['SBXloc']
@@ -67,9 +70,8 @@ class ExampleActor(RunActor):
     
         print("Sandbox Location= "+str(location))
     
-        ## TODO: If no globus-tools, use wget
-#        subprocess.call(["globus-url-copy", location, "sandbox.tar"])
         rc = subprocess.call(['which', 'globus-url-copy'])
+
         if rc == 0:
             if 'gsiftp' not in location and 'strw' not in location:
                 location='gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/sandbox/'+location
@@ -81,6 +83,7 @@ class ExampleActor(RunActor):
                 self.download_sandbox('wget',location)
             else:
                 self.download_sandbox('globus-url-copy',location)
+
         subprocess.call(["tar", "-xf", "sandbox.tar"])
         subprocess.call(["chmod","a+x","master.sh"])
     
@@ -89,7 +92,7 @@ class ExampleActor(RunActor):
     
         ## Read tokvar values from token and write to bash variables if not already exist! Save attachments and export abs filename to variable
 
-        set_token_field(token['_id'],'status','launched',p_db,p_usr,p_pwd)
+        set_token_field(token['_id'],'status','launched',self.p_db,self.p_usr,self.p_pwd)
         RUNDIR=os.getcwd() 
 
         #The launched script is simply master.sh with token and picas authen stored in env vars
@@ -99,18 +102,18 @@ class ExampleActor(RunActor):
         
         out = execute(command,shell=True)
         print('exit status is '+str(out))
-        set_token_field(token['_id'],'output',out[0],p_db,p_usr,p_pwd)
+        set_token_field(token['_id'],'output',out[0],self.p_db,self.p_usr,self.p_pwd)
         if out[0]==0:
-            set_token_field(token['_id'],'status','done',p_db,p_usr,p_pwd)
+            set_token_field(token['_id'],'status','done',self.p_db,self.p_usr,self.p_pwd)
         else:
-            set_token_field(token['_id'],'status','error',p_db,p_usr,p_pwd)
+            set_token_field(token['_id'],'status','error',self.p_db,self.p_usr,self.p_pwd)
         
         os.chdir(RUNDIR)
         try:
            logsout = "logs_out"
-           upload_attachment(token['_id'],logsout,p_db,p_usr,p_pwd)
+           upload_attachment(token['_id'],logsout,self.p_db,self.p_usr,self.p_pwd)
            logserr = "logs_.err"
-           upload_attachment(token['_id'],logserr,p_db,p_usr,p_pwd)
+           upload_attachment(token['_id'],logserr,self.p_db,self.p_usr,self.p_pwd)
         except:
            pass
 
@@ -119,7 +122,7 @@ class ExampleActor(RunActor):
         result=sols_search.communicate()[0]
 
         for png in result.split():
-            upload_attachment(token['_id'],png,p_db,p_usr,p_pwd,name=png)
+            upload_attachment(token['_id'],png,self.p_db,self.p_usr,self.p_pwd,name=png)
             #            try:
 #                upload_attachment(token['_id'],png,p_db,p_usr,p_pwd,name=png)
 #               time.sleep(2)
@@ -148,7 +151,7 @@ def main():
         actor.run()
     except Exception as e:
         print(str(e.args))
-        set_token_field(actor.token_name,'status','launcher_error',p_db,p_usr,p_pwd)
+        set_token_field(actor.token_name,'status','launcher_error',actor.p_db,actor.p_usr,actor.p_pwd)
 
 
 if __name__ == '__main__':
