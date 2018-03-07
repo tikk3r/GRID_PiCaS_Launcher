@@ -57,7 +57,7 @@ function dl_cal1(){
    OLD_P=$PWD
    cd ${RUNDIR}/Input
 
-   for i in `ls *tar`; do tar -xf $i && rm -rf $i; done
+   for i in `ls *tar`; do tar -xvf $i && rm -rf $i; done
    cd ${RUNDIR}
 
    echo "Download Done!"
@@ -67,7 +67,7 @@ function dl_cal2(){
 # This function is specific to the temp files created by pref_cal1 
    sed 's?srm://srm.grid.sara.nl:8443?gsiftp://gridftp.grid.sara.nl:2811?g' $1 | xargs -I{} globus-url-copy -st 30 {} $PWD/ || { echo 'downloading failed' ; exit 21; }
    for i in `ls *tar`; do tar -xf $i &&rm $i; done
-   find . -name "${OBSID}*ndppp_prep_cal" -exec mv {} . \;   
+   find . -name "${OBSID}*ndppp_prep_cal" -exec mv {} ${RUNDIR}\Input \;   
 
 }
 
