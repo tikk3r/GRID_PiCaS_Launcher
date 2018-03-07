@@ -43,7 +43,8 @@ function upload_results_cal1(){
 }
 
 function upload_results_cal2(){
-        
+       
+         tar -cvf Output/calib_solutions.tar prefactor/cal_results/*npy prefactor/results/*h5
          globus-url-copy file:`pwd`/Output/calib_solutions.tar gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/spectroscopy-migrated/prefactor/cal_sols/${OBSID}_solutions.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed
         wait
 }
