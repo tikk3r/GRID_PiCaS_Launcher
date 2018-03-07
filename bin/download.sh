@@ -69,7 +69,7 @@ function dl_cal2(){
    sed 's?srm://srm.grid.sara.nl:8443?gsiftp://gridftp.grid.sara.nl:2811?g' $1 | xargs -I{} globus-url-copy -st 30 {} $PWD/Input/ || { echo 'downloading failed' ; exit 21; }
    cd Input
    for i in `ls *tar`; do tar -xf $i &&rm $i; done
-   find . -name "${OBSID}*ndppp_prep_cal" -exec mv {} . \;   
+   find . -name "${OBSID}*ndppp_prep_cal" -exec mv {} ${RUNDIR}/Input/ \;   
    cd ${RUNDIR}
 
 }
