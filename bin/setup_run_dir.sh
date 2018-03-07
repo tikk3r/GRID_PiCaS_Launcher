@@ -19,6 +19,8 @@ cp pipeline.cfg $1
 cd ${RUNDIR}
 touch pipeline_status
 
+mkdir -p Input
+mkdir -p Output
 }
 
 function setup_run_dir(){
