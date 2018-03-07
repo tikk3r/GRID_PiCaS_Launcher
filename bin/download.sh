@@ -10,8 +10,9 @@ function download_files(){
     echo "setup_dl: globus-url-copy doesn't exist. ";exit 13                                             
  fi  
 
- if [[ !(-f $1 ) ]]
+ if [[ ! -f ${1}  ]]
  then
+     echo "No srm.txt found "
      exit 20 #exit 20=> No download file present
  fi
 
