@@ -1,5 +1,33 @@
 #!/bin/bash
 
+function upload_error_wrapper(){
+## $1 is file, $2 is location; Exits 31 if error; 32 if pools ful; 33 if file exists
+
+globus-url-copy $1 $2  2>upload_error_status
+cat upload_error_status
+
+if [[ ! -z $( grep "550 File exists" upload_error_status)  ]]; then
+    echo "Upload_error File Exists"
+    exit 33
+fi
+
+if [[ ! -z grep "451 All pools are full" upload_error_status  ]]; then
+   echo "Upload Error: Pools full!"
+   exit 32
+fi
+
+if [[ ! -z $( grep "550 File not found" upload_error_status )  ]]; then
+    echo "Upload_error File cannot be found (folder doesn't exist?)"
+    exit 34
+fi
+
+
+if [[ ! -z grep "error" upload_error_status   ]]; then
+    echo "Upload Error"
+    exit 31
+fi
+}                     
+
 function upload_results(){
 python ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading_results'
 echo "---------------------------------------------------------------------------"
@@ -15,6 +43,8 @@ echo "--------------------------------------------------------------------------
  esac
 
 }
+
+
 
 function generic_upload(){
 
@@ -73,36 +103,3 @@ echo ""
 
 }
 
-
-function upload_error_wrapper(){
-## $1 is file, $2 is location; Exits 31 if error; 32 if pools ful; 33 if file exists
-
-globus-url-copy $1 $2  2>upload_error_status
-
-cat upload_error_status
-
-if [[ ! -z $( grep "550 File exists" upload_error_status)  ]]; then
-    echo "Upload_error File Exists"
-    exit 33
-fi
-
-if [[ ! -z grep "451 All pools are full" upload_error_status  ]]; then
-   echo "Upload Error: Pools full!"
-   exit 32
-fi
-
-if [[ ! -z $( grep "550 File not found" upload_error_status )  ]]; then
-    echo "Upload_error File cannot be found (folder doesn't exist?)"
-    exit 34
-fi
-
-
-
-
-if [[ ! -z grep "error" upload_error_status   ]]; then
-    echo "Upload Error"
-    exit 31
-fi
-
-
-}
