@@ -38,7 +38,12 @@ if [ ! -n "$(type -t download_files )"   ] && [ ! "$(type -t download_files )" =
     echo "Defining generic download"
     function download_files(){
         echo "Generic download of files since Sanbdox doesn't have bin/download.sh"
-        dl_generic $1                                                                                      
+        dl_generic $1                                                              
+        cd ${RUNDIR}/Input
+        find . -type d  -name "*.ms" -exec mv {} ./ \;
+        find . -type d  -name "*.MS" -exec mv {} ./ \;
+
+        cd ${RUNDIR}
 
 }
 fi
