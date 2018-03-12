@@ -11,7 +11,7 @@ if [[ ! -z $( grep "550 File exists" upload_error_status)  ]]; then
     exit 33
 fi
 
-if [[ ! -z grep "451 All pools are full" upload_error_status  ]]; then
+if [[ ! -z $( grep "451 All pools are full" upload_error_status ) ]]; then
    echo "Upload Error: Pools full!"
    exit 32
 fi
@@ -22,7 +22,7 @@ if [[ ! -z $( grep "550 File not found" upload_error_status )  ]]; then
 fi
 
 
-if [[ ! -z grep "error" upload_error_status   ]]; then
+if [[ ! -z $( grep "error" upload_error_status )  ]]; then
     echo "Upload Error"
     exit 31
 fi
