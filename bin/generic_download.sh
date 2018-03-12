@@ -2,6 +2,9 @@
 
 #First argument is file, second argument is $PIPELINE
 
+
+
+
 function dl_generic(){
     echo "Initiating generic download"
   if [[ ! -z $( cat $1 | grep juelich )  ]]; then 
@@ -27,4 +30,17 @@ function dl_generic(){
    echo "Download Done!"
 
 }
+
+
+
+if [ ! -n "$(type -t download_files )"   ] && [ ! "$(type -t download_files )" = function   ]; then
+
+    echo "Defining generic download"
+    function download_files(){
+        echo "Generic download of files since Sanbdox doesn't have bin/download.sh"
+        dl_generic $1                                                                                      
+
+}
+fi
+
 
