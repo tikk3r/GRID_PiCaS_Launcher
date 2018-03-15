@@ -37,7 +37,7 @@ def export_tok_keys(cfgfile='tokvar.cfg',token=None):
         set_token_field(token['_id'],'output',-2,dbn,un,pwd)
         raise Exception("tokvar missing")
 
-    server = couchdb.Server("https://picas-lofar.grid.sara.nl:6984")
+    server = couchdb.Server("https://picas-lofar.grid.surfsara.nl:6984")
     server.resource.credentials = (un, pwd)
     db = server[dbn]
     for key in tokvar:
