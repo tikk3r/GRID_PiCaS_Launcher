@@ -84,9 +84,12 @@ function upload_results_cal2(){
 
 function upload_results_targ1(){
 
-uberftp -mkdir gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/spectroscopy-migrated/prefactor/SKSP/${OBSID}
-globus-url-copy file:`pwd`/results.tar.gz gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/spectroscopy-migrated/prefactor/SKSP/${OBSID}/t1_${OBSID}_AB${A_SBN}_SB${STARTSB}_.tar.gz || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed
-
+uberftp -mkdir ${RESULTS_DIR}/${OBSID}
+mv ${RUNDIR}/prefactor/results/L* ${RUNDIR}/Output/
+cd ${RUNDIR}/Output
+tar -cvf results.tar $PWD/*
+globus-url-copy file:${RUNDIR}/Output/results.tar ${RESULTS_DIR}/${OBSID}/pref_targ1_${OBSID}_AB${A_SBN}_SB${STARTSB}_.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed
+cd ${RUNDIR}
 }
 
 function upload_results_targ2(){
