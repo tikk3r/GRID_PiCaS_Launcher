@@ -117,7 +117,7 @@ class ExampleActor(RunActor):
 def main():
     # setup connection to db
     db_name = sys.argv[1]
-    client = CouchClient(url="https://picas-lofar.grid.sara.nl:6984", db=str(sys.argv[1]), username=str(sys.argv[2]), password=str(sys.argv[3]))
+    client = CouchClient(url="https://picas-lofar.grid.surfsara.nl:6984", db=str(sys.argv[1]), username=str(sys.argv[2]), password=str(sys.argv[3]))
     # Create token modifier
     modifier = BasicTokenModifier()
     # Create iterator, point to the right todo view

@@ -8,7 +8,7 @@ import os,sys,time
 
 def update_freq(p_db,p_usr,p_pwd,tok_id,freq):
     try:
-        server = couchdb.Server(url="https://picas-lofar.grid.sara.nl:6984")
+        server = couchdb.Server(url="https://picas-lofar.grid.surfsara.nl:6984")
         server.resource.credentials = (p_usr,p_pwd)
         db = server[p_db]
     except couchdb.http.ServerError:
