@@ -2,7 +2,7 @@ import couchdb
 import os,sys,time
 
 def set_token_field(tok_id,fieldname,value,p_db,p_usr,p_pwd):
-    server = couchdb.Server(url="https://picas-lofar.grid.sara.nl:6984")
+    server = couchdb.Server(url="https://picas-lofar.grid.surfsara.nl:6984")
     server.resource.credentials = (p_usr,p_pwd)
     db = server[p_db]
     token=db[tok_id]
