@@ -1,6 +1,8 @@
 
 function setup_sara_dir(){
 
+export PYTHONPATH=${PWD}:$PYTHONPATH
+
 cp *parset $1
 cp -r  $PWD/prefactor/ $1
 #TODO: Make this block just a git pull?
