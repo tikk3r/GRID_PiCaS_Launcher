@@ -1,15 +1,15 @@
 function cleanup(){
-if [[ "$?" != "0" ]]; then
-   echo "Problem copying final files to the Grid. Clean up and Exit now..."
-   cp log_$name logtar_$name.fa ${JOBDIR}
-   cd ${JOBDIR}
-
-   if [[ $(hostname -s) != 'loui' ]]; then
-    echo "removing RunDir"
-    rm -rf ${RUNDIR}
-   fi
-   exit 1 #exit 21=> cannot upload final files
-fi
+#if [[ "$?" != "0" ]]; then
+#   echo "Problem copying final files to the Grid. Clean up and Exit now..."
+#   cp log_$name logtar_$name.fa ${JOBDIR}
+#   cd ${JOBDIR}
+#
+#   if [[ $(hostname -s) != 'loui' ]]; then
+#    echo "removing RunDir"
+#    rm -rf ${RUNDIR}
+#   fi
+#   exit 1 #exit 21=> cannot upload final files
+#fi
 echo ""
 
 echo ""
