@@ -38,8 +38,8 @@ class Launchtest(unittest.TestCase):
         self.dbn="sksp_unittest"
         sys.argv=["dummy", self.dbn,self.usr,self.pwd]
         self.token="travis_getSBX_test"+vers
-        server = couchdb.Server("https://picas-lofar.grid.sara.nl:6984")
-        self.client = CouchClient(url="https://picas-lofar.grid.sara.nl:6984", db=self.dbn, username=self.usr, password=self.pwd)
+        server = couchdb.Server("https://picas-lofar.grid.surfsara.nl:6984")
+        self.client = CouchClient(url="https://picas-lofar.grid.surfsara.nl:6984", db=self.dbn, username=self.usr, password=self.pwd)
         server.resource.credentials = (self.usr,self.pwd)
         self.db= server[self.dbn]
         tok={'type':self.token}
