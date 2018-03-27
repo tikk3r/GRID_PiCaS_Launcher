@@ -29,7 +29,6 @@ fi
 }                     
 
 function upload_results(){
-python ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading_results'
 echo "---------------------------------------------------------------------------"
 echo "Copy the output from the Worker Node to the Grid Storage Element"
 echo "---------------------------------------------------------------------------"
@@ -52,7 +51,11 @@ function generic_upload(){
   if [ "$(ls -A $PWD)" ]; then
      uberftp -mkdir ${RESULTS_DIR}/${PIPELINE_STEP}/
      uberftp -mkdir ${RESULTS_DIR}/${PIPELINE_STEP}/${OBSID}
+
+     python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'archiving results'   
      tar -cvf results.tar $PWD/* 
+
+     python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading results'   
      echo ""
      echo ""
      echo " Uploading to ${RESULTS_DIR}/${PIPELINE_STEP}/${OBSID}/${OBSID}_${PICAS_USR}_SB${STARTSB}.tar"
@@ -64,21 +67,20 @@ function generic_upload(){
 }
 
 function upload_results_cal1(){
- find ${RUNDIR} -name "instrument" |xargs tar -cvf ${RUNDIR}/Output/instruments_${OBSID}_${STARTSB}.tar  
- find ${RUNDIR} -iname "FIELD" |grep work |xargs tar -rvf ${RUNDIR}/Output/instruments_${OBSID}_${STARTSB}.tar 
- find ${RUNDIR} -iname "ANTENNA" |grep work |xargs tar -rvf ${RUNDIR}/Output/instruments_${OBSID}_${STARTSB}.tar
-
- uberftp -mkdir ${RESULTS_DIR}/${OBSID}
-
- globus-url-copy ${RUNDIR}/Output/instruments_${OBSID}_${STARTSB}.tar ${RESULTS_DIR}/${OBSID}/instruments_${OBSID}_SB${STARTSB}.tar  || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed   
+   find ${RUNDIR} -name "instrument" |xargs tar -cvf ${RUNDIR}/Output/instruments_${OBSID}_${STARTSB}.tar  
+   find ${RUNDIR} -iname "FIELD" |grep work |xargs tar -rvf ${RUNDIR}/Output/instruments_${OBSID}_${STARTSB}.tar 
+   find ${RUNDIR} -iname "ANTENNA" |grep work |xargs tar -rvf ${RUNDIR}/Output/instruments_${OBSID}_${STARTSB}.tar
+  
+   uberftp -mkdir ${RESULTS_DIR}/${OBSID}
+  
+   globus-url-copy ${RUNDIR}/Output/instruments_${OBSID}_${STARTSB}.tar ${RESULTS_DIR}/${OBSID}/instruments_${OBSID}_SB${STARTSB}.tar  || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed   
 }
 
 function upload_results_cal2(){
-       
-        uberftp -mkdir ${RESULTS_DIR}/${OBSID}
-         tar -cvf Output/calib_solutions.tar prefactor/cal_results/*npy prefactor/results/*h5
-         globus-url-copy file:`pwd`/Output/calib_solutions.tar ${RESULTS_DIR}/${OBSID}/${OBSID}.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed
-        wait
+   uberftp -mkdir ${RESULTS_DIR}/${OBSID}
+   tar -cvf Output/calib_solutions.tar prefactor/cal_results/*npy prefactor/results/*h5
+   globus-url-copy file:`pwd`/Output/calib_solutions.tar ${RESULTS_DIR}/${OBSID}/${OBSID}.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed
+   wait
 }
 
 
@@ -87,7 +89,11 @@ function upload_results_targ1(){
 uberftp -mkdir ${RESULTS_DIR}/${OBSID}
 mv ${RUNDIR}/prefactor/results/L* ${RUNDIR}/Output/
 cd ${RUNDIR}/Output
+
+python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'archiving results'      
 tar -cvf results.tar $PWD/*
+
+python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading results'      
 globus-url-copy file:${RUNDIR}/Output/results.tar ${RESULTS_DIR}/${OBSID}/pref_targ1_${OBSID}_AB${A_SBN}_SB${STARTSB}_.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed
 cd ${RUNDIR}
 }
@@ -96,8 +102,12 @@ function upload_results_targ2(){
 
    mv ${RUNDIR}/prefactor/results/L* ${RUNDIR}/Output/
    cd ${RUNDIR}/Output
+   python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'archiving results'   
    tar -zcvf results.tar.gz $PWD/*
+
    uberftp -mkdir gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/distrib/SKSP/${OBSID}
+
+   python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading Results'   
    globus-url-copy file:`pwd`/results.tar.gz gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/distrib/SKSP/${OBSID}/GSM_CAL_${OBSID}_ABN_${STARTSB}.tar.gz || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed 
     wait
 }
