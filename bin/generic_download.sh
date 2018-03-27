@@ -22,6 +22,7 @@ function dl_generic(){
    wait
    OLD_P=$PWD 
    cd ${RUNDIR}/Input
+   python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'extracting'              
 
    for i in `ls *tar`; do tar -xvf $i && rm -rf $i; done
    for i in `ls *gz`; do tar -zxvf $i && rm -rf $i; done
