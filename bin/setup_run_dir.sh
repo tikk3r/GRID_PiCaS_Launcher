@@ -17,6 +17,7 @@ cp srm.txt $1 #this is a fallthrough by taking the srm from the token not from t
 cp ${PARSET} $1
 cp ${SCRIPT} $1
 cp -r $PWD/openTSDB_tcollector $1
+cp -r $PWD/ddf-pipeline $1
 cp pipeline.cfg $1
 cd ${RUNDIR}
 touch pipeline_status
