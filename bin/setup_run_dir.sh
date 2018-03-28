@@ -6,9 +6,7 @@ export PYTHONPATH=${PWD}:$PYTHONPATH
 cp *parset $1
 cp -r  $PWD/prefactor/ $1
 #TODO: Make this block just a git pull?
-cp download_srms.py $1
 cp *py $1
-cp -r couchdb/ $1
 mkdir $1/piechart
 cp -r $PWD/piechart/* $1/piechart
 

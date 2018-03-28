@@ -67,8 +67,8 @@ echo "INITIALIZE LOFAR SOFTWARE"
 
 echo  "var LOFARDATAROOT: " ${LOFARDATAROOT}
 echo  "setup" "adding symbolic link for EPHEMERIDES and GEODETIC data into homedir"
-ln -s ${LOFARDATAROOT} .
-ln -s ${LOFARDATAROOT} ~/
+ln -sf ${LOFARDATAROOT} .
+ln -sf ${LOFARDATAROOT} ~/
 # NEW NB we can't assume the home dir is shared across all Grid nodes.
 
 source /cvmfs/softdrive.nl/lofar_sw/env/current_losoto.sh
