@@ -2,7 +2,7 @@
 
 function start_profile(){
 echo "start tCollector in dryrun mode"
-cd ${RUNDIR}/openTSDB_tcollector/
+cd ${RUNDIR}/tcollector/
 mkdir logs
 ./tcollector.py -H spui.grid.sara.nl -p 4242  &
 TCOLL_PID=$!
