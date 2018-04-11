@@ -49,6 +49,7 @@ class ExampleActor(RunActor):
             subprocess.call([command, location, "-O",'sandbox.tar'])
         if os.stat("sandbox.tar").st_size == 0: 
             set_token_field(self.token_name,'output',-2,self.p_db,self.p_usr,self.p_pwd)
+            set_token_field(self.token_name,'done',time.time(),self.p_db,self.p_usr,self.p_pwd)
             raise Exception("Sandbox failed to download!")
 
     def process_token(self, key, token):
