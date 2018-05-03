@@ -17,6 +17,7 @@ import time
 from GRID_PiCaS_Launcher import couchdb
 import subprocess
 import shutil
+import glob
 
 #picas imports
 from GRID_PiCaS_Launcher.picas.actors import RunActor
@@ -132,6 +133,8 @@ class ExampleActor(RunActor):
         #try reuploading the last png (for some reason last png corrupts>)
         #self.client.db.put_attachment(token,open(os.path.basename(png),'r'),os.path.split(png)[1])
         # Attach logs in token
+#        for tmpdir in glob.glob('tmp.*'):
+#            shutil.rmtree(tmpdir)
         self.client.modify_token(self.modifier.close(self.client.db[self.token_name]))
         return
 
@@ -152,7 +155,7 @@ def main():
         actor.run()
     except Exception as e:
         print(str(e.args))
-        set_token_field(actor.token_name,'status','launcher_error',actor.p_db,actor.p_usr,actor.p_pwd)
+        set_token_field(actor.token_name,'status','error',actor.p_db,actor.p_usr,actor.p_pwd)
 
 
 if __name__ == '__main__':
