@@ -20,10 +20,13 @@ def progress_loop(db,uname,paswd,tok_id,outfile='ouptput',parset="Pre-Facet-Cali
     finished_steps=[]
     print(start)
     while len(running)>0 or time.time()-start<60:
-        time.sleep(10)
+        time.sleep(0.5)
         steps=get_steps(outfile)
         for st in steps:
             if st not in finished_steps:
+                os.environ['PIPELINE_STATUS'] = st
+                with open(os.environ['RUNDIR']+"/pipeline_step",'w') as f:
+                    f.write(st)
                 update_status(db,uname,paswd,tok_id,st)
         p=subprocess.Popen(['pgrep','-u',os.environ["USER"],'-f','genericpipeline.py'],stdout=subprocess.PIPE)
         running=p.communicate()[0]
