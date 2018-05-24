@@ -29,16 +29,16 @@ kill $COLL_PID
 }
 
 function monitor_step(){
- export PIPELINE_STEP=$( cat ${RUNDIR}/pipeline_step )
+ export PIPELINE_SUB_STEP="${PIPELINE_STEP}":"$( cat ${RUNDIR}/pipeline_step )"
  
-  if [ "$PIPELINE_STEP" != "$CURR_STEP"  ]; then
+  if [ "$PIPELINE_SUB_STEP" != "$CURR_STEP"  ]; then
       if [ ! -z $( echo $COLL_PID ) ]; then
           kill $COLL_PID;
           killall telegraf;
       fi
       launch_telegraf &
       export COLL_PID=$!
-      export CURR_STEP=$PIPELINE_STEP;
+      export CURR_STEP=$PIPELINE_SUB_STEP;
   fi; 
  sleep 1;
 }
