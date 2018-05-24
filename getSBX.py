@@ -57,7 +57,12 @@ class ExampleActor(RunActor):
             location="gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/spectroscopy-migrated/sandbox/sandbox_"+str(sys.argv[2])+"_"+str(token['OBSID'])+".tar"
     
         print("Sandbox Location= "+location)
-    
+        set_token_field(token['_id'],'WARNING",'"""!!!!!!!!!!!!
+                Dear User. If you are reading this, it means you're using the old version of GRID_PiCaStools. 
+                Within the next week We will be updating the backend from the testpy3 branch to the master branch. That means your jobs may start crashing. 
+                Please read here for more info: 
+                https://goo.gl/gKsUzJ
+                !!!!!!!!!!!!!!!!!!!!!!!!""",p_db,p_usr,p_pwd)     
         ## TODO: If no globus-tools, use wget
         subprocess.call(["globus-url-copy", location, "sandbox.tar"])
         subprocess.call(["tar", "-xf", "sandbox.tar"])
@@ -86,12 +91,6 @@ class ExampleActor(RunActor):
         else:
             set_token_field(token['_id'],'status','error',p_db,p_usr,p_pwd)
         
-        set_token_field(token['_id'],'WARNING!!!",'"""!!!!!!!!!!!!
-                Dear User. If you are reading this, it means you're using the old version of GRID_PiCaStools. 
-                Within the next week We will be updating the backend from the testpy3 branch to the master branch. That means your jobs may start crashing. 
-                Please read here for more info: 
-                https://goo.gl/gKsUzJ
-                !!!!!!!!!!!!!!!!!!!!!!!!""",p_db,p_usr,p_pwd)
 	os.chdir(RUNDIR)
         try:
            logsout = "logs_out"
