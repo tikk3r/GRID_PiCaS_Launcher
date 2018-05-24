@@ -86,12 +86,12 @@ class ExampleActor(RunActor):
         else:
             set_token_field(token['_id'],'status','error',p_db,p_usr,p_pwd)
         
-        set_token_field(token['_id'],"""!!!!!!!!!!!!
+        set_token_field(token['_id'],'WARNING!!!",'"""!!!!!!!!!!!!
                 Dear User. If you are reading this, it means you're using the old version of GRID_PiCaStools. 
                 Within the next week We will be updating the backend from the testpy3 branch to the master branch. That means your jobs may start crashing. 
                 Please read here for more info: 
                 https://goo.gl/gKsUzJ
-                !!!!!!!!!!!!!!!!!!!!!!!!""",'done',p_db,p_usr,p_pwd)
+                !!!!!!!!!!!!!!!!!!!!!!!!""",p_db,p_usr,p_pwd)
 	os.chdir(RUNDIR)
         try:
            logsout = "logs_out"
