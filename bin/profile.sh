@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function start_profile(){
-echo "start tCollector in dryrun mode"
+echo "start telegraf in dryrun mode"
 source /cvmfs/softdrive.nl/apmechev/go_packages/init.sh 
 
 echo "" > ${RUNDIR}/pipeline_step
@@ -34,6 +34,7 @@ function monitor_step(){
   if [ "$PIPELINE_STEP" != "$CURR_STEP"  ]; then
       if [ ! -z $( echo $COLL_PID ) ]; then
           kill $COLL_PID;
+          killall telegraf;
       fi
       launch_telegraf &
       export COLL_PID=$!
