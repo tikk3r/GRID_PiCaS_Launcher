@@ -17,7 +17,10 @@ mkfifo ${RUNDIR}/pipeline_fifo
 ########
 #telegraf --config /cvmfs/softdrive.nl/apmechev/go_packages/src/github.com/influxdata/telegraf/telegraf.conf 2>/dev/null &
 ########
-COLL_PID=$!
+#COLL_PID=$!
+
+monitor_loop &
+
 cd ${RUNDIR}
 
 }
