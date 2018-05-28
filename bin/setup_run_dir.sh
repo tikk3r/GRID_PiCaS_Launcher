@@ -16,6 +16,7 @@ cp ${PARSET} $1
 cp ${SCRIPT} $1
 cp -r $PWD/tcollector $1
 cp -r $PWD/ddf-pipeline $1
+cp -r $PWD/skymodels $1
 cp pipeline.cfg $1
 cd ${RUNDIR}
 touch pipeline_status
