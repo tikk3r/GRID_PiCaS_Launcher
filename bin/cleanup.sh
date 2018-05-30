@@ -13,7 +13,7 @@ function cleanup(){
 echo ""
 
 echo ""
-echo "copy echos to the Job home directory and clean temp files in scratch"
+echo "copy logs to the Job home directory and clean temp files in scratch"
 cp out* ${JOBDIR}
 cp pngs.tar.gz ${JOBDIR}
 cd ${JOBDIR}
