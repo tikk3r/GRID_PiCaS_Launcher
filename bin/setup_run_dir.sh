@@ -2,6 +2,7 @@
 function setup_sara_dir(){
 
 export PYTHONPATH=${PWD}:$PYTHONPATH
+source /cvmfs/softdrive.nl/lofar_sw/env/current_dysco.sh 
 
 cp *parset $1
 cp -r  $PWD/prefactor/ $1
