@@ -103,12 +103,12 @@ function upload_results_targ2(){
    mv ${RUNDIR}/prefactor/results/L* ${RUNDIR}/Output/
    cd ${RUNDIR}/Output
    python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'archiving results'   
-   tar -zcvf results.tar.gz $PWD/*
+   tar -cvf results.tar $PWD/*
 
    uberftp -mkdir gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/distrib/SKSP/${OBSID}
 
    python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading Results'   
-   globus-url-copy file:`pwd`/results.tar.gz gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/distrib/SKSP/${OBSID}/GSM_CAL_${OBSID}_ABN_${STARTSB}.tar.gz || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed 
+   globus-url-copy file:`pwd`/results.tar gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/distrib/SKSP/${OBSID}/GSM_CAL_${OBSID}_ABN_${STARTSB}.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed 
     wait
 }
 
