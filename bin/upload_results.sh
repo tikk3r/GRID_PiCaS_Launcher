@@ -109,7 +109,7 @@ function upload_results_targ2(){
 
    python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading Results'   
    globus-url-copy file:`pwd`/results.tar gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/distrib/SKSP/${OBSID}/GSM_CAL_${OBSID}_ABN_${STARTSB}.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed 
-    wait
+
 }
 
 
