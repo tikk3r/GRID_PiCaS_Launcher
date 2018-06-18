@@ -155,7 +155,7 @@ def main():
         actor.run()
     except Exception as e:
         print(str(e.args))
-        set_token_field(actor.token_name,'status','error',actor.p_db,actor.p_usr,actor.p_pwd)
+#        set_token_field(actor.token_name,'status','error',actor.p_db,actor.p_usr,actor.p_pwd)
         set_token_field(actor.token_name,'launcher_status',str(e.args),actor.p_db,actor.p_usr,actor.p_pwd)
 
 
