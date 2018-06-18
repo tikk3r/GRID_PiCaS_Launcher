@@ -91,7 +91,7 @@ mv ${RUNDIR}/prefactor/results/L* ${RUNDIR}/Output/
 cd ${RUNDIR}/Output
 
 python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'archiving results'      
-tar -cvf results.tar $PWD/*
+tar -cvf results.tar $PWD/* --remove-files
 
 python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading results'      
 globus-url-copy file:${RUNDIR}/Output/results.tar ${RESULTS_DIR}/${OBSID}/pref_targ1_${OBSID}_AB${A_SBN}_SB${STARTSB}_.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed
