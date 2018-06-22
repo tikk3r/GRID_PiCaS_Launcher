@@ -3,9 +3,9 @@
 function start_profile(){
 echo "start telegraf in prod mode"
 source /cvmfs/softdrive.nl/apmechev/go_packages/init.sh 
+export CURRENT_SESSION=$$
 
 echo "" > ${RUNDIR}/pipeline_step
-
 ########
 #telegraf --config /cvmfs/softdrive.nl/apmechev/go_packages/src/github.com/influxdata/telegraf/telegraf.conf 2>/dev/null &
 ########
