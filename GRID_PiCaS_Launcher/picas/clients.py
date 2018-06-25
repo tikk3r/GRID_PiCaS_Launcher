@@ -11,8 +11,8 @@ import random
 import sys
 
 
-import couchdb
-from couchdb import Server
+from GRID_PiCaS_Launcher import couchdb
+from GRID_PiCaS_Launcher.couchdb import Server
 
 class CouchClient(object):
     """Client class to handle communication with the CouchDB back-end.

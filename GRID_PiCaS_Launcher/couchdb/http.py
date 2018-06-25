@@ -34,8 +34,8 @@ try:
 except ImportError:
     from email.utils import parsedate
 
-from couchdb import json
-from couchdb import util
+from GRID_PiCaS_Launcher.couchdb import json
+from GRID_PiCaS_Launcher.couchdb import util
 
 __all__ = ['HTTPError', 'PreconditionFailed', 'ResourceNotFound',
            'ResourceConflict', 'ServerError', 'Unauthorized', 'RedirectLimit',
@@ -216,7 +216,7 @@ class Session(object):
                         timeout (the default)
         :param retry_delays: list of request retry delays.
         """
-        from couchdb import __version__ as VERSION
+        from GRID_PiCaS_Launcher.couchdb import __version__ as VERSION
         self.user_agent = 'CouchDB-Python/%s' % VERSION
         # XXX We accept a `cache` dict arg, but the ref gets overwritten later
         # during cache cleanup. Do we remove the cache arg (does using a shared

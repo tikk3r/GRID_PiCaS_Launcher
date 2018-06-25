@@ -1,8 +1,9 @@
 #!/bin/env python 
 import sys,os
-import couchdb
-from get_token_field import get_token_field
-from set_token_field import set_token_field
+from GRID_PiCaS_Launcher  import couchdb
+from GRID_PiCaS_Launcher.get_token_field import get_token_field
+from GRID_PiCaS_Launcher.set_token_field import set_token_field
+
 
 try:
     import yaml

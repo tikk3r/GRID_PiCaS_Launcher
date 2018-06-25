@@ -1,11 +1,11 @@
 import unittest
-import get_picas_credentials as gpc
-from get_token_field import get_token_field
-from set_token_field import set_token_field
+from GRID_PiCaS_Launcher import get_picas_credentials as gpc
+from GRID_PiCaS_Launcher.get_token_field import get_token_field
+from GRID_PiCaS_Launcher.set_token_field import set_token_field
 import os
 from time import sleep
-import couchdb
-from tok_to_bash import export_tok_keys
+from GRID_PiCaS_Launcher import couchdb
+from GRID_PiCaS_Launcher.tok_to_bash import export_tok_keys
 import sys
 
 class tok2bashtest(unittest.TestCase):
@@ -18,7 +18,7 @@ class tok2bashtest(unittest.TestCase):
         self.usr=creds['user']
         self.pwd=creds['password']
         self.dbn=str('sksp_unittest')
-        self.test_tokvarile='tests/test_tok_var.cfg'
+        self.test_tokvarile='GRID_PiCaS_Launcher/tests/test_tok_var.cfg'
         server = couchdb.Server("https://picas-lofar.grid.surfsara.nl:6984")
         server.resource.credentials = (self.usr,self.pwd)
         self.db= server[self.dbn]
@@ -63,13 +63,13 @@ class tok2bashtest(unittest.TestCase):
         self.assertTrue(os.environ['INT1']=='1234')
 
     def test_dl_attach(self):
-        self.travis_safe_upload('tests/test_attachment.txt', 'test_attachment')
+        self.travis_safe_upload('GRID_PiCaS_Launcher/tests/test_attachment.txt', 'test_attachment')
         token=self.db[self.token_id]
         export_tok_keys(self.test_tokvarile,token)
         self.assertTrue(os.path.isfile('test_attachment'))
 
     def test_dl_attach_var(self):
-        self.travis_safe_upload('tests/test_attachment.txt', 'test_attachment2')
+        self.travis_safe_upload('GRID_PiCaS_Launcher/tests/test_attachment.txt', 'test_attachment2')
         token=self.db[self.token_id]
         export_tok_keys(self.test_tokvarile,token)
         self.assertTrue(os.path.isfile('test_attachment2'))

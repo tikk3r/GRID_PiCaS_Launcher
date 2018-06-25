@@ -1,5 +1,5 @@
 import unittest
-import get_picas_credentials as pc
+from GRID_PiCaS_Launcher import get_picas_credentials as pc
 import os
 from os.path import expanduser
 
