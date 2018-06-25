@@ -21,7 +21,7 @@ cd ${RUNDIR}
 function stop_profile(){
 echo "killing tcollector"
 kill $COLL_PID
-killall telegraf
+killall -9 telegraf
 }
 
 function monitor_step(){
