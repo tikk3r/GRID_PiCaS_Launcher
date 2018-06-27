@@ -119,3 +119,26 @@ echo ""
 
 }
 
+function upload_with_pipe(){
+  cd ${RUNDIR}/Output
+
+  if [ "$(ls -A $PWD)" ]; then
+     uberftp -mkdir ${RESULTS_DIR}/${PIPELINE_STEP}/
+     uberftp -mkdir ${RESULTS_DIR}/${PIPELINE_STEP}/${OBSID}
+
+     python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading results'
+     echo ""
+     echo ""
+     echo " Uploading to ${RESULTS_DIR}/${PIPELINE_STEP}/${OBSID}/${OBSID}_${PICAS_USR}_SB${STARTSB}.tar"
+  
+     UPLOAD_FIFO="GRID_upload_fifo.tar"
+     mkfifo ${UPLOAD_FIFO} 
+     tar -cvf ${UPLOAD_FIFO} cal_tables_finish_dates & globus-url-copy $UPLOAD_FIFO gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/distrib/SKSP/logscal_tables_finish_dates
+   else
+    echo "$PWD is Empty"; exit 30; # exit 30 => no files to upload 
+  fi 
+  cd ${RUNDIR}
+ 
+
+}
+
