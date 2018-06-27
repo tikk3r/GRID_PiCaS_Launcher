@@ -133,7 +133,8 @@ function upload_with_pipe(){
   
      UPLOAD_FIFO="GRID_upload_fifo.tar"
      mkfifo ${UPLOAD_FIFO} 
-     tar -cvf ${UPLOAD_FIFO} cal_tables_finish_dates & globus-url-copy $UPLOAD_FIFO gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/distrib/SKSP/logscal_tables_finish_dates
+     tar -cvf ${UPLOAD_FIFO} * & globus-url-copy ${UPLOAD_FIFO} ${RESULTS_DIR}/${PIPELINE_STEP}/${OBSID}/${OBSID}_${PICAS_USR}_SB${STARTSB}.tar
+
    else
     echo "$PWD is Empty"; exit 30; # exit 30 => no files to upload 
   fi 
