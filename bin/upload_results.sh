@@ -81,8 +81,7 @@ function upload_results_cal2(){
    python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading results'   
    uberftp -mkdir ${RESULTS_DIR}/${OBSID}
    tar -cvf Output/calib_solutions.tar ${RUNDIR}/prefactor/cal_results/*npy ${RUNDIR}/prefactor/results/*h5
-   globus-url-copy file:`pwd`/Output/calib_solutions.tar ${RESULTS_DIR}/${OBSID}/${OBSID}.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed
-   wait
+   globus-url-copy file:`pwd`/Output/calib_solutions.tar ${RESULTS_DIR}/${OBSID}/${OBSID}.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed 
 }
 
 
