@@ -3,6 +3,7 @@
 function start_profile(){
 echo "start telegraf in prod mode"
 source /cvmfs/softdrive.nl/apmechev/go_packages/init.sh 
+#Used to only profile processes with the current session ID
 export CURRENT_SESSION=$$
 
 echo "" > ${RUNDIR}/pipeline_step
