@@ -1,4 +1,5 @@
 function cleanup(){
+
 echo ""
 python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'cleaning up'  
 echo ""
@@ -7,7 +8,7 @@ cp out* ${JOBDIR}
 #cp pngs.tar.gz ${JOBDIR}
 cd ${JOBDIR}
 
-if [[ $(hostname -s) != 'loui' ]]; then
+if [[ $(hostname -s) != 'f18-01.gina.sara.nl' ]]; then
     echo "removing RunDir"
     rm -rf ${RUNDIR}
 fi
