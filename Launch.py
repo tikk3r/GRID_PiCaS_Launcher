@@ -125,7 +125,8 @@ class ExampleActor(RunActor):
 
         for png in result.split():
             upload_attachment(token['_id'],png,self.p_db,self.p_usr,self.p_pwd,name=png)
-            #            try:
+            os.remove(png)
+                #            try:
 #                upload_attachment(token['_id'],png,p_db,p_usr,p_pwd,name=png)
 #               time.sleep(2)
 #            except:
