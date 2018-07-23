@@ -131,14 +131,13 @@ function upload_with_pipe(){
      echo ""
      echo " Uploading to ${RESULTS_DIR}/${PIPELINE_STEP}/${OBSID}/${OBSID}_${PICAS_USR}_SB${STARTSB}.tar"
   
-     UPLOAD_FIFO="../GRID_upload_fifo.tar"
-     mkfifo ${UPLOAD_FIFO}
-     tar -cvf ${UPLOAD_FIFO} ${PWD}/* & globus-url-copy $UPLOAD_FIFO ${RESULTS_DIR}/${PIPELINE_STEP}/${OBSID}/${OBSID}_${PICAS_USR}_SB${STARTSB}.tar
+     tar -cvf upload_results.tar ${PWD}/*
+     globus-url-copy upload_results.tar ${RESULTS_DIR}/${PIPELINE_STEP}/${OBSID}/${OBSID}_${PICAS_USR}_SB${STARTSB}.tar
    else
     echo "$PWD is Empty"; exit 30; # exit 30 => no files to upload 
   fi 
   cd ${RUNDIR}
- 
+  rm -rf ${RUNDIR}/Output/*
 
 }
 
