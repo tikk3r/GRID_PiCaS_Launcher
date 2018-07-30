@@ -88,6 +88,7 @@ function upload_results_targ1(){
 
 uberftp -mkdir ${RESULTS_DIR}/${OBSID}
 mv ${RUNDIR}/prefactor/results/L* ${RUNDIR}/Output/
+cp ${PARSET}  $( ls -d ${RUNDIR}/Output/L*/)/parset
 cd ${RUNDIR}/Output
 
 python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'archiving results'      
@@ -101,6 +102,7 @@ cd ${RUNDIR}
 function upload_results_targ2(){
 
    mv ${RUNDIR}/prefactor/results/L* ${RUNDIR}/Output/
+   cp ${PARSET}  $( ls -d ${RUNDIR}/Output/L*/ )/parset
    cd ${RUNDIR}/Output
    python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'archiving results'   
    tar -cvf results.tar $PWD/*
