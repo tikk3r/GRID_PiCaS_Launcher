@@ -8,7 +8,7 @@ cp out* ${JOBDIR}
 #cp pngs.tar.gz ${JOBDIR}
 cd ${JOBDIR}
 
-if [[ $(hostname -s) != 'f18-01' ]]; then
+if [[ $(hostname -s) != 'f18-01.gina.sara.nl' ]]; then
     echo "removing RunDir"
     rm -rf ${RUNDIR}
 fi
