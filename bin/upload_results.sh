@@ -79,24 +79,24 @@ function upload_results_cal1(){
 function upload_results_cal2(){
    uberftp -mkdir ${RESULTS_DIR}/${OBSID}
    tar -cvf Output/calib_solutions.tar prefactor/cal_results/*npy prefactor/results/*h5
-   globus-url-copy file:`pwd`/Output/calib_solutions.tar ${RESULTS_DIR}/${OBSID}/${OBSID}.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed
+   upload_error_wrapper Output/calib_solutions.tar ${RESULTS_DIR}/${OBSID}/${OBSID}.tar
    wait
 }
 
 
 function upload_results_targ1(){
 
-uberftp -mkdir ${RESULTS_DIR}/${OBSID}
-mv ${RUNDIR}/prefactor/results/L* ${RUNDIR}/Output/
-cp ${PARSET}  $( ls -d ${RUNDIR}/Output/L*/)/parset
-cd ${RUNDIR}/Output
+    uberftp -mkdir ${RESULTS_DIR}/${OBSID}
+    mv ${RUNDIR}/prefactor/results/L* ${RUNDIR}/Output/
+    cp ${PARSET}  $( ls -d ${RUNDIR}/Output/L*/)/parset
+    cd ${RUNDIR}/Output
 
-python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'archiving results'      
-tar -cvf results.tar $PWD/* --remove-files
+    python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'archiving results'      
+    tar -cvf results.tar $PWD/* --remove-files
 
-python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading results'      
-globus-url-copy file:${RUNDIR}/Output/results.tar ${RESULTS_DIR}/${OBSID}/pref_targ1_${OBSID}_AB${A_SBN}_SB${STARTSB}_.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed
-cd ${RUNDIR}
+    python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading results'      
+    upload_error_wrapper results.tar ${RESULTS_DIR}/${OBSID}/pref_targ1_${OBSID}_AB${A_SBN}_SB${STARTSB}_.tar 
+    cd ${RUNDIR}
 }
 
 function upload_results_targ2(){
