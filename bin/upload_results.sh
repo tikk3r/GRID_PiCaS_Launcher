@@ -73,7 +73,7 @@ function upload_results_cal1(){
   
    uberftp -mkdir ${RESULTS_DIR}/${OBSID}
   
-   globus-url-copy ${RUNDIR}/Output/instruments_${OBSID}_${STARTSB}.tar ${RESULTS_DIR}/${OBSID}/instruments_${OBSID}_SB${STARTSB}.tar  || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed   
+   upload_error_wrapper ${RUNDIR}/Output/instruments_${OBSID}_${STARTSB}.tar ${RESULTS_DIR}/${OBSID}/instruments_${OBSID}_SB${STARTSB}.tar 
 }
 
 function upload_results_cal2(){
