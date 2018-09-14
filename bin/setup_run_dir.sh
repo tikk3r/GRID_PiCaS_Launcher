@@ -4,22 +4,20 @@ function setup_sara_dir(){
 export PYTHONPATH=${PWD}:$PYTHONPATH
 source /cvmfs/softdrive.nl/lofar_sw/env/current_dysco.sh 
 
-cp *parset $1
-cp -r  $PWD/prefactor/ $1
+cp *parset $1               2>/dev/null
+cp -r  $PWD/prefactor/ $1   2>/dev/null
 #TODO: Make this block just a git pull?
-cp *py $1
-mkdir $1/piechart
-cp -r $PWD/piechart/* $1/piechart
+cp *py $1   
 
 cp srm.txt $1 #this is a fallthrough by taking the srm from the token not from the sandbox!
 
 cp ${PARSET} $1
-cp ${SCRIPT} $1
-cp -r $PWD/tcollector $1
-cp -r $PWD/ddf-pipeline $1
-cp -r $PWD/skymodels $1
-cp -r $PWD/tools $1
-cp pipeline.cfg $1
+cp ${SCRIPT} $1             2>/dev/null
+
+cp -r $PWD/ddf-pipeline $1  2>/dev/null
+cp -r $PWD/skymodels $1     2>/dev/null
+cp -r $PWD/tools $1         2>/dev/null
+cp pipeline.cfg $1          2>/dev/null
 cd ${RUNDIR}
 touch pipeline_status
 
