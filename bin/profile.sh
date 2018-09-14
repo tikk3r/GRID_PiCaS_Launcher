@@ -21,7 +21,7 @@ cd ${RUNDIR}
 function stop_profile(){
 echo "killing tcollector"
 kill $COLL_PID
-killall -9 telegraf
+killall -9 telegraf 2>/dev/null
 }
 
 function monitor_step(){
@@ -30,7 +30,7 @@ function monitor_step(){
   if [ "$PIPELINE_SUB_STEP" != "$CURR_STEP"  ]; then
       if [ ! -z $( echo $COLL_PID ) ]; then
           kill $COLL_PID;
-          killall telegraf;
+          killall telegraf 2>/dev/null; 
       fi
       launch_telegraf &
       echo "Launching TELEGRAF for pipeline step $PIPELINE_SUB_STEP" 
