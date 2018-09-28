@@ -51,6 +51,12 @@ function setup_softdrive_lofar(){
 function setup_LOFAR_env(){
 
 echo "INITIALIZE LOFAR SOFTWARE"  
+ if [[ -n "$SIMG" ]]
+ then
+    echo "Skipping cvmfs software loading in lieu of singularity image at $SIMG"
+    ls $SIMG
+    return
+ fi
 
  if [ ! -z $( echo $1 | grep cvmfs ) ]
   then

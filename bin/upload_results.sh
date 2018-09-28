@@ -105,7 +105,7 @@ function upload_results_targ2(){
    cp ${PARSET}  $( ls -d ${RUNDIR}/Output/L*/ )/parset
    cd ${RUNDIR}/Output
    python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'archiving results'   
-   tar -cvf results.tar $PWD/*
+   tar -cvf results.tar $PWD/* -C $PWD/
 
    uberftp -mkdir gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/distrib/SKSP/${OBSID}
 
