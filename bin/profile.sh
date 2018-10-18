@@ -12,7 +12,6 @@ echo "" > ${RUNDIR}/pipeline_step
 #COLL_PID=$!
 
 monitor_loop &
-
 cd ${RUNDIR}
 
 }
@@ -33,8 +32,8 @@ function monitor_step(){
           killall telegraf 2>/dev/null; 
       fi
       launch_telegraf &
-      echo "Launching TELEGRAF for pipeline step $PIPELINE_SUB_STEP" 
       export COLL_PID=$!
+      echo "Launching TELEGRAF for pipeline step $PIPELINE_SUB_STEP" 
       export CURR_STEP=$PIPELINE_SUB_STEP;
   fi; 
  sleep 1;
