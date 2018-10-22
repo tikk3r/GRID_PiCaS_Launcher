@@ -72,13 +72,14 @@ function upload_results_cal1(){
    find ${RUNDIR} -iname "ANTENNA" |grep work |xargs tar -rvf ${RUNDIR}/Output/instruments_${OBSID}_${STARTSB}.tar
   
    uberftp -mkdir ${RESULTS_DIR}/${OBSID}
-  
+   uberftp -rm ${RESULTS_DIR}/${OBSID}/instruments_${OBSID}_SB${STARTSB}.tar 
    upload_error_wrapper ${RUNDIR}/Output/instruments_${OBSID}_${STARTSB}.tar ${RESULTS_DIR}/${OBSID}/instruments_${OBSID}_SB${STARTSB}.tar 
 }
 
 function upload_results_cal2(){
    uberftp -mkdir ${RESULTS_DIR}/${OBSID}
    tar -cvf Output/calib_solutions.tar prefactor/cal_results/*npy prefactor/results/*h5
+   uberftp -rm ${RESULTS_DIR}/${OBSID}/${OBSID}.tar
    upload_error_wrapper Output/calib_solutions.tar ${RESULTS_DIR}/${OBSID}/${OBSID}.tar
  
 }
@@ -95,7 +96,8 @@ function upload_results_targ1(){
     python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'archiving results'      
     tar -cvf results.tar $PWD/* --remove-files
 
-    python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading results'      
+    python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading results'
+    uberftp -rm  ${RESULTS_DIR}/${OBSID}/pref_targ1_${OBSID}_AB${A_SBN}_SB${STARTSB}_.tar
     upload_error_wrapper results.tar ${RESULTS_DIR}/${OBSID}/pref_targ1_${OBSID}_AB${A_SBN}_SB${STARTSB}_.tar 
     cd ${RUNDIR}
 }
@@ -111,6 +113,7 @@ function upload_results_targ2(){
    uberftp -mkdir gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/distrib/SKSP/${OBSID}
 
    python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'uploading Results'   
+   uberftp -rm gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/distrib/SKSP/${OBSID}/GSM_CAL_${OBSID}_ABN_${STARTSB}.tar
    globus-url-copy file:`pwd`/results.tar gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/distrib/SKSP/${OBSID}/GSM_CAL_${OBSID}_ABN_${STARTSB}.tar || { echo "Upload Failed"; exit 31;} # exit 31 => Upload to storage failed 
 
 }
