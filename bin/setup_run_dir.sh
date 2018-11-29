@@ -18,6 +18,8 @@ cp -r $PWD/ddf-pipeline $1  2>/dev/null
 cp -r $PWD/skymodels $1     2>/dev/null
 cp -r $PWD/tools $1         2>/dev/null
 cp pipeline.cfg $1          2>/dev/null
+cp sing_pipeline.cfg $1          2>/dev/null
+
 cd ${RUNDIR}
 touch pipeline_status
 
