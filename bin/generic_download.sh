@@ -7,7 +7,8 @@
 
 function dl_generic(){
     echo "Initiating generic download"
-   if [[ ! -z $( cat $1 | grep juelich )  ]]; then 
+   python  ${JOBDIR}/GRID_PiCaS_Launcher/update_token_status.py ${PICAS_DB} ${PICAS_USR} ${PICAS_USR_PWD} ${TOKEN} 'downloading'
+    if [[ ! -z $( cat $1 | grep juelich )  ]]; then 
      sed 's?srm://lofar-srm.fz-juelich.de:8443?gsiftp://lofar-gridftp.fz-juelich.de:2811?g' $1 | xargs -I{} globus-url-copy -rst -st 30 -fast -v {} $PWD/Input/ || { echo 'downloading failed' ; exit 21; }
    fi
 
