@@ -78,6 +78,10 @@ function upload_results_cal1(){
 
 function upload_results_cal2(){
    uberftp -mkdir ${RESULTS_DIR}/${OBSID}
+   cd ${RUNDIR}
+   ls prefactor/cal_results/*npy 
+   ls  prefactor/results/*h5
+
    tar -cvf Output/calib_solutions.tar prefactor/cal_results/*npy prefactor/results/*h5
    uberftp -rm ${RESULTS_DIR}/${OBSID}/${OBSID}.tar
    upload_error_wrapper Output/calib_solutions.tar ${RESULTS_DIR}/${OBSID}/${OBSID}.tar
