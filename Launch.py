@@ -81,7 +81,7 @@ class ExampleActor(RunActor):
         else:
             if 'strw' in location :
                 location='/'.join(location.split('/')[-2:])
-                location='ftp://ftp.strw.leidenuniv.nl/pub/apmechev/sandbox/'+location
+#                location='ftp://ftp.strw.leidenuniv.nl/pub/apmechev/sandbox/'+location
                 self.download_sandbox('wget',location)
             else:
                 self.download_sandbox('globus-url-copy',location)
