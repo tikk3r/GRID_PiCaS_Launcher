@@ -10,7 +10,7 @@ cp out* $"{JOBDIR}"
 #cp pngs.tar.gz $"{JOBDIR}"
 cd $"{JOBDIR}" || exit 4 # Exit 4-> JOBDIR doesn't exist
 
-if [[ $(hostname -s) == 'f18-01.gina.sara.nl' ||    $(hostname -s) == 'loui.grid.surfsara.nl' ]]; then
+if [[ $(hostname ) == 'f18-01.gina.sara.nl' ||    $(hostname) == 'loui.grid.surfsara.nl' ]]; then
     echo "Keeping RUNDIR"
     return 0
 fi
