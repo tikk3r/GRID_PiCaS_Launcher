@@ -29,6 +29,8 @@ class Launchtest(unittest.TestCase):
 
     def setUp(self):
         vers=str(sys.version_info[0])+"."+str(sys.version_info[1])
+        if vers == '2.6':
+            vers = '2.6.0'
         self.t_type="travis_ci_test"+vers
         token="travis_getSBX_test"+vers
         pc=gpc.picas_cred()
