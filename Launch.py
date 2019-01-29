@@ -30,6 +30,7 @@ from GRID_PiCaS_Launcher.picas.executers import execute
 from GRID_PiCaS_Launcher.update_token_status import update_status
 from GRID_PiCaS_Launcher.set_token_field import set_token_field
 from GRID_PiCaS_Launcher.upload_attachment import upload_attachment
+from GRID_PiCaS_Launcher.tok_to_bash import get_attachment
 
 #from tok_to_bash import  export_tok_keys
 
@@ -41,6 +42,11 @@ class ExampleActor(RunActor):
         self.modifier = modifier
         self.client = iterator.client
 
+    def create_sandbox(self):
+        if 'sanbox.cfg' not in token['_attachments'].keys():
+            print("WARNING: No sandbox configuration file")
+        cfg_file = token['_attachments']['sanbox.cfg']
+        
 
     def download_sandbox(self,command,location):
         if os.path.isfile("sandbox.tar"): os.remove("sandbox.tar")
