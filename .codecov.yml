@@ -1,0 +1,6 @@
+ignore:
+     - "compat/"
+     - "GRID_PiCaS_Launcher/couchdb"
+
+coverage:
+    round: nearest
