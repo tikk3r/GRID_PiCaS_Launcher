@@ -54,7 +54,7 @@ class Launchtest(unittest.TestCase):
         set_token_field(self.token,'string1','1234',self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'done',0,self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'status','todo',self.dbn,self.usr,self.pwd)
-        set_token_field(self.token,'SBXloc','ftp://ftp.strw.leidenuniv.nl/pub/apmechev/travis_ci_tests/sandbox_travis.tar',self.dbn,self.usr,self.pwd)
+        set_token_field(self.token,'SBXloc','https://home.strw.leidenuniv.nl/~apmechev/sandbox_travis.tar',self.dbn,self.usr,self.pwd)
         modifier = BasicTokenModifier()
         iterator = BasicViewIterator(self.client, self.token+"/todo", modifier)
         self.TestActor = TestActor(iterator, modifier)
