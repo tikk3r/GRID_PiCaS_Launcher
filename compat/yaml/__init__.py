@@ -1,12 +1,10 @@
 
-from error import *
-
-from tokens import *
-from events import *
-from nodes import *
-
-from loader import *
-from dumper import *
+from compat.yaml.error import *
+from compat.yaml.tokens import *
+from compat.yaml.events import *
+from compat.yaml.nodes import *
+from compat.yaml.loader import *
+from compat.yaml.dumper import *
 
 __version__ = '3.12'
 
