@@ -1,9 +1,9 @@
 
 __all__ = ['Composer', 'ComposerError']
 
-from error import MarkedYAMLError
-from events import *
-from nodes import *
+from compat.yaml.error import MarkedYAMLError
+from compat.yaml.events import *
+from compat.yaml.nodes import *
 
 class ComposerError(MarkedYAMLError):
     pass

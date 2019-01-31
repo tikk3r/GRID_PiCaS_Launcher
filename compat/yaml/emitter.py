@@ -8,8 +8,8 @@
 
 __all__ = ['Emitter', 'EmitterError']
 
-from error import YAMLError
-from events import *
+from compat.yaml.error import YAMLError
+from compat.yaml.events import *
 
 class EmitterError(YAMLError):
     pass

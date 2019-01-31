@@ -4,12 +4,12 @@ __all__ = ['CBaseLoader', 'CSafeLoader', 'CLoader',
 
 from _yaml import CParser, CEmitter
 
-from constructor import *
+from compat.yaml.constructor import *
 
-from serializer import *
-from representer import *
+from compat.yaml.serializer import *
+from compat.yaml.representer import *
 
-from resolver import *
+from compat.yaml.resolver import *
 
 class CBaseLoader(CParser, BaseConstructor, BaseResolver):
 

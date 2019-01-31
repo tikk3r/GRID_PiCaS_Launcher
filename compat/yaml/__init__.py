@@ -9,7 +9,7 @@ from compat.yaml.dumper import *
 __version__ = '3.12'
 
 try:
-    from cyaml import *
+    from compat.yaml.cyaml import *
     __with_libyaml__ = True
 except ImportError:
     __with_libyaml__ = False

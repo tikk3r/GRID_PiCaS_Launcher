@@ -2,8 +2,8 @@
 __all__ = ['BaseConstructor', 'SafeConstructor', 'Constructor',
     'ConstructorError']
 
-from error import *
-from nodes import *
+from compat.yaml.error import *
+from compat.yaml.nodes import *
 
 import datetime
 
