@@ -14,7 +14,6 @@ def get_token_field(tok_id,fieldname,p_db,p_usr,p_pwd):
 if __name__ == '__main__':
     if len(sys.argv==5):
         value=get_token_field(sys.argv[4],sys.argv[5],sys.argv[1],sys.argv[2],sys.argv[3])
-        value=get_token_field(sys.argv[-2],sys.argv[-1],dbn,usr,passw)
     else:
         pc = picas_cred()
         db = picas_cred.database
