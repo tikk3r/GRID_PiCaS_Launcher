@@ -1,6 +1,7 @@
 exclude:
  - /GRID_PiCaS_Launcher/couchdb/.*
  - /docs/.*
+ - /compat/yaml/*
 component_depth: 2
 
 

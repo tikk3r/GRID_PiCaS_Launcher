@@ -11,14 +11,16 @@ def get_token_field(tok_id,fieldname,p_db,p_usr,p_pwd):
     return  token[fieldname]
 
 
-if __name__ == '__main__': 
-    if len(sys.argv)==6:
-        value=get_token_field(sys.argv[4],sys.argv[5],sys.argv[1],sys.argv[2],sys.argv[3])
+def main(args):
+    if len(args)==6:
+        value=get_token_field(args[4],args[5],args[1],args[2],args[3])
     else:
         pc = picas_cred()
         dbn = pc.database
         usr = pc.user
         passw = pc.password
-        value=get_token_field(sys.argv[-2],sys.argv[-1],dbn,usr,passw)
+        value=get_token_field(args[-2],args[-1],dbn,usr,passw)
     print(value)
  
+if __name__ == '__main__':
+    main(sys.argv)

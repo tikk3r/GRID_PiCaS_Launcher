@@ -1,7 +1,6 @@
 import unittest
 from GRID_PiCaS_Launcher import get_picas_credentials as gpc
-from GRID_PiCaS_Launcher.get_token_field import get_token_field
-from GRID_PiCaS_Launcher.set_token_field import set_token_field
+from GRID_PiCaS_Launcher import get_token_field
 import os
 from time import sleep
 from GRID_PiCaS_Launcher import couchdb
@@ -25,15 +24,11 @@ class getfieldtest(unittest.TestCase):
         server.resource.credentials = (self.usr,self.pwd)
 
     def test_get_value(self):
-        pop1 = subprocess.Popen(['python','GRID_PiCaS_Launcher/get_token_field.py',self.dbn,
-                                self.usr, self.pwd, self.token_id,'integer1'],
-                                stdout=subprocess.PIPE)
-        val1 = pop1.communicate()
+        val1 = get_token_field.main(self.dbn,
+                                    self.usr, self.pwd, self.token_id,'integer1')
         os.environ['PICAS_USR'] = self.usr
         os.environ['PICAS_USR_PWD'] = self.pwd
         os.environ['PICAS_DB'] = self.dbn
-        pop2 = subprocess.Popen(['python','GRID_PiCaS_Launcher/get_token_field.py',
-                                self.token_id,'integer1'], stdout=subprocess.PIPE)
-        val2 = pop2.communicate()
+        val2 = get_token_field.main(self.token_id,'integer1')
         self.assertTrue(val1 == val2)
 
