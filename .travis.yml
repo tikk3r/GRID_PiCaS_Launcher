@@ -10,7 +10,8 @@ python:
 before_install:
    - pip install pyyaml
    - pip install codecov
-script:
+script: #Putting GRID_PiCaS_Launcher into the pythonpath by force
+   - export PYTHONPATH=$PWD:$PYTHONPATH
    - nosetests --with-coverage
 
 after_success:
