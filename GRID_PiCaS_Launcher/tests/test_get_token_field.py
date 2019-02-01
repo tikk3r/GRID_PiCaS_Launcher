@@ -25,12 +25,15 @@ class getfieldtest(unittest.TestCase):
         server.resource.credentials = (self.usr,self.pwd)
 
     def test_get_value(self):
-        val1 = subprocess.call(['python','GRID_PiCaS_Launcher/get_token_field.py',self.dbn,
-                                self.usr, self.pwd, self.token_id,'integer1' ])
+        pop1 = subprocess.Popen(['python','GRID_PiCaS_Launcher/get_token_field.py',self.dbn,
+                                self.usr, self.pwd, self.token_id,'integer1'],
+                                stdout=subprocess.PIPE)
+        val1 = pop1.communicate()
         os.environ['PICAS_USR'] = self.usr
         os.environ['PICAS_USR_PWD'] = self.pwd
         os.environ['PICAS_DB'] = self.dbn
-        val2 = subprocess.call(['python','GRID_PiCaS_Launcher/get_token_field.py',
-            self.token_id,'integer1'])
+        pop2 = subprocess.call(['python','GRID_PiCaS_Launcher/get_token_field.py',
+                                self.token_id,'integer1'], stdout=subprocess.PIPE)
+        val2 = pop2.communicate()
         self.assertTrue(val1 == val2)
 
