@@ -108,7 +108,7 @@ class BasicTokenModifier(TokenModifier):
         @return the scrubbed token. Should be uploaded to the server to finish 
         the process.
         """
-        if not token.has_key('scrub_count'):
+        if not 'scrub_count' in token.keys():
             token['scrub_count'] = 0
         token['scrub_count'] += 1
         token = self.unlock(token)
