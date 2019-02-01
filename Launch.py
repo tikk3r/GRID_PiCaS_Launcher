@@ -24,6 +24,7 @@ print("!!!!!!!!!!!!!!!!!!!!!!")
 import sys,os
 import time
 from GRID_PiCaS_Launcher import couchdb
+from GRID_PiCaS_Launcher.get_picas_credenials import picas_cred
 import subprocess
 import shutil
 import glob
@@ -140,26 +141,16 @@ class ExampleActor(RunActor):
 
         for png in result.split():
             upload_attachment(token['_id'],png,self.p_db,self.p_usr,self.p_pwd,name=png)
-            os.remove(png)
-                #            try:
-#                upload_attachment(token['_id'],png,p_db,p_usr,p_pwd,name=png)
-#               time.sleep(2)
-#            except:
-#                print("error attaching "+str(png))
-        #try reuploading the last png (for some reason last png corrupts>)
-        #self.client.db.put_attachment(token,open(os.path.basename(png),'r'),os.path.split(png)[1])
-        # Attach logs in token
-#        for tmpdir in glob.glob('tmp.*'):
-#            shutil.rmtree(tmpdir)
+            os.remove(png) 
         self.client.modify_token(self.modifier.close(self.client.db[self.token_name]))
         return
 
         
 
-def main():
+def main(url="https://picas-lofar.grid.surfsara.nl:6984", db=None, username=None, password=None):
     # setup connection to db
     db_name = sys.argv[1]
-    client = CouchClient(url="https://picas-lofar.grid.surfsara.nl:6984", db=str(sys.argv[1]), username=str(sys.argv[2]), password=str(sys.argv[3]))
+    client = CouchClient(url=url, db=db, username=username, password=password
     # Create token modifier
     modifier = BasicTokenModifier()
     # Create iterator, point to the right todo view
@@ -176,4 +167,13 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    if len(sys.argv == 4):
+        db = str(sys.argv[1])
+        username = str(sys.argv[2])
+        password = str(sys.argv[3])
+    else:
+        pc = picas_cred()
+        db = pc.database
+        username = pc.user
+        password = pc.password
+    main(db=db, username=username, password=password)
