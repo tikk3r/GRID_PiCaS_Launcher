@@ -25,6 +25,7 @@ class Sandbox(object):
         repository. By default it does so in the current directory. """
         if not checkout_dir:
             checkout_dir = os.getcwd()
+            return_dir = os.getcwd()
         else:
             return_dir = os.getcwd()
         if not repo_location:
