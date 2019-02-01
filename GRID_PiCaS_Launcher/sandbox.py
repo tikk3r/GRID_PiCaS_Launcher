@@ -41,17 +41,19 @@ class Sandbox(object):
             checkout.wait()
         shutil.rmtree('.git/')
         os.chdir(return_dir)
+    
+    @staticmethod
+    def _do_download(downloader):
+        downloader.download()
+        downloader.check_download()
+        downloader.extract_sandbox()
+        downloader.remove_download_file()
 
-    def download_sandbox(self,command,location):
-        if os.path.isfile("sandbox.tar"): os.remove("sandbox.tar")
-        if command=='globus-url-copy':
-            subprocess.call([command, location, "sandbox.tar"])
-        elif command=='wget':
-            subprocess.call([command, location, '-T','30','-t','10', "-O",'sandbox.tar'])
-        if os.stat("sandbox.tar").st_size == 0: 
-            set_token_field(self.token_name,'output',-2,self.p_db,self.p_usr,self.p_pwd)
-            set_token_field(self.token_name,'done',time.time(),self.p_db,self.p_usr,self.p_pwd)
-            raise Exception("Sandbox failed to download!")
+    def download_sandbox(self,location):
+        if 'gsiftp' in location:
+            self._do_download(SandboxGSIDownloader(location))
+        elif 'http' in location or 'ftp' in location:
+            self._do_download(SandboxWgetDownloader(location))
 
 
 class SandboxDownloader(object):
@@ -105,3 +107,13 @@ class SandboxGSIDownloader(SandboxDownloader):
         extension = self._get_sandbox_extension()
         subprocess.call(['globus-url-copy', self.location,
             "{}{}".format(self.download_file, extension)])
+
+class SandboxWgetDownloader(SandboxDownloader):
+    def __init__(self,location):
+        super(SandboxWgetDownloader, self).__init__(location)
+
+    def download(self):
+        extension = self._get_sandbox_extension()
+        subprocess.call(['wget', "-O",
+            "{}{}".format(self.download_file, extension),
+            self.location])
