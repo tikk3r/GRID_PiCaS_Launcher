@@ -24,7 +24,7 @@ print("!!!!!!!!!!!!!!!!!!!!!!")
 import sys,os
 import time
 from GRID_PiCaS_Launcher import couchdb
-from GRID_PiCaS_Launcher.get_picas_credenials import picas_cred
+from GRID_PiCaS_Launcher.get_picas_credentials import picas_cred
 import subprocess
 import shutil
 import glob
@@ -150,7 +150,7 @@ class ExampleActor(RunActor):
 def main(url="https://picas-lofar.grid.surfsara.nl:6984", db=None, username=None, password=None):
     # setup connection to db
     db_name = sys.argv[1]
-    client = CouchClient(url=url, db=db, username=username, password=password
+    client = CouchClient(url=url, db=db, username=username, password=password)
     # Create token modifier
     modifier = BasicTokenModifier()
     # Create iterator, point to the right todo view

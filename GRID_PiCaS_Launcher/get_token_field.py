@@ -1,5 +1,5 @@
 from GRID_PiCaS_Launcher import couchdb
-from GRID_PiCaS_Launcer.get_picas_credentials import picas_cred
+from GRID_PiCaS_Launcher.get_picas_credentials import picas_cred
 import os,sys
  
 
