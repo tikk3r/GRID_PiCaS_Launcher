@@ -7,6 +7,7 @@ from time import sleep
 from GRID_PiCaS_Launcher import couchdb
 from GRID_PiCaS_Launcher.tok_to_bash import export_tok_keys
 import sys
+import subprocess
 
 class getfieldtest(unittest.TestCase):
 
@@ -23,12 +24,6 @@ class getfieldtest(unittest.TestCase):
         server = couchdb.Server("https://picas-lofar.grid.surfsara.nl:6984")
         server.resource.credentials = (self.usr,self.pwd)
 
-    def tearDown(self):
-        if os.path.isfile('test_attachment'): os.remove('test_attachment')
-        if os.path.isfile('test_attachment2'): os.remove('test_attachment2')
-        if os.path.isfile('test1var'):os.remove('test1var')
-        if os.path.isfile(self.test_tokvarile):os.remove(self.test_tokvarile)
- 
     def test_get_value(self):
         val1 = subprocess.call(['python','GRID_PiCaS_Launcher/get_token_field.py',self.dbn,
                                 self.usr, self.pwd, self.token_id,'integer1' ])
