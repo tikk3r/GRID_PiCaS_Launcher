@@ -17,7 +17,7 @@ class TokenModifier(object):
         raise NotImplementedError("Lock function not implemented.")
     
     def unlock(self, *args, **kwargs):
-        raise NotImplementedError("Unlock functin not implemented.")
+        raise NotImplementedError("Unlock function not implemented.")
     
     def close(self, *args, **kwargs):
         raise NotImplementedError("Close function not implemented.")
