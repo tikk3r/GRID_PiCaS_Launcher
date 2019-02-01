@@ -32,7 +32,6 @@ class Launchtest(unittest.TestCase):
         if vers == '2.6':
             vers = '2.6.0'
         self.t_type="travis_ci_test"+vers
-        token="travis_getSBX_test"+vers
         pc=gpc.picas_cred()
         creds=pc.return_credentials()
         self.usr=creds['user']
@@ -55,8 +54,8 @@ class Launchtest(unittest.TestCase):
         set_token_field(self.token,'done',0,self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'status','todo',self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'SBXloc','https://home.strw.leidenuniv.nl/~apmechev/sandbox_travis.tar',self.dbn,self.usr,self.pwd)
-        modifier = BasicTokenModifier()
-        iterator = BasicViewIterator(self.client, self.token+"/todo", modifier)
+        self.modifier = BasicTokenModifier()
+        iterator = BasicViewIterator(self.client, self.token+"/todo", self.modifier)
         self.TestActor = TestActor(iterator, modifier)
         self.Ex=ExampleActor(iterator, modifier)
 
@@ -84,6 +83,8 @@ class Launchtest(unittest.TestCase):
         set_token_field(self.token,'output',0,self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'string1','1234',self.dbn,self.usr,self.pwd)
         self.find_and_delete("png")
+        self.modifier.unlock(self.token)
+        self.modifier.unclose(self.token)
 
     def test_lock_token(self):
         self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)==0)
@@ -119,6 +120,12 @@ class Launchtest(unittest.TestCase):
             self.Ex.process_token(self.token,tok)
         except Exception as e:
             print(str(e))
+
+    def test_scrub(self): 
+        scrubs = get_token_field(self.token,'scrub_count',self.dbn,self.usr,self.pwd)
+        self.modifier.scrub(self.token)
+        self.assertTrue(scrubs+1 == get_token_field(self.token,'scrub_count',self.dbn,self.usr,self.pwd))
+        set_token_field(self.token,'scrub_count',scrubs,self.dbn,self.usr,self.pwd)
 
     def test_uploadpng(self):
         self.Ex.run()
