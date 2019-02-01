@@ -56,8 +56,8 @@ class Launchtest(unittest.TestCase):
         set_token_field(self.token,'SBXloc','https://home.strw.leidenuniv.nl/~apmechev/sandbox_travis.tar',self.dbn,self.usr,self.pwd)
         self.modifier = BasicTokenModifier()
         iterator = BasicViewIterator(self.client, self.token+"/todo", self.modifier)
-        self.TestActor = TestActor(iterator, modifier)
-        self.Ex=ExampleActor(iterator, modifier)
+        self.TestActor = TestActor(iterator, self.modifier)
+        self.Ex=ExampleActor(iterator, self.modifier)
 
     def travis_safe_upload(self,att,att_tok):
         fail=1
