@@ -11,7 +11,7 @@ def get_token_field(tok_id,fieldname,p_db,p_usr,p_pwd):
     return  token[fieldname]
 
 
-def main(args):
+def main(*args):
     if len(args)==6:
         value=get_token_field(args[4],args[5],args[1],args[2],args[3])
     else:
