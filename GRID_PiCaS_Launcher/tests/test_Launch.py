@@ -124,7 +124,7 @@ class Launchtest(unittest.TestCase):
     def test_scrub(self): 
         scrubs = get_token_field(self.token,'scrub_count',self.dbn,self.usr,self.pwd)
         self.modifier.scrub(self.db[self.token])
-        self.assertTrue(scrubs+1 == get_token_field(self.token,'scrub_count',self.dbn,self.usr,self.pwd))
+        self.assertTrue(scrubs+1 == int(get_token_field(self.token,'scrub_count',self.dbn,self.usr,self.pwd)))
         set_token_field(self.token,'scrub_count',scrubs,self.dbn,self.usr,self.pwd)
 
     def test_uploadpng(self):
