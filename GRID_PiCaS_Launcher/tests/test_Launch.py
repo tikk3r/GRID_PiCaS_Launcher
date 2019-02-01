@@ -83,8 +83,8 @@ class Launchtest(unittest.TestCase):
         set_token_field(self.token,'output',0,self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'string1','1234',self.dbn,self.usr,self.pwd)
         self.find_and_delete("png")
-        self.modifier.unlock(self.token)
-        self.modifier.unclose(self.token)
+        self.modifier.unlock(self.db[self.token])
+        self.modifier.unclose(self.db[self.token])
 
     def test_lock_token(self):
         self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)==0)
@@ -123,7 +123,7 @@ class Launchtest(unittest.TestCase):
 
     def test_scrub(self): 
         scrubs = get_token_field(self.token,'scrub_count',self.dbn,self.usr,self.pwd)
-        self.modifier.scrub(self.token)
+        self.modifier.scrub(self.db[self.token])
         self.assertTrue(scrubs+1 == get_token_field(self.token,'scrub_count',self.dbn,self.usr,self.pwd))
         set_token_field(self.token,'scrub_count',scrubs,self.dbn,self.usr,self.pwd)
 
