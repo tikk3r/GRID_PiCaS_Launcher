@@ -54,3 +54,54 @@ class Sandbox(object):
             raise Exception("Sandbox failed to download!")
 
 
+class SandboxDownloader(object):
+    def __init__(self,location):
+        self.location = location
+        self.download_file = 'downloaded_sandbox'
+
+    def download(self):
+        raise NotImplementedError("Do not use this (Abstract) Class")
+
+    def check_download(self):
+        extension = self._get_sandbox_extension()
+        if os.stat(self.download_file+extension).st_size == 0:
+            raise ValueError("Sandbox could not be downloaded from {}{}"
+                            .format(self.location,extension))
+
+    def _extract_tar(self):
+        ex = subprocess.Popen(['tar','-xf',self.download_file+'.tar'])
+        ex.communicate()
+
+    def _extract_tar_gz(self):
+        ex = subprocess.Popen(['tar','-zxf',self.download_file+'.tar.gz'])
+        ex.communicate()
+
+    def _get_sandbox_extension(self):
+        extension = ".{}".format(self.location.split('.')[-1])
+        return extension
+
+    def _extract_zip(self):
+         ex = subprocess.Popen(['unzip',self.download_file+'.zip'])
+         ex.communicate()
+
+    def extract_sandbox(self):
+        extension = self._get_sandbox_extension()
+        if extension == '.tar':
+            self._extract_tar()
+        if extension == '.tar.gz':
+            self._extract_tar_gz()
+        if extension == '.zip':
+            self._extract_zip()
+    
+    def remove_download_file(self):
+        extension = self._get_sandbox_extension()
+        os.remove(self.download_file+extension)
+
+class SandboxGSIDownloader(SandboxDownloader):
+    def __init__(self,location):
+        super(SandboxGSIDownloader, self).__init__(location)
+
+    def download(self):
+        extension = self._get_sandbox_extension()
+        subprocess.call(['globus-url-copy', self.location,
+            "{}{}".format(self.download_file, extension)])
