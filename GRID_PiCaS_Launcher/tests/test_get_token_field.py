@@ -32,7 +32,7 @@ class getfieldtest(unittest.TestCase):
         os.environ['PICAS_USR'] = self.usr
         os.environ['PICAS_USR_PWD'] = self.pwd
         os.environ['PICAS_DB'] = self.dbn
-        pop2 = subprocess.call(['python','GRID_PiCaS_Launcher/get_token_field.py',
+        pop2 = subprocess.Popen(['python','GRID_PiCaS_Launcher/get_token_field.py',
                                 self.token_id,'integer1'], stdout=subprocess.PIPE)
         val2 = pop2.communicate()
         self.assertTrue(val1 == val2)

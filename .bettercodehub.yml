@@ -1,0 +1,6 @@
+exclude:
+ - /GRID_PiCaS_Launcher/couchdb/.*
+ - /docs/.*
+component_depth: 2
+
+
