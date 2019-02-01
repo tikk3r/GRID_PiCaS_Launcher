@@ -1,5 +1,6 @@
 import unittest
 from GRID_PiCaS_Launcher.sandbox import Sandbox
+from GRID_PiCaS_Launcher.sandbox import SandboxWgetDownloader
 import os
 import shutil
 
@@ -47,5 +48,19 @@ class testSandbox(unittest.TestCase):
             s._pull_git_repository(repo_location='https://github.com/apmechev/GRID_Sandbox.git')
             self.assertFalse(os.path.exists('.git'))
             os.chdir('..')
+            shutil.rmtree("testcwd")
 
+class testSandboxDownloader(unittest.TestCase):
 
+    def test_https_download(self):
+        os.mkdir("test_dl_https")
+        os.chdir("test_dl_https")
+        s_dl = SandboxWgetDownloader(location='https://home.strw.leidenuniv.nl/~apmechev/sandbox_travis.tar')
+        s_dl.download()
+        s_dl.check_download()
+        s_dl.extract_sandbox()
+        s_dl.remove_download_file()
+        assertTrue('downloaded_sandbox.tar' not in os.listdir(os.getcwd()))
+        assertTrue('master.sh' in os.listdir(os.getcwd()))
+        os.chdir('..')
+        shutil.rmtree('test_dl_https')
