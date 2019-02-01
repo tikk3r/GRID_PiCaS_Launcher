@@ -67,7 +67,7 @@ class SandboxDownloader(object):
     def check_download(self):
         extension = self._get_sandbox_extension()
         if os.stat(self.download_file+extension).st_size == 0:
-            raise ValueError("Sandbox could not be downloaded from {}{}"
+            raise ValueError("Sandbox could not be downloaded from {0}{1}"
                             .format(self.location,extension))
 
     def _extract_tar(self):
@@ -79,7 +79,7 @@ class SandboxDownloader(object):
         ex.communicate()
 
     def _get_sandbox_extension(self):
-        extension = ".{}".format(self.location.split('.')[-1])
+        extension = ".{0}".format(self.location.split('.')[-1])
         return extension
 
     def _extract_zip(self):
@@ -106,7 +106,7 @@ class SandboxGSIDownloader(SandboxDownloader):
     def download(self):
         extension = self._get_sandbox_extension()
         subprocess.call(['globus-url-copy', self.location,
-            "{}{}".format(self.download_file, extension)])
+            "{0}{1}".format(self.download_file, extension)])
 
 class SandboxWgetDownloader(SandboxDownloader):
     def __init__(self,location):
@@ -115,5 +115,5 @@ class SandboxWgetDownloader(SandboxDownloader):
     def download(self):
         extension = self._get_sandbox_extension()
         subprocess.call(['wget', "-O",
-            "{}{}".format(self.download_file, extension),
+            "{0}{1}".format(self.download_file, extension),
             self.location])
