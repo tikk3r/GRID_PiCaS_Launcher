@@ -81,7 +81,7 @@ class Launchtest(unittest.TestCase):
         set_token_field(self.token,'done',0,self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'status','todo',self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'hostname','',self.dbn,self.usr,self.pwd)
-        self.client.modify_token(self.modifier.add_output(self.db[self.token]),0)
+        self.client.modify_token(self.modifier.add_output(self.db[self.token],0))
         self.assertTrue(get_token_field(self.token,'output',self.dbn,self.usr,self.pwd)==0)
         set_token_field(self.token,'string1','1234',self.dbn,self.usr,self.pwd)
         self.find_and_delete("png")
