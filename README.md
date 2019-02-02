@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/apmechev/GRID_picastools.svg?branch=master)](https://travis-ci.org/apmechev/GRID_picastools)
-[![codecov Coverage](https://codecov.io/gh/apmechev/GRID_picastools/branch/restructure/graph/badge.svg?precision=1)](https://codecov.io/gh/apmechev/GRID_picastools)
+[![Build Status](https://travis-ci.org/apmechev/GRID_picastools.svg?branch=master)](https://travis-ci.org/apmechev/GRID_PiCaS_Launcher)
+[![codecov Coverage](https://codecov.io/gh/apmechev/GRID_picastools/branch/restructure/graph/badge.svg?precision=1)](https://codecov.io/gh/apmechev/GRID_PiCaS_Launcher)
 [![alt text](http://apmechev.com/img/git_repos/GRID_picastools_clones.svg "github clones since 2017-01-25")](https://github.com/apmechev/github_clones_badge)
 
 GRID_picastools
