@@ -4,6 +4,7 @@ from GRID_PiCaS_Launcher.sandbox import SandboxWgetDownloader
 import os
 import shutil
 
+import GRID_PiCaS_Launcher
 BASE_DIR = GRID_PiCaS_Launcher.__file__.split('__init__')[0]
 
 #TODO: confirm that the branch and commit are correct using internal function
