@@ -130,6 +130,9 @@ class Launchtest(unittest.TestCase):
         set_token_field(self.token,'scrub_count',scrubs,self.dbn,self.usr,self.pwd)
 
     def test_uploadpng(self):
+        self.Ex.database = 'sksp_unittest'
+        self.Ex.user = self.usr
+        self.Ex.password = self.pwd
         self.Ex.run()
         sys.stderr(os.getcwd())
         sys.stderr(os.listdir(os.getcwd()))
