@@ -8,19 +8,38 @@ class Sandbox(object):
 
     def __init__(self,config_file=None, location=None):
         if config_file:
-            self.config_file = config_file
+            self.config = self._get_field_from_cfgfile(config_file)
         elif location:
             self.location = location 
         else:
             raise RuntimeError("Neither configuration file nor location supplied")
 
+    @staticmethod
+    def _get_field_from_cfgfile(cfg_file):
+        """Gets the data from the data file and returns it
+        """
+        with open(cfg_file,'r') as _f:
+           data = json.load(_f)
+        if ['sandbox'] in data.keys():
+            return data['sandbox']
+        return data
 
     def build_sandbox(self):
-        cfg_file = self.config_file
+        cfg = self.config
+        if 'git' in cfg.keys():
+            repo_branch = None
+            repo_commit = None
+            repo_loc = cfg['git']['url']
+            if 'branch' in cfg['git'].keys():
+                repo_branch = cfg['git']['branch']
+            if 'commit' in cfg['git']:
+                repo_commit = cfg['git']['commit']
+            self._pull_git_repository(repo_location=repo_loc, repo_branch=repo_branch,
+                    repo_commit=repo_commit)
         
     @staticmethod
-    def _pull_git_repository(repo_location=None, repo_branch='master', repo_commit=None,
-                             checkout_dir=None):
+    def _pull_git_repository(repo_location=None, repo_branch=None, repo_commit=None,
+                             checkout_dir=None, remove_gitdir=False):
         """Internal function that checks out a specific commit or branch of a 
         repository. By default it does so in the current directory. """
         if not checkout_dir:
@@ -34,12 +53,14 @@ class Sandbox(object):
                     ['git', 'clone', repo_location, checkout_dir])
         clone.wait()
         os.chdir(checkout_dir)
-        checkout = subprocess.Popen(['git', 'checkout', repo_branch])
-        checkout.wait()
+        if repo_branch:
+            checkout = subprocess.Popen(['git', 'checkout', repo_branch])
+            checkout.wait()
         if repo_commit:
             checkout = subprocess.Popen(['git', 'checkout', repo_commit])
             checkout.wait()
-        shutil.rmtree('.git/')
+        if remove_gitdir:
+            shutil.rmtree('.git/')
         os.chdir(return_dir)
     
     @staticmethod

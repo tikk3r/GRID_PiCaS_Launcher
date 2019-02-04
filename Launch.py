@@ -42,6 +42,7 @@ from GRID_PiCaS_Launcher.set_token_field import set_token_field
 from GRID_PiCaS_Launcher.upload_attachment import upload_attachment
 from GRID_PiCaS_Launcher.tok_to_bash import get_attachment
 
+
 #from tok_to_bash import  export_tok_keys
 from GRID_PiCaS_Launcher import sandbox
 import pdb
@@ -52,22 +53,13 @@ class ExampleActor(RunActor):
         self.modifier = modifier
         self.client = iterator.client
 
-    def create_sandbox(self):
-        if 'sanbox.cfg' not in token['_attachments'].keys():
+    def create_sandbox(self, key='sandbox.json'):
+        if key not in token['_attachments'].keys():
             print("WARNING: No sandbox configuration file")
-        cfg_file = token['_attachments']['sanbox.cfg']
-        
-
-    def download_sandbox(self,command,location):
-        if os.path.isfile("sandbox.tar"): os.remove("sandbox.tar")
-        if command=='globus-url-copy':
-            subprocess.call([command, location, "sandbox.tar"])
-        elif command=='wget':
-            subprocess.call([command, location, '-T','30','-t','10', "-O",'sandbox.tar'])
-        if os.stat("sandbox.tar").st_size == 0: 
-            set_token_field(self.token_name,'output',-2,self.p_db,self.p_usr,self.p_pwd)
-            set_token_field(self.token_name,'done',time.time(),self.p_db,self.p_usr,self.p_pwd)
-            raise Exception("Sandbox failed to download!")
+            return
+        cfg_file = token['_attachments'][key]
+        sandbox = sandbox.Sandbox(config_file=cfg_file)
+        sandbox.build_sandbox()
 
     def process_token(self, key, token):
     # Print token information
