@@ -1,6 +1,7 @@
 import subprocess
 import os
 import shutil 
+import json
 
 class Sandbox(object):
     """A class that builds the sandbox from a json file, or 

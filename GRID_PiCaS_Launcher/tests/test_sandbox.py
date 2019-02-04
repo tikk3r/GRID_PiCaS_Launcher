@@ -6,13 +6,13 @@ import shutil
 
 import GRID_PiCaS_Launcher
 BASE_DIR = GRID_PiCaS_Launcher.__file__.split('__init__')[0]
-
+DUMMY_CONFIG = BASE_DIR+"/tests/sandbox.json"
 #TODO: confirm that the branch and commit are correct using internal function
 class testSandbox(unittest.TestCase):
 
         def test_checkout_commit(self):
             pre_run_dir = os.getcwd()
-            s=Sandbox(config_file='DUMMY_FILE_NAME')
+            s=Sandbox(config_file=DUMMY_CONFIG)
             s._pull_git_repository(repo_location='https://github.com/apmechev/GRID_Sandbox.git',
                     repo_branch='prefactor', 
                     repo_commit='4df7866', 
@@ -24,7 +24,7 @@ class testSandbox(unittest.TestCase):
 
         def test_checkout_branch(self):
             pre_run_dir = os.getcwd()
-            s=Sandbox(config_file='DUMMY_FILE_NAME')
+            s=Sandbox(config_file=DUMMY_CONFIG)
             s._pull_git_repository(repo_location='https://github.com/apmechev/GRID_Sandbox.git',
                     repo_branch='prefactor',
                     checkout_dir='test_sbx3')
@@ -35,7 +35,7 @@ class testSandbox(unittest.TestCase):
 
         def test_checkout_master(self):
             pre_run_dir = os.getcwd()
-            s=Sandbox(config_file='DUMMY_FILE')
+            s=Sandbox(config_file=DUMMY_CONFIG)
             s._pull_git_repository(repo_location='https://github.com/apmechev/GRID_Sandbox.git',
                     checkout_dir='test_sbx2')
             self.assertTrue(os.getcwd() == pre_run_dir)
@@ -46,8 +46,8 @@ class testSandbox(unittest.TestCase):
         def test_checkout_cwd(self):
             #We need to make a directory since otherwise it kills the GRID_PiCaS_Launcher .git folder
             os.mkdir("testcwd")
-            os.chdir('testcwd')
-            s=Sandbox(config_file='DUMMY_FILE')
+            os.chdir('testBASE_DIRcwd')
+            s=Sandbox(config_file=DUMMY_CONFIG)
             s._pull_git_repository(repo_location='https://github.com/apmechev/GRID_Sandbox.git')
             self.assertFalse(os.path.exists('.git'))
             os.chdir('..')
