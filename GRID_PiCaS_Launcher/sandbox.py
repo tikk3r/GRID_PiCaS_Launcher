@@ -2,6 +2,7 @@ import subprocess
 import os
 import shutil 
 import json
+import tempfile
 
 class Sandbox(object):
     """A class that builds the sandbox from a json file, or 
@@ -44,16 +45,17 @@ class Sandbox(object):
         """Internal function that checks out a specific commit or branch of a 
         repository. By default it does so in the current directory. """
         if not checkout_dir:
-            checkout_dir = os.getcwd()
             return_dir = os.getcwd()
+            checkout_dir_path = tempfile.mkdtemp(prefix=os.getcwd()+'/')
         else:
             return_dir = os.getcwd()
+            checkout_dir_path = checkout_dir
         if not repo_location:
             raise RuntimeError("No repository to cone!!")
         clone = subprocess.Popen(
-                    ['git', 'clone', repo_location, checkout_dir])
+                    ['git', 'clone', repo_location, checkout_dir_path])
         clone.wait()
-        os.chdir(checkout_dir)
+        os.chdir(checkout_dir_path)
         if repo_branch:
             checkout = subprocess.Popen(['git', 'checkout', repo_branch])
             checkout.wait()
@@ -62,6 +64,10 @@ class Sandbox(object):
             checkout.wait()
         if remove_gitdir:
             shutil.rmtree('.git/')
+        if not checkout_dir:
+            files = os.listdir(checkout_dir_path)
+            for f in files:
+                shutil.move(checkout_dir_path+f, return_dir)
         os.chdir(return_dir)
     
     @staticmethod

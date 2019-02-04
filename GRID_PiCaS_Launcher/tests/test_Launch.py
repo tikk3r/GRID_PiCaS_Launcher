@@ -133,9 +133,7 @@ class Launchtest(unittest.TestCase):
         self.Ex.database = 'sksp_unittest'
         self.Ex.user = self.usr
         self.Ex.password = self.pwd
-        self.Ex.run()
-        sys.stderr(os.getcwd())
-        sys.stderr(os.listdir(os.getcwd()))
+        self.Ex.run() 
         for att in self.db[self.token]['_attachments']:
             if "png" in att:
                 return
