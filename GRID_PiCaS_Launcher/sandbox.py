@@ -67,7 +67,9 @@ class Sandbox(object):
         if not checkout_dir:
             files = os.listdir(checkout_dir_path)
             for f in files:
-                shutil.move(checkout_dir_path+"/"+f, return_dir)
+                src = os.path.join(checkout_dir_path, f)
+                dest = os.path.join(return_dir,f)
+                shutil.move(src, dest)
         os.chdir(return_dir)
     
     @staticmethod
