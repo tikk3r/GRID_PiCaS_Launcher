@@ -9,7 +9,7 @@ import random
 
 # CouchDB imports
 import sys
-
+import pdb
 
 from GRID_PiCaS_Launcher import couchdb
 from GRID_PiCaS_Launcher.couchdb import Server

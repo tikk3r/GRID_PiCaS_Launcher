@@ -61,20 +61,7 @@ class ExampleActor(RunActor):
         sandbox = sandbox.Sandbox(config_file=cfg_file)
         sandbox.build_sandbox()
 
-    def process_token(self, key, token):
-    # Print token information
-        os.environ['PICAS_DB']=str(sys.argv[1])
-        os.environ['PICAS_USR']=str(sys.argv[2])
-        os.environ['PICAS_USR_PWD']=str(sys.argv[3])
-        os.environ['TOKEN']=token['_id']
-        from GRID_PiCaS_Launcher.tok_to_bash import  export_tok_keys
-
-        self.p_db=os.environ['PICAS_DB']
-        self.p_usr=os.environ['PICAS_USR']
-        self.p_pwd=os.environ['PICAS_USR_PWD']
-        self.token_name=token['_id'] 
-
-    def download_sandbox(self):
+    def download_sandbox(self, token):
         downloader = None
         if 'SBXloc' in token.keys():
             location=token['SBXloc']
@@ -90,14 +77,22 @@ class ExampleActor(RunActor):
             downloader.extract_sandbox()
             downloader.remove_download_file()
 
+
+    def process_token(self, key, token):
+    # Print token information
+        os.environ['TOKEN']=token['_id']
+        from GRID_PiCaS_Launcher.tok_to_bash import  export_tok_keys
+
+        self.token_name=token['_id'] 
+        self.download_sandbox(token)
         subprocess.call(["chmod","a+x","master.sh"])
     
         print("Working on token: " + token['_id'])
-        export_tok_keys('tokvar.cfg',token)
+#        export_tok_keys('tokvar.cfg',token)
     
         ## Read tokvar values from token and write to bash variables if not already exist! Save attachments and export abs filename to variable
 
-        set_token_field(token['_id'],'status','launched',self.p_db,self.p_usr,self.p_pwd)
+        set_token_field(token['_id'],'status','launched',self.database,self.user,self.password)
         RUNDIR=os.getcwd() 
 
         #The launched script is simply master.sh with token and picas authen stored in env vars
@@ -107,18 +102,18 @@ class ExampleActor(RunActor):
         
         out = execute(command,shell=True)
         print('exit status is '+str(out))
-        set_token_field(token['_id'],'output',out[0],self.p_db,self.p_usr,self.p_pwd)
+        set_token_field(token['_id'],'output',out[0],self.database,self.user,self.password)
         if out[0]==0:
-            set_token_field(token['_id'],'status','done',self.p_db,self.p_usr,self.p_pwd)
+            set_token_field(token['_id'],'status','done',self.database,self.user,self.password)
         else:
-            set_token_field(token['_id'],'status','error',self.p_db,self.p_usr,self.p_pwd)
+            set_token_field(token['_id'],'status','error',self.database,self.user,self.password)
         
         os.chdir(RUNDIR)
         try:
            logsout = "logs_out"
-           upload_attachment(token['_id'],logsout,self.p_db,self.p_usr,self.p_pwd)
+           upload_attachment(token['_id'],logsout,self.database,self.user,self.password)
            logserr = "logs_.err"
-           upload_attachment(token['_id'],logserr,self.p_db,self.p_usr,self.p_pwd)
+           upload_attachment(token['_id'],logserr,self.database,self.user,self.password)
         except:
            pass
 
@@ -127,7 +122,7 @@ class ExampleActor(RunActor):
         result=sols_search.communicate()[0]
 
         for png in result.split():
-            upload_attachment(token['_id'],png,self.p_db,self.p_usr,self.p_pwd,name=png)
+            upload_attachment(token['_id'],png,self.database,self.user,self.password,name=png)
             os.remove(png) 
         self.client.modify_token(self.modifier.close(self.client.db[self.token_name]))
         return
@@ -144,17 +139,21 @@ def main(url="https://picas-lofar.grid.surfsara.nl:6984", db=None, username=None
     iterator = BasicViewIterator(client, sys.argv[4]+"/todo", modifier)
     # Create actor, takes one token from todo view
     actor = ExampleActor(iterator, modifier)
+    actor.user = username
+    actor.database = db
+    actor.password = password
     # Start work!
     try:
         actor.run()
     except Exception as e:
+        print("Exception occured")
         print(str(e.args))
-#        set_token_field(actor.token_name,'status','error',actor.p_db,actor.p_usr,actor.p_pwd)
-        set_token_field(actor.token_name,'launcher_status',str(e.args),actor.p_db,actor.p_usr,actor.p_pwd)
+#        set_token_field(actor.token_name,'status','error',actor.database,actor.p_usr,actor.password)
+        set_token_field(actor.token_name,'launcher_status',str(e.args),actor.database,actor.user,actor.password)
 
 
 if __name__ == '__main__':
-    if len(sys.argv == 4):
+    if len(sys.argv) == 5:
         db = str(sys.argv[1])
         username = str(sys.argv[2])
         password = str(sys.argv[3])

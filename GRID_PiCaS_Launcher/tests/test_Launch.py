@@ -131,6 +131,8 @@ class Launchtest(unittest.TestCase):
 
     def test_uploadpng(self):
         self.Ex.run()
+        sys.stderr(os.getcwd())
+        sys.stderr(os.listdir(os.getcwd()))
         for att in self.db[self.token]['_attachments']:
             if "png" in att:
                 return
