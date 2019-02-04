@@ -46,9 +46,10 @@ class testSandbox(unittest.TestCase):
         def test_checkout_cwd(self):
             #We need to make a directory since otherwise it kills the GRID_PiCaS_Launcher .git folder
             os.mkdir("testcwd")
-            os.chdir('testBASE_DIRcwd')
+            os.chdir('testcwd')
             s=Sandbox(config_file=DUMMY_CONFIG)
-            s._pull_git_repository(repo_location='https://github.com/apmechev/GRID_Sandbox.git')
+            s._pull_git_repository(repo_location='https://github.com/apmechev/GRID_Sandbox.git',
+                    remove_gitdir=True)
             self.assertFalse(os.path.exists('.git'))
             os.chdir('..')
             shutil.rmtree("testcwd")

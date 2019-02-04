@@ -40,7 +40,7 @@ class Sandbox(object):
         
     @staticmethod
     def _pull_git_repository(repo_location=None, repo_branch=None, repo_commit=None,
-                             checkout_dir=None, remove_gitdir=False):
+                             checkout_dir=None, remove_gitdir=True):
         """Internal function that checks out a specific commit or branch of a 
         repository. By default it does so in the current directory. """
         if not checkout_dir:
