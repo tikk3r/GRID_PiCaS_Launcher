@@ -73,28 +73,23 @@ class ExampleActor(RunActor):
         self.p_usr=os.environ['PICAS_USR']
         self.p_pwd=os.environ['PICAS_USR_PWD']
         self.token_name=token['_id'] 
+
+    def download_sandbox(self):
+        downloader = None
         if 'SBXloc' in token.keys():
             location=token['SBXloc']
         else:
-            location="gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/spectroscopy-migrated/sandbox/sandbox_"+str(sys.argv[2])+"_"+str(token['OBSID'])+".tar"
-    
-        print("Sandbox Location= "+str(location))
-    
-        rc = subprocess.call(['which', 'globus-url-copy'])
+            return None
+        if 'gsiftp' in location:
+            downloader = sandbox.SandboxGSIDownloader(location)
+        if 'https' in location or 'ftp' in location:
+            downloader = sandbox.SandboxWgetDownloader(location)
+        if downloader:
+            downloader.download()
+            downloader.check_download()
+            downloader.extract_sandbox()
+            downloader.remove_download_file()
 
-        if rc == 0:
-            if 'gsiftp' not in location and 'strw' not in location:
-                location='gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/sandbox/'+location
-            self.download_sandbox('globus-url-copy',location)
-        else:
-            if 'strw' in location :
-#                location='/'.join(location.split('/')[-2:])
-#                location='ftp://ftp.strw.leidenuniv.nl/pub/apmechev/sandbox/'+location
-                self.download_sandbox('wget',location)
-            else:
-                self.download_sandbox('globus-url-copy',location)
-
-        subprocess.call(["tar", "-xf", "sandbox.tar"])
         subprocess.call(["chmod","a+x","master.sh"])
     
         print("Working on token: " + token['_id'])

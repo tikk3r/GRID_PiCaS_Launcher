@@ -4,6 +4,8 @@ from GRID_PiCaS_Launcher.sandbox import SandboxWgetDownloader
 import os
 import shutil
 
+BASE_DIR = GRID_PiCaS_Launcher.__file__.split('__init__')[0]
+
 #TODO: confirm that the branch and commit are correct using internal function
 class testSandbox(unittest.TestCase):
 
@@ -64,3 +66,11 @@ class testSandboxDownloader(unittest.TestCase):
         self.assertTrue('master.sh' in os.listdir(os.getcwd()))
         os.chdir('..')
 #        shutil.rmtree('test_dl_https')
+
+class testSandboxBuilder(unittest.TestCase):
+
+    def test_build_master(self):
+        cfgfile = BASE_DIR+'/tests/sandbox.json'
+        sbx = Sandbox(config_file=cfgfile)
+        sbx.build_sandbox()
+        assert 'master.sh' in os.listdir(os.getcwd())
