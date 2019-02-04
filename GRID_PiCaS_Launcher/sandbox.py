@@ -21,7 +21,7 @@ class Sandbox(object):
         """
         with open(cfg_file,'r') as _f:
            data = json.load(_f)
-        if ['sandbox'] in data.keys():
+        if 'sandbox' in data.keys():
             return data['sandbox']
         return data
 

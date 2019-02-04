@@ -136,4 +136,4 @@ class Launchtest(unittest.TestCase):
         for att in self.db[self.token]['_attachments']:
             if "png" in att:
                 return
-        raise Exception("test.png does not exist!")
+        raise Exception("test.png was not attached to the Token!")
