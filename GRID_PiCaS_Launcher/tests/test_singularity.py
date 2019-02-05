@@ -1,13 +1,25 @@
 import unittest                                                                                                                             
-from GRID_PiCaS_Launcher.singularity import download_singularity_from_env, parse_singularity_link, download_simg_from_gsiftp, pull_image_from_shub, put_variables_in_env, get_image_file_hash
+from GRID_PiCaS_Launcher.singularity import download_singularity_from_env, parse_singularity_link, download_simg_from_gsiftp, pull_image_from_shub, put_variables_in_env, get_image_file_hash, HiddenPrints
 import os
 import json
-
-
 import GRID_PiCaS_Launcher
+from contextlib import contextmanager
+from StringIO import StringIO
+
+
 BASE_DIR = GRID_PiCaS_Launcher.__file__.split('__init__')[0]
 DUMMY_CONFIG = BASE_DIR+"/tests/cal_pref3_v1.0.json"
 #TODO: confirm that the branch and commit are correct using internal function
+
+@contextmanager
+def captured_output():
+    new_out, new_err = StringIO(), StringIO()
+    old_out, old_err = sys.stdout, sys.stderr
+    try:
+        sys.stdout, sys.stderr = new_out, new_err
+        yield sys.stdout, sys.stderr
+    finally:
+        sys.stdout, sys.stderr = old_out, old_err
 class testsingularity(unittest.TestCase):
 
     def test_all(self):
@@ -38,3 +50,16 @@ class testsingularity(unittest.TestCase):
             put_variables_in_env(badjson)
         except RuntimeError as e:
             self.assertTrue(str(e) == "Could not find SIMG in {}")
+
+    def test_silent_print(self):
+        config = json.load(open(DUMMY_CONFIG))
+        put_variables_in_env(config)
+        with captured_output() as (out, err):
+            outfile = download_singularity_from_env()
+        self.assertTrue(len(out.split("\n")>1)
+        with captured_output() as (out, err):
+            with HiddenPrints():
+                outfile = download_singularity_from_env()
+        self.assertTrue(len(out.split("\n")<2)
+        self.assertEquals(out == outfile)
+
