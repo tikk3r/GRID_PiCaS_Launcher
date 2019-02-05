@@ -28,7 +28,7 @@ def download_simg_from_gsiftp(simg_link):
     if not out and not err:
         return img_name
     else:
-        print("Error downloading image:{1}".format(err))
+        print("Error downloading image:{0}".format(err))
 
 
 

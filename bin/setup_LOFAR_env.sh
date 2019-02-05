@@ -80,5 +80,6 @@ ln -sf ${LOFARDATAROOT} ~/
 source /cvmfs/softdrive.nl/lofar_sw/env/current_losoto.sh
 }
 
-
-
+function dl_singularity_container(){
+    python GRID_PiCaS_Launcher/singularity.py
+}
