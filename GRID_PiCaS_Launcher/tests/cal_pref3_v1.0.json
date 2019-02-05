@@ -1,4 +1,5 @@
 {
+    "_apiVersion": 0.5,
     "Job": {
         "NCPU": 6,
         "parameter_step": 1,
@@ -19,7 +20,7 @@
             "gzip": false,
             "location": "gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/pipelines/test/",
             "remove_prev": false,
-            "template": "CI_pref3_cal_$DATE"
+            "template": "CI_pref3_cal_$STARTSB_$DATE"
         },
         "variables": {
             "_attachments": {
@@ -28,7 +29,6 @@
             }
         }
     },
-    "_apiVersion": 0.5,
     "container": {
         "singularity": {
             "SIMG": "shub://tikk3r/lofar-grid-hpccloud:lofar",
