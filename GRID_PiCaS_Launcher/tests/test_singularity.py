@@ -1,6 +1,7 @@
 import unittest                                                                                                                             
 from GRID_PiCaS_Launcher.singularity import download_singularity_from_env, parse_singularity_link, download_simg_from_gsiftp, pull_image_from_shub, put_variables_in_env, get_image_file_hash, HiddenPrints
 import os
+import sys
 import json
 import GRID_PiCaS_Launcher
 from contextlib import contextmanager
@@ -55,14 +56,13 @@ class testsingularity(unittest.TestCase):
         config = json.load(open(DUMMY_CONFIG))
         put_variables_in_env(config)
         with captured_output() as output:
-            (out, err) = output
             outfile = download_singularity_from_env()
-        self.assertTrue(len(out.split("\n")>1))
+        (out, err) = output
+        self.assertTrue(len(out.getvalue().split("\n")) == 1)
 
         with captured_output() as output:
-            (out, err) = output
             with HiddenPrints():
                 outfile = download_singularity_from_env()
-        self.assertTrue(len(out.split("\n")<2))
-        self.assertEquals(out == outfile)
+        (out, err) = output
+        self.assertTrue(len(out.getvalue().split("\n"))==0)
 
