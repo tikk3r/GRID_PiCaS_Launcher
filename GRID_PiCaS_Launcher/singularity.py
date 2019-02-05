@@ -51,6 +51,7 @@ def pull_image_from_shub(shub_link,commit=None):
                                     stderr=subprocess.PIPE)
         out,err= _pull.communicate()
         if not err:
+            out = out.decode('ascii')
             img_path = out.split('/n')[-1].split("Done. Container is at: ")[1].strip()
             if os.path.exists(img_path):
                 img_hash = get_image_file_hash(img_path)
