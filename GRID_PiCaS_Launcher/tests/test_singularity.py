@@ -54,11 +54,13 @@ class testsingularity(unittest.TestCase):
     def test_silent_print(self):
         config = json.load(open(DUMMY_CONFIG))
         put_variables_in_env(config)
-        with captured_output() as (out, err):
-            outfile = download_singularity_from_env()
-        self.assertTrue(len(out.split("\n")>1)
         with captured_output() as output:
-            out, err = output
+            (out, err) = output
+            outfile = download_singularity_from_env()
+        self.assertTrue(len(out.split("\n")>1))
+
+        with captured_output() as output:
+            (out, err) = output
             with HiddenPrints():
                 outfile = download_singularity_from_env()
         self.assertTrue(len(out.split("\n")<2)
