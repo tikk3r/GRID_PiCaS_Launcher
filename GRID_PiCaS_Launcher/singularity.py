@@ -1,4 +1,5 @@
 import subprocess
+import sys
 import os
 import hashlib
 import warnings
@@ -91,5 +92,17 @@ def get_image_file_hash(image_path):
             hasher.update(chunk)
     return hasher.hexdigest()
 
+class HiddenPrints:
+    def __enter__(self):
+        self._original_stdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        sys.stdout.close()
+        sys.stdout = self._original_stdout
+
+
 if __name__ == "__main__":
-    download_singularity_from_env()
+    with HiddenPrints():
+        location = download_singularity_from_env() 
+    print(location)
