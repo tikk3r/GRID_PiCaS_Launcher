@@ -57,7 +57,8 @@ class testsingularity(unittest.TestCase):
         with captured_output() as (out, err):
             outfile = download_singularity_from_env()
         self.assertTrue(len(out.split("\n")>1)
-        with captured_output() as (out, err):
+        with captured_output() as output:
+            out, err = output
             with HiddenPrints():
                 outfile = download_singularity_from_env()
         self.assertTrue(len(out.split("\n")<2)
