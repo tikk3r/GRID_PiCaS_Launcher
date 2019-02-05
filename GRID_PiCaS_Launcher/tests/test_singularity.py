@@ -63,6 +63,6 @@ class testsingularity(unittest.TestCase):
             (out, err) = output
             with HiddenPrints():
                 outfile = download_singularity_from_env()
-        self.assertTrue(len(out.split("\n")<2)
+        self.assertTrue(len(out.split("\n")<2))
         self.assertEquals(out == outfile)
 
