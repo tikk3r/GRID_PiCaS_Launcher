@@ -9,10 +9,10 @@ matrix:
           dist: xenial
           python: 2.7
         - os: linux
-          dist: xenial
+          dist: trusty
           python: 3.3
         - os: linux
-          dist: trusty
+          dist: xenial
           python: 3.4
         - os: linux
           dist: xenial
