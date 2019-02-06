@@ -5,7 +5,10 @@ import sys
 import json
 import GRID_PiCaS_Launcher
 from contextlib import contextmanager
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 
 BASE_DIR = GRID_PiCaS_Launcher.__file__.split('__init__')[0]
@@ -21,6 +24,8 @@ def captured_output():
         yield sys.stdout, sys.stderr
     finally:
         sys.stdout, sys.stderr = old_out, old_err
+
+
 class testsingularity(unittest.TestCase):
 
     def test_all(self):
@@ -58,11 +63,11 @@ class testsingularity(unittest.TestCase):
         with captured_output() as output:
             outfile = download_singularity_from_env()
         (out, err) = output
-        self.assertTrue(len(out.getvalue().split("\n")) == 1)
+        self.assertTrue(len(out.getvalue().split("\n")) == 2)
 
         with captured_output() as output:
             with HiddenPrints():
                 outfile = download_singularity_from_env()
         (out, err) = output
-        self.assertTrue(len(out.getvalue().split("\n"))==0)
+        self.assertTrue(len(out.getvalue().split("\n"))==1)
 
