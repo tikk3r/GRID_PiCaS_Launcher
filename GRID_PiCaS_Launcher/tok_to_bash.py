@@ -1,5 +1,7 @@
 #!/bin/env python 
-import sys,os
+import sys
+import os
+import warnings
 from GRID_PiCaS_Launcher  import couchdb
 from GRID_PiCaS_Launcher.get_token_field import get_token_field
 from GRID_PiCaS_Launcher.set_token_field import set_token_field
@@ -27,6 +29,16 @@ def get_attachment(db,token, filename, savename=None):
             f.write(str(line))
     return os.path.abspath(filename)
 
+
+def export_variable(name, value, overwrite=True):
+    if name.upper()!= name:
+        warnings.warn("environmental variable '{}' not in Uppercase! This may lead to errors".format(name))
+    if name in os.environ.keys():
+        print("!!!WARNING, Environment variable {0} already is set to {1}".format(name, os.environ[name]))
+    if name in os.environ.keys() and not overwrite:
+        print("!!!Will not overwrite environment variable {0}".format(name))
+        return
+    os.environ[name] = value
 
 def export_tok_keys(cfgfile='tokvar.cfg',token=None):
     dbn=os.environ['PICAS_DB']

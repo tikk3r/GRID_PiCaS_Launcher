@@ -40,8 +40,8 @@ from GRID_PiCaS_Launcher.picas.executers import execute
 from GRID_PiCaS_Launcher.update_token_status import update_status
 from GRID_PiCaS_Launcher.set_token_field import set_token_field
 from GRID_PiCaS_Launcher.upload_attachment import upload_attachment
-from GRID_PiCaS_Launcher.tok_to_bash import get_attachment
-
+from GRID_PiCaS_Launcher.tok_to_bash import export_variable
+from GRID_PiCaS_Launcher.singularity import download_singularity_from_env
 
 #from tok_to_bash import  export_tok_keys
 from GRID_PiCaS_Launcher import sandbox
@@ -61,6 +61,16 @@ class ExampleActor(RunActor):
         sandbox = sandbox.Sandbox(config_file=cfg_file)
         sandbox.build_sandbox()
 
+    @staticmethod
+    def get_variables_from_config(config, variables=None):
+        if not variables:
+            variables = {}
+        if 'variables' in config.keys():
+            _vars = config['variables']
+        for var in _vars:
+            variables[var]=_vars[var]
+        return variables
+
     def download_sandbox(self, token):
         downloader = None
         if 'SBXloc' in token.keys():
@@ -77,19 +87,23 @@ class ExampleActor(RunActor):
             downloader.extract_sandbox()
             downloader.remove_download_file()
 
-
     def process_token(self, key, token):
     # Print token information
+        variables = {}
         os.environ['TOKEN']=token['_id']
-        from GRID_PiCaS_Launcher.tok_to_bash import  export_tok_keys
 
-        self.token_name=token['_id'] 
+        self.token_name=token['_id']
+
+        self.config = token['config.json']
+        variables = self.get_variables_from_config(self.config, variables)
+
         self.download_sandbox(token)
         subprocess.call(["chmod","a+x","master.sh"])
-    
+
+        for variable in variables:
+            export_variable(variable, variables[variable])
+
         print("Working on token: " + token['_id'])
-#        export_tok_keys('tokvar.cfg',token)
-    
         ## Read tokvar values from token and write to bash variables if not already exist! Save attachments and export abs filename to variable
 
         set_token_field(token['_id'],'status','launched',self.database,self.user,self.password)
@@ -131,12 +145,11 @@ class ExampleActor(RunActor):
 
 def main(url="https://picas-lofar.grid.surfsara.nl:6984", db=None, username=None, password=None):
     # setup connection to db
-    db_name = sys.argv[1]
     client = CouchClient(url=url, db=db, username=username, password=password)
     # Create token modifier
     modifier = BasicTokenModifier()
     # Create iterator, point to the right todo view
-    iterator = BasicViewIterator(client, sys.argv[4]+"/todo", modifier)
+    iterator = BasicViewIterator(client, sys.argv[-1]+"/todo", modifier)
     # Create actor, takes one token from todo view
     actor = ExampleActor(iterator, modifier)
     actor.user = username
@@ -153,6 +166,11 @@ def main(url="https://picas-lofar.grid.surfsara.nl:6984", db=None, username=None
 
 
 if __name__ == '__main__':
+    """Entry point of the Launcher. 
+    The options are either 1: database, 2:username 3: password and 4: picas_token_type
+
+    or 1: picas_token_type. In this case, we get the picas credentials from ~/.picasrc
+          or from the environment variables"""
     if len(sys.argv) == 5:
         db = str(sys.argv[1])
         username = str(sys.argv[2])
