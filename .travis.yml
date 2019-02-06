@@ -1,13 +1,28 @@
-dist: xenial
 language: python
-python:
-  - "2.6"
-  - "2.7"
-  - "3.3"
-  - "3.4"
-  - "3.5"
-  - "3.6"
-  - "3.7"
+
+matrix:
+    include:
+        - os: linux
+          dist: trusty
+          python: 2.6
+        - os: linux
+          dist: xenial
+          python: 2.7
+        - os: linux
+          dist: xenial
+          python: 3.3
+        - os: linux
+          dist: trusty
+          python: 3.4
+        - os: linux
+          dist: xenial
+          python: 3.5
+        - os: linux
+          dist: xenial
+          python: 3.6
+        - os: linux
+          dist: xenial
+          python: 3.7
 # command to install dependencies
 before_install:
    - sudo wget -O- http://neuro.debian.net/lists/xenial.us-ca.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
