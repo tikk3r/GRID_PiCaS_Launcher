@@ -50,16 +50,19 @@ def export_tok_keys(cfgfile='tokvar.cfg',token=None):
     for key in tokvar:
         if isinstance(tokvar[key],str):
             try:
-                picas_val=str(get_token_field(token['_id'],key,dbn,un,pwd))
+                picas_val=str(get_token_field(token['_id'],
+                    tokvar[key],dbn,un,pwd))
             except KeyError:
                 sys.stderr.write("WARNING: Picas Variable Missing:"+key)
                 picas_val=""
-            os.environ[tokvar[key].split('$')[1]]=picas_val
+            export_variable(key,picas_val)
         elif key=='_attachments':
             for att_file in tokvar['_attachments']:
-                get_attachment(db,token,att_file,savename=att_file) 
-                if '$' in tokvar['_attachments'][att_file]:
-                    os.environ[tokvar['_attachments'][att_file].split('$')[1]]=att_file
+                picas_att_name = tokvar['_attachments'][att_file]
+                get_attachment(db,token,picas_att_name,
+                        savename=picas_att_name) #TODO: Add savename as an option
+                export_variable(att_file, picas_att_name)
+
 
 if __name__ == '__main__':
     export_tok_keys(cfgfile='tokvar.cfg')
