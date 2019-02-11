@@ -27,7 +27,7 @@ class tok2bashtest(unittest.TestCase):
         server.resource.credentials = (self.usr,self.pwd)
         self.db= server[self.dbn]
         variable_data ={"_token_keys":{
-                                "STRING":"string1", 
+                                "STRING1":"string1", 
                                 "TOKEN":"_id",
                                 "INT1":"integer1"},
                         "_attachments":{
