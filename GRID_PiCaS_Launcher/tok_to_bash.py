@@ -48,7 +48,7 @@ def export_tok_keys(cfgfile='tokvar.json',token=None):
         if key == "_token_keys":
             try:
                 picas_val=str(get_token_field(token['_id'],
-                    tokvar[key], dbn, un, pwd))
+                    tokvar["_token_keys"][key], dbn, un, pwd))
             except KeyError:
                 warnins.warn("WARNING: Picas Variable Missing:"+key)
                 continue
