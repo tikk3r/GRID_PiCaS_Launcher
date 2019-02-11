@@ -38,8 +38,12 @@ def export_tok_keys(cfgfile='tokvar.json',token=None):
     dbn=os.environ['PICAS_DB']
     un=os.environ['PICAS_USR']
     pwd=os.environ['PICAS_USR_PWD']
-    with open(cfgfile,'r') as _f:
-        tokvar=json.load(_f)
+    try:
+        with open(cfgfile,'r') as _f:
+            tokvar=json.load(_f)
+    except Exception as e:
+        set_token_field(token['_id'],'output',-2,dbn,un,pwd)
+        raise Exception("tokvar read error {0}".format(str(e)))
 
     server = couchdb.Server("https://picas-lofar.grid.surfsara.nl:6984")
     server.resource.credentials = (un, pwd)

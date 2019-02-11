@@ -110,9 +110,9 @@ class Launchtest(unittest.TestCase):
     def test_missing_tokvar(self): 
         from GRID_PiCaS_Launcher.tok_to_bash import  export_tok_keys
         try:
-            export_tok_keys('xtokvar.cfg',{'_id':self.token})
+            export_tok_keys('xtokvar.json',{'_id':self.token})
         except Exception as e:
-            self.assertTrue(str(e)=='tokvar missing')
+            self.assertTrue('tokvar read error'  in str(e))
             self.assertTrue(get_token_field(self.token,'output',self.dbn,self.usr,self.pwd)==-2)
 
     def test_failed_sbx(self):
