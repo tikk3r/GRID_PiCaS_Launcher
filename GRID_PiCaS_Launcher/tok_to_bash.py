@@ -2,6 +2,7 @@
 import sys
 import os
 import warnings
+import json
 from GRID_PiCaS_Launcher  import couchdb
 from GRID_PiCaS_Launcher.get_token_field import get_token_field
 from GRID_PiCaS_Launcher.set_token_field import set_token_field
@@ -38,7 +39,7 @@ def export_tok_keys(cfgfile='tokvar.cfg',token=None):
     un=os.environ['PICAS_USR']
     pwd=os.environ['PICAS_USR_PWD']
     try:
-        tokvar=yaml.load(open(cfgfile,'rb'))
+        tokvar=json.load(open(cfgfile,'rb'))
     except:
         set_token_field(token['_id'],'output',-2,dbn,un,pwd)
         raise Exception("tokvar missing")

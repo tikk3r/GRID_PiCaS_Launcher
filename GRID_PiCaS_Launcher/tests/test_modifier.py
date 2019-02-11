@@ -46,5 +46,5 @@ class testSandbox(unittest.TestCase):
         t = NestedTokenModifier()
         self.assertTrue(t.timeout == 86400)
         t = NestedTokenModifier(10000)
-        self.assertTrue(t.timeout == 1000)
+        self.assertTrue(t.timeout == 10000)
         
