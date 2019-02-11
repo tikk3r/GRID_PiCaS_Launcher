@@ -44,20 +44,21 @@ def export_tok_keys(cfgfile='tokvar.json',token=None):
     server = couchdb.Server("https://picas-lofar.grid.surfsara.nl:6984")
     server.resource.credentials = (un, pwd)
     db = server[dbn]
-    for key in tokvar:
-        if key == "_token_keys":
-            try:
-                picas_val=str(get_token_field(token['_id'],
-                    tokvar["_token_keys"][key], dbn, un, pwd))
-            except KeyError:
-                warnins.warn("WARNING: Picas Variable Missing:"+key)
-                continue
-            if key[0] == "$":
-                variable = key[1:]
-            else:
-                variable = key
-            export_variable(variable, picas_val)
-        elif key == '_attachments':
+    for head in tokvar:
+        if head  == "_token_keys":
+            for var in tokvar["_token_keys"]:
+                try:
+                    picas_val=str(get_token_field(token['_id'],
+                        tokvar["_token_keys"][var], dbn, un, pwd))
+                except KeyError:
+                    warnings.warn("WARNING: Picas Variable Missing: "+var)
+                    continue
+                if var[0] == "$":
+                    variable = var[1:]
+                else:
+                    variable = var
+                export_variable(variable, picas_val)
+        elif head == '_attachments':
             for att_file in tokvar['_attachments']:
                 picas_att_name = tokvar['_attachments'][att_file]
                 get_attachment(db,token,picas_att_name,
