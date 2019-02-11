@@ -34,12 +34,12 @@ def export_variable(name, value, overwrite=True):
         return
     os.environ[name] = value
 
-def export_dict_to_env(variable_dictionary):
+def export_dict_to_env(db, variable_dictionary, token_id):
     for head in variable_dictionary:
         if head  == "_token_keys":
             for var in variable_dictionary["_token_keys"]:
                 try:
-                    picas_val=str(get_token_field(token['_id'],
+                    picas_val=str(get_token_field(token_id,
                         variable_dictionary["_token_keys"][var], dbn, un, pwd))
                 except KeyError:
                     warnings.warn("WARNING: Picas Variable Missing: "+var)
@@ -52,6 +52,7 @@ def export_dict_to_env(variable_dictionary):
         elif head == '_attachments':
             for att_file in variable_dictionary['_attachments']:
                 picas_att_name = variable_dictionary['_attachments'][att_file]
+                token = db[token_id]
                 get_attachment(db,token,picas_att_name,
                         savename=picas_att_name) #TODO: Add savename as an option
                 export_variable(att_file, picas_att_name)
@@ -72,7 +73,7 @@ def export_tok_keys(cfgfile='tokvar.json',token=None):
     server = couchdb.Server("https://picas-lofar.grid.surfsara.nl:6984")
     server.resource.credentials = (un, pwd)
     db = server[dbn]
-    export_dict_to_env(db, tokvar)
+    export_dict_to_env(db, tokvar, token['_id'])
 
 
 if __name__ == '__main__':
