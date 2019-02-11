@@ -1,15 +1,18 @@
 import unittest
 from GRID_PiCaS_Launcher.picas.modifiers import TokenModifier
+from GRID_PiCaS_Launcher.picas.modifiers import NestedTokenModifier
 
 
 class testSandbox(unittest.TestCase):
 
     def test_timeout(self):
-        t=TokenModifier()
+        t = TokenModifier()
         self.assertTrue(t.timeout == 86400)
+        t = TokenModifier(1000)
+        self.assertTrue(t.timeout == 1000)
 
     def test_Exceptions(self):
-        t=TokenModifier()
+        t = TokenModifier()
         try:
            t.lock()
         except NotImplementedError as e:
@@ -39,3 +42,9 @@ class testSandbox(unittest.TestCase):
         except  NotImplementedError as e:
             self.assertTrue(str(e)=='set_error function not implemented.')
 
+    def test_nested_modifier(self):
+        t = NestedTokenModifier()
+        self.assertTrue(t.timeout == 86400)
+        t = NestedTokenModifier(10000)
+        self.assertTrue(t.timeout == 1000)
+        

@@ -7,13 +7,6 @@ from GRID_PiCaS_Launcher.get_token_field import get_token_field
 from GRID_PiCaS_Launcher.set_token_field import set_token_field
 
 
-try:
-    import yaml
-except ImportError:
-    sys.path.append('compat')
-    sys.path.append('compat/yaml')
-    import yaml
-
 def get_attachment(db,token, filename, savename=None):
     try:
         attach = db.get_attachment(token, filename).read()

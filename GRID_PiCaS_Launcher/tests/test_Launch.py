@@ -87,6 +87,7 @@ class Launchtest(unittest.TestCase):
         self.find_and_delete("png")
         self.client.modify_token(self.modifier.unlock(self.db[self.token]))
         self.client.modify_token(self.modifier.unclose(self.db[self.token]))
+        update_status(self.dbn, self.usr, self.pwd, self.token, 'done')
 
     def test_lock_token(self):
         self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)==0)
