@@ -38,7 +38,7 @@
     "container": {
         "singularity": {
             "SIMG": "shub://tikk3r/lofar-grid-hpccloud:lofar",
-            "SIMG_COMMIT": "1de77e612e66568e8faee4e6428f54a1"
+            "SIMG_COMMIT": "24e3f7bf5d4213b4f166c329f29acbfc"
         }
     },
     "sandbox": {

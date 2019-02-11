@@ -12,6 +12,7 @@ from GRID_PiCaS_Launcher.picas.actors import RunActor
 from GRID_PiCaS_Launcher.picas.clients import CouchClient
 from GRID_PiCaS_Launcher.picas.iterators import BasicViewIterator
 from GRID_PiCaS_Launcher.picas.modifiers import BasicTokenModifier
+from GRID_PiCaS_Launcher.picas.modifiers import NestedTokenModifier
 from GRID_PiCaS_Launcher.picas.executers import execute
 
 from Launch import ExampleActor
@@ -59,6 +60,7 @@ class Launchtest(unittest.TestCase):
         iterator = BasicViewIterator(self.client, self.token+"/todo", self.modifier)
         self.TestActor = TestActor(iterator, self.modifier)
         self.Ex=ExampleActor(iterator, self.modifier)
+        self.nestedmodifier = NestedTokenModifier()
 
     def travis_safe_upload(self,att,att_tok):
         fail=1
@@ -88,6 +90,7 @@ class Launchtest(unittest.TestCase):
         self.client.modify_token(self.modifier.unlock(self.db[self.token]))
         self.client.modify_token(self.modifier.unclose(self.db[self.token]))
         update_status(self.dbn, self.usr, self.pwd, self.token, 'done')
+        
 
     def test_lock_token(self):
         self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)==0)
@@ -98,6 +101,12 @@ class Launchtest(unittest.TestCase):
             self.key=e.args[0]
             self.tok=e.args[1]
         self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)>0)
+        set_token_field(self.token,'lock',0,self.dbn,self.usr,self.pwd)
+        self.nestedmodifier.lock(self.token, self.client.db)
+        self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)>0)
+        self.nestedmodifier.unlock(self.token, self.client.db)
+        self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)==0)
+
 
     def test_failed_sbx(self):
         set_token_field(self.token,'SBXloc','ftp://ftp.strw.leidenuniv.nl/pub/apmechev/travis_ci_tests/sanddbox_travis.tar',self.dbn,self.usr,self.pwd) 
@@ -128,6 +137,9 @@ class Launchtest(unittest.TestCase):
         scrubs = get_token_field(self.token,'scrub_count',self.dbn,self.usr,self.pwd)
         self.client.modify_token(self.modifier.scrub(self.db[self.token]))
         self.assertTrue(scrubs+1 == int(get_token_field(self.token,'scrub_count',self.dbn,self.usr,self.pwd)))
+        _ = self.nestedmodifier.scrub(self.token, self.client.db)
+        self.assertTrue(scrubs+2 == int(get_token_field(self.token,'scrub_count',self.dbn,self.usr,self.pwd)))
+        
         set_token_field(self.token,'scrub_count',scrubs,self.dbn,self.usr,self.pwd)
 
     def test_uploadpng(self):
