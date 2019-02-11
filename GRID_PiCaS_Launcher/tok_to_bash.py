@@ -72,7 +72,7 @@ def export_tok_keys(cfgfile='tokvar.json',token=None):
     server = couchdb.Server("https://picas-lofar.grid.surfsara.nl:6984")
     server.resource.credentials = (un, pwd)
     db = server[dbn]
-    export_dict_to_env(tokvar)
+    export_dict_to_env(db, tokvar)
 
 
 if __name__ == '__main__':
