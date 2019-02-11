@@ -26,12 +26,13 @@ class tok2bashtest(unittest.TestCase):
         server = couchdb.Server("https://picas-lofar.grid.surfsara.nl:6984")
         server.resource.credentials = (self.usr,self.pwd)
         self.db= server[self.dbn]
-        variable_data ={"STRING":"string1", 
-                        "TOKEN":"_id",
+        variable_data ={"_token_keys":{
+                                "STRING":"string1", 
+                                "TOKEN":"_id",
+                                "INT1":"integer1"},
                         "_attachments":{
                                         "test_attachment":"test_attachment",
-                                        "ATTACH":"test_attachment2"},
-                        "INT1":"integer1"}
+                                        "ATTACH":"test_attachment2"}}
 
         with open(self.test_tokvarile,'w') as f:
             json.dump(variable_data, f)

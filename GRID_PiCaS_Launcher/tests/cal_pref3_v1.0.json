@@ -1,5 +1,5 @@
 {
-    "_apiVersion": 0.5,
+    "PicasApiVersion": 0.5,
     "Job": {
         "NCPU": 6,
         "parameter_step": 1,
@@ -23,9 +23,15 @@
             "template": "CI_pref3_cal_$STARTSB_$DATE"
         },
         "variables": {
+            "_token_keys":{
+                "$OBSID": "OBSID",
+                "$PIPELINE_STEP": "PIPELINE_STEP",
+                "$RESULTS_DIR": "RESULTS_DIR",
+                "$STARTSB": "STARTSB"
+            },
             "_attachments": {
-                "PARSET": "Pre-Facet-Calibrator.parset",
-                "SRMFILE": "srm.txt"
+                "$PARSET": "Pre-Facet-Calibrator.parset",
+                "$SRMFILE": "srm.txt"
             }
         }
     },
