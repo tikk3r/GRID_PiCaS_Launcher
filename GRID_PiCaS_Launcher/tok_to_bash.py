@@ -26,7 +26,7 @@ def get_attachment(db,token, filename, savename=None):
 
 def export_variable(name, value, overwrite=True):
     if name.upper()!= name:
-        warnings.warn("environmental variable '{}' not in Uppercase! This may lead to errors".format(name))
+        warnings.warn("environmental variable '{0}' not in Uppercase! This may lead to errors".format(name))
     if name in os.environ.keys():
         print("!!!WARNING, Environment variable {0} already is set to {1}".format(name, os.environ[name]))
     if name in os.environ.keys() and not overwrite:
@@ -34,15 +34,11 @@ def export_variable(name, value, overwrite=True):
         return
     os.environ[name] = value
 
-def export_tok_keys(cfgfile='tokvar.cfg',token=None):
+def export_tok_keys(cfgfile='tokvar.json',token=None):
     dbn=os.environ['PICAS_DB']
     un=os.environ['PICAS_USR']
     pwd=os.environ['PICAS_USR_PWD']
-    try:
-        tokvar=json.load(open(cfgfile,'rb'))
-    except:
-        set_token_field(token['_id'],'output',-2,dbn,un,pwd)
-        raise Exception("tokvar missing")
+    tokvar=json.load(open(cfgfile,'rb'))
 
     server = couchdb.Server("https://picas-lofar.grid.surfsara.nl:6984")
     server.resource.credentials = (un, pwd)

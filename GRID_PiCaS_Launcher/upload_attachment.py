@@ -17,9 +17,6 @@ def upload_attachment(tok_id,attachment,p_db,p_usr,p_pwd,name=None):
     with open(attachment,'rb') as att:
         client.db.put_attachment(token,att,str(name))
     
-
-
-
 if __name__ == '__main__':
     try:
         dbn=os.environ['PICAS_DB']
