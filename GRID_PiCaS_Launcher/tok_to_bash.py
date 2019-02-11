@@ -34,6 +34,30 @@ def export_variable(name, value, overwrite=True):
         return
     os.environ[name] = value
 
+def export_dict_to_env(variable_dictionary):
+    for head in variable_dictionary:
+        if head  == "_token_keys":
+            for var in variable_dictionary["_token_keys"]:
+                try:
+                    picas_val=str(get_token_field(token['_id'],
+                        variable_dictionary["_token_keys"][var], dbn, un, pwd))
+                except KeyError:
+                    warnings.warn("WARNING: Picas Variable Missing: "+var)
+                    continue
+                if var[0] == "$":
+                    variable = var[1:]
+                else:
+                    variable = var
+                export_variable(variable, picas_val)
+        elif head == '_attachments':
+            for att_file in variable_dictionary['_attachments']:
+                picas_att_name = variable_dictionary['_attachments'][att_file]
+                get_attachment(db,token,picas_att_name,
+                        savename=picas_att_name) #TODO: Add savename as an option
+                export_variable(att_file, picas_att_name)
+
+
+
 def export_tok_keys(cfgfile='tokvar.json',token=None):
     dbn=os.environ['PICAS_DB']
     un=os.environ['PICAS_USR']
@@ -48,26 +72,7 @@ def export_tok_keys(cfgfile='tokvar.json',token=None):
     server = couchdb.Server("https://picas-lofar.grid.surfsara.nl:6984")
     server.resource.credentials = (un, pwd)
     db = server[dbn]
-    for head in tokvar:
-        if head  == "_token_keys":
-            for var in tokvar["_token_keys"]:
-                try:
-                    picas_val=str(get_token_field(token['_id'],
-                        tokvar["_token_keys"][var], dbn, un, pwd))
-                except KeyError:
-                    warnings.warn("WARNING: Picas Variable Missing: "+var)
-                    continue
-                if var[0] == "$":
-                    variable = var[1:]
-                else:
-                    variable = var
-                export_variable(variable, picas_val)
-        elif head == '_attachments':
-            for att_file in tokvar['_attachments']:
-                picas_att_name = tokvar['_attachments'][att_file]
-                get_attachment(db,token,picas_att_name,
-                        savename=picas_att_name) #TODO: Add savename as an option
-                export_variable(att_file, picas_att_name)
+    export_dict_to_env(tokvar)
 
 
 if __name__ == '__main__':

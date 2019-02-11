@@ -40,7 +40,7 @@ from GRID_PiCaS_Launcher.picas.executers import execute
 from GRID_PiCaS_Launcher.update_token_status import update_status
 from GRID_PiCaS_Launcher.set_token_field import set_token_field
 from GRID_PiCaS_Launcher.upload_attachment import upload_attachment
-from GRID_PiCaS_Launcher.tok_to_bash import export_variable
+from GRID_PiCaS_Launcher.tok_to_bash import export_dict_to_env
 from GRID_PiCaS_Launcher.singularity import download_singularity_from_env
 
 #from tok_to_bash import  export_tok_keys
@@ -100,8 +100,7 @@ class ExampleActor(RunActor):
         self.download_sandbox(token)
         subprocess.call(["chmod","a+x","master.sh"])
 
-        for variable in variables:
-            export_variable(variable, variables[variable])
+        export_dict_to_env(variables)
 
         print("Working on token: " + token['_id'])
         ## Read tokvar values from token and write to bash variables if not already exist! Save attachments and export abs filename to variable
@@ -143,13 +142,13 @@ class ExampleActor(RunActor):
 
         
 
-def main(url="https://picas-lofar.grid.surfsara.nl:6984", db=None, username=None, password=None):
+def main(url="https://picas-lofar.grid.surfsara.nl:6984", db=None, username=None, password=None, view='todo'):
     # setup connection to db
     client = CouchClient(url=url, db=db, username=username, password=password)
     # Create token modifier
     modifier = BasicTokenModifier()
     # Create iterator, point to the right todo view
-    iterator = BasicViewIterator(client, sys.argv[-1]+"/todo", modifier)
+    iterator = BasicViewIterator(client, sys.argv[-1]+"/"+view, modifier)
     # Create actor, takes one token from todo view
     actor = ExampleActor(iterator, modifier)
     actor.user = username
@@ -171,7 +170,7 @@ if __name__ == '__main__':
 
     or 1: picas_token_type. In this case, we get the picas credentials from ~/.picasrc
           or from the environment variables"""
-    if len(sys.argv) == 5:
+    if len(sys.argv) > 4:
         db = str(sys.argv[1])
         username = str(sys.argv[2])
         password = str(sys.argv[3])
