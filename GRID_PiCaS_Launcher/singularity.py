@@ -7,6 +7,10 @@ import json
 import pdb
 
 def download_singularity_from_env():
+    """download_singularity_from_env
+    Downloads the singularity image from environment variables:
+    $SIMG: url of the image
+    $SIMG_COMMIT: The commit hash of the image"""
     if not 'SIMG' in os.environ.keys():
         raise RuntimeError("NO $SIMG in Environment!")
     simg_url = os.environ['SIMG']
@@ -14,13 +18,25 @@ def download_singularity_from_env():
     return parse_singularity_link(simg_url, simg_commit)
 
 def parse_singularity_link(simg_url, simg_commit=None):
+    """parse_singularity_link
+
+    :param simg_url: The url to the singularity image (can be gsiftp:// or shub://, 
+                    ideally also http:// will be supported)
+    :type simg_url: str
+    :param simg_commit: Optional commit hash for singularity hub
+    :type simg_commit: str
+    """
     if simg_url.split("://")[0] == 'shub':
         return pull_image_from_shub(simg_url, simg_commit)
     if simg_url.split("://")[0] == 'gsiftp':
-        return download_simg_from_gsiftp(simg_url)
+        return download_simg_from_gsiftp(simg_url) #TODO: If hash is given here, still check if it's ok
     print("Unknown image location {0}".format(simg_url))
 
 def download_simg_from_gsiftp(simg_link):
+    """download_simg_from_gsiftp
+
+    :param simg_link: The gsiftp link for the singularity image
+    """
     img_name = simg_link.split('/')[-1]
     print("Downloading image {0}".format(img_name))
     _dl = subprocess.Popen(['globus-url-copy', simg_link, img_name], stdout=subprocess.PIPE,
@@ -34,6 +50,9 @@ def download_simg_from_gsiftp(simg_link):
 
 
 def pull_image_from_shub(shub_link,commit=None):
+    """Using the shub url (shub://...), this module downloads the singularity image
+    Optionally, a commit hash can be given. If the downloaded image's hash doesn't match, 
+    a warning is thrown, however processing continues"""
     print("Pulling image {0} with commit {1}".format(shub_link,commit))
     if not commit:
         _pull = subprocess.Popen(['singularity','pull',shub_link],stdout=subprocess.PIPE,
