@@ -25,11 +25,8 @@ matrix:
           python: 3.7
 # command to install dependencies
 before_install:
-   - sudo wget -O- http://neuro.debian.net/lists/xenial.us-ca.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
-   - until sudo apt-key adv --recv-keys --keyserver hkp://pool.sks-keyservers.net:80 0xA5D32F012649A5A9; do
-     echo "GPG key import timed out, sleeping for a bit";
-     sleep 20;
-     done
+   - sudo wget -O - http://neuro.debian.net/lists/xenial.us-ca.full | sudo tee /etc/apt/sources.list.d/neurodebian.sources.list
+   - wget -q -O - "https://keyserver.escomposlinux.org/pks/lookup?op=get&search=0xA5D32F012649A5A9" |tail -67| head -65 | sudo apt-key add -
    - sudo apt-get update
    - sudo apt-get install -y singularity-container
    - singularity --version
