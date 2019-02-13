@@ -87,7 +87,7 @@ def pull_image_from_shub(shub_link,commit=None):
 
 def put_variables_in_env(json_payload):
     """Takes a json payload from a token and puts the variables in the environment"""
-    condfig = parse_json_payload(json_payload)
+    config = parse_json_payload(json_payload)
     os.environ['SIMG'] = config['SIMG']
     if "SIMG_COMMIT" in config.keys():
         os.environ["SIMG_COMMIT"] = config["SIMG_COMMIT"]

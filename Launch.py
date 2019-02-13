@@ -42,7 +42,7 @@ from GRID_PiCaS_Launcher.set_token_field import set_token_field
 from GRID_PiCaS_Launcher.upload_attachment import upload_attachment
 from GRID_PiCaS_Launcher.tok_to_bash import export_dict_to_env
 from GRID_PiCaS_Launcher.singularity import parse_singularity_link
-from GRID_PiCaS_Launcher.singularity import put_variables_in_env
+from GRID_PiCaS_Launcher.singularity import parse_json_payload 
 
 #from tok_to_bash import  export_tok_keys
 from GRID_PiCaS_Launcher import sandbox
