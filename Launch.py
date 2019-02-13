@@ -74,7 +74,7 @@ class ExampleActor(RunActor):
             config = self.config
         put_variables_in_env(config)
         image_location = download_singularity_from_env()
-        os.environ['SIMG'] = location
+        os.environ['SIMG'] = image_location
 
     @staticmethod
     def get_variables_from_config(config, variables=None):
