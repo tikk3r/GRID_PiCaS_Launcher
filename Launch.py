@@ -42,6 +42,7 @@ from GRID_PiCaS_Launcher.set_token_field import set_token_field
 from GRID_PiCaS_Launcher.upload_attachment import upload_attachment
 from GRID_PiCaS_Launcher.tok_to_bash import export_dict_to_env
 from GRID_PiCaS_Launcher.singularity import download_singularity_from_env
+from GRID_PiCaS_Launcher.singularity import put_variables_in_env
 
 #from tok_to_bash import  export_tok_keys
 from GRID_PiCaS_Launcher import sandbox
@@ -60,6 +61,20 @@ class ExampleActor(RunActor):
         cfg_file = token['_attachments'][key]
         sandbox = sandbox.Sandbox(config_file=cfg_file)
         sandbox.build_sandbox()
+
+    def get_image(self,config=None):
+        """get_image: Downloads the image in the cwd
+        and sets the environment variable $SIMG to point to
+        the local downloaded image. 
+
+        :param config:Optional config JSON, if None, we use
+        the ExampleActor.config member
+        """
+        if not config:
+            config = self.config
+        put_variables_in_env(config)
+        image_location = download_singularity_from_env()
+        os.environ['SIMG'] = location
 
     @staticmethod
     def get_variables_from_config(config, variables=None):
@@ -96,6 +111,8 @@ class ExampleActor(RunActor):
 
         self.config = token['config.json']
         variables = self.get_variables_from_config(self.config, variables)
+        if 'container' in self.config.keys() or 'singularity' in self.config.keys:
+            self.get_image()
 
         self.download_sandbox(token)
         subprocess.call(["chmod","a+x","master.sh"])
