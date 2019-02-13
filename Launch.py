@@ -41,7 +41,7 @@ from GRID_PiCaS_Launcher.update_token_status import update_status
 from GRID_PiCaS_Launcher.set_token_field import set_token_field
 from GRID_PiCaS_Launcher.upload_attachment import upload_attachment
 from GRID_PiCaS_Launcher.tok_to_bash import export_dict_to_env
-from GRID_PiCaS_Launcher.singularity import download_singularity_from_env
+from GRID_PiCaS_Launcher.singularity import parse_singularity_link
 from GRID_PiCaS_Launcher.singularity import put_variables_in_env
 
 #from tok_to_bash import  export_tok_keys
@@ -72,8 +72,9 @@ class ExampleActor(RunActor):
         """
         if not config:
             config = self.config
-        put_variables_in_env(config)
-        image_location = download_singularity_from_env()
+        simg_config = parse_json_payload(config)
+        image_location = parse_singularity_link(simg_config['SIMG'],
+                                                simg_config['SIMG_COMMIT'])
         os.environ['SIMG'] = image_location
 
     @staticmethod

@@ -106,7 +106,15 @@ class Launchtest(unittest.TestCase):
         self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)>0)
         self.nestedmodifier.unlock(self.token, self.client.db)
         self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)==0)
-
+        self.nestedmodifier.close(self.token, self.client.db)
+        self.assertTrue(get_token_field(self.token,'done',self.dbn,self.usr,self.pwd)>0)
+        self.nestedmodifier.add_output(self.token, self.client.db, 12)
+        self.assertTrue(get_token_field(self.token,'output',self.dbn,self.usr,self.pwd)==12)
+        self.nestedmodifier.set_error(self.token, self.client.db)
+        self.assertTrue(get_token_field(self.token,'done',self.dbn,self.usr,self.pwd)==-1)
+        self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)==-1)
+        self.nestedmodifier.unclose(self.token, self.client.db)
+        self.assertTrue(get_token_field(self.token,'done',self.dbn,self.usr,self.pwd)==0)
 
     def test_failed_sbx(self):
         set_token_field(self.token,'SBXloc','ftp://ftp.strw.leidenuniv.nl/pub/apmechev/travis_ci_tests/sanddbox_travis.tar',self.dbn,self.usr,self.pwd) 

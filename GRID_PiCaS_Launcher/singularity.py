@@ -87,6 +87,13 @@ def pull_image_from_shub(shub_link,commit=None):
 
 def put_variables_in_env(json_payload):
     """Takes a json payload from a token and puts the variables in the environment"""
+    condfig = parse_json_payload(json_payload)
+    os.environ['SIMG'] = config['SIMG']
+    if "SIMG_COMMIT" in config.keys():
+        os.environ["SIMG_COMMIT"] = config["SIMG_COMMIT"]
+
+def parse_json_payload(json_payload):
+    """Takes a json payload from a token and puts the variables in the environment"""
     if 'container' in json_payload.keys():
         json_payload = json_payload['container']
     if 'singularity' in json_payload.keys():
@@ -95,9 +102,9 @@ def put_variables_in_env(json_payload):
         payload = json_payload
     else:
         raise RuntimeError("Could not find SIMG in {0}".format(json_payload))
-    os.environ['SIMG'] = payload['SIMG']
-    if "SIMG_COMMIT" in payload.keys():
-        os.environ["SIMG_COMMIT"] = payload["SIMG_COMMIT"]
+    simg = payload['SIMG']
+    simg_hash = payload.get("SIMG_COMMIT", None)
+    return {'SIMG': simg, "SIMG_COMMIT": simg_hash}
 
 def get_image_file_hash(image_path):
     '''get_image_hash will return an md5 hash of the file based on a criteria level.
