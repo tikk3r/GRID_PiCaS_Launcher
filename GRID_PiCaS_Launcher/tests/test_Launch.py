@@ -155,6 +155,7 @@ class Launchtest(unittest.TestCase):
         self.Ex.user = self.usr
         self.Ex.password = self.pwd
         self.Ex.run() 
+        self.assertEquals(os.environ['SIMG'],'tikk3r-lofar-grid-hpccloud-master-lofar.simg')
         for att in self.db[self.token]['_attachments']:
             if "png" in att:
                 return
