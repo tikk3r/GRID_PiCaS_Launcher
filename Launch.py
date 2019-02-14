@@ -88,20 +88,13 @@ class ExampleActor(RunActor):
         return variables
 
     def download_sandbox(self, token):
-        downloader = None
         if 'SBXloc' in token.keys():
             location=token['SBXloc']
         else:
             return None
-        if 'gsiftp' in location:
-            downloader = sandbox.SandboxGSIDownloader(location)
-        if 'https' in location or 'ftp' in location:
-            downloader = sandbox.SandboxWgetDownloader(location)
-        if downloader:
-            downloader.download()
-            downloader.check_download()
-            downloader.extract_sandbox()
-            downloader.remove_download_file()
+        sandbox = Sandbox(location=location)
+        sandbox.download_sandbox(location)
+ 
 
     def process_token(self, key, token):
     # Print token information
