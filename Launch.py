@@ -59,8 +59,8 @@ class ExampleActor(RunActor):
             print("WARNING: No sandbox configuration file")
             return
         cfg_file = token['_attachments'][key]
-        sandbox = sandbox.Sandbox(config_file=cfg_file)
-        sandbox.build_sandbox()
+        sbx = sandbox.Sandbox(config_file=cfg_file)
+        sbx.build_sandbox()
 
     def get_image(self,config=None):
         """get_image: Downloads the image in the cwd
@@ -92,8 +92,8 @@ class ExampleActor(RunActor):
             location=token['SBXloc']
         else:
             return None
-        sandbox = sandbox.Sandbox(location=location)
-        sandbox.download_sandbox()
+        sbx = sandbox.Sandbox(location=location)
+        sbx.download_sandbox()
  
 
     def process_token(self, key, token):
