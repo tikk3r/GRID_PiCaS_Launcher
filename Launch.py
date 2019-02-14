@@ -92,8 +92,8 @@ class ExampleActor(RunActor):
             location=token['SBXloc']
         else:
             return None
-        sandbox = Sandbox(location=location)
-        sandbox.download_sandbox(location)
+        sandbox = sandbox.Sandbox(location=location)
+        sandbox.download_sandbox()
  
 
     def process_token(self, key, token):

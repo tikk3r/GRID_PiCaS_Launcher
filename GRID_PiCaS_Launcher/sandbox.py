@@ -79,7 +79,9 @@ class Sandbox(object):
         downloader.extract_sandbox()
         downloader.remove_download_file()
 
-    def download_sandbox(self,location):
+    def download_sandbox(self,location=None):
+        if not location:
+            location = self.location
         if 'gsiftp' in location:
             self._do_download(SandboxGSIDownloader(location))
         elif 'http' in location or 'ftp' in location:
