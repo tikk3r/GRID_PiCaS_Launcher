@@ -4,10 +4,14 @@
             "branch": "master",
             "url": "https://github.com/apmechev/GRID_Sandbox.git"
         },
-        "prefactor": {
-            "branch": "version3.0",
-            "checkout_dir": "prefactor",
-            "url": "https://github.com/lofar-astron/prefactor.git"
-        }
+        "scripts": [
+            {
+                "prefactor": {
+                    "branch": "version3.0",
+                    "checkout_dir": "prefactor",
+                    "url": "https://github.com/lofar-astron/prefactor.git"
+                }
+            }
+        ]
     }
 }
