@@ -82,7 +82,14 @@ function upload_results_cal2(){
    ls prefactor/cal_results/*npy 
    ls  prefactor/results/*h5
 
-   tar -cvf Output/calib_solutions.tar prefactor/cal_results/*npy prefactor/results/*h5
+   if [ -d "prefactor/results/cal_values" ];then
+       tar -cvf Output/calib_solutions.tar prefactor/results/cal_values/* prefactor/results/inspection/*
+   elif [ -d "prefactor/cal_results/"   ];then
+              tar -cvf Output/calib_solutions.tar prefactor/cal_results/*npy prefactor/results/*h5
+   else;
+       echo "WARNING: Could not fild results"
+   fi
+
    uberftp -rm ${RESULTS_DIR}/${OBSID}/${OBSID}.tar
    upload_error_wrapper Output/calib_solutions.tar ${RESULTS_DIR}/${OBSID}/${OBSID}.tar
  
