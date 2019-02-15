@@ -110,8 +110,8 @@ class ExampleActor(RunActor):
         if 'container' in self.config.keys() or 'singularity' in self.config.keys:
             self.get_image()
 
-        self.create_sandbox()
         self.download_sandbox(token) ##Will be removed!
+        self.create_sandbox()
         subprocess.call(["chmod","a+x","master.sh"])
 
         export_dict_to_env(self.client.db, variables, self.token_name)

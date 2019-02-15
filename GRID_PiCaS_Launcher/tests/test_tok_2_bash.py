@@ -26,7 +26,7 @@ class tok2bashtest(unittest.TestCase):
         self.usr=creds['user']
         self.pwd=creds['password']
         self.dbn=str('sksp_unittest')
-        self.test_tokvarile=BASE_DIR+'/GRID_PiCaS_Launcher/tests/test_tok_var.json'
+        self.test_tokvarile='GRID_PiCaS_Launcher/tests/test_tok_var.json'
         server = couchdb.Server("https://picas-lofar.grid.surfsara.nl:6984")
         server.resource.credentials = (self.usr,self.pwd)
         self.db= server[self.dbn]
@@ -37,7 +37,7 @@ class tok2bashtest(unittest.TestCase):
                         "_attachments":{
                                         "test_attachment":"test_attachment",
                                         "ATTACH":"test_attachment2"}}
-
+        print(os.getcwd())
         with open(self.test_tokvarile,'w') as f:
             json.dump(variable_data, f)
         set_token_field(self.token_id,'string1','test_string',self.dbn,self.usr,self.pwd)
