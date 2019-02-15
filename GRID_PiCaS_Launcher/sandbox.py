@@ -61,10 +61,10 @@ class Sandbox(object):
         os.chdir(checkout_dir_path)
         if repo_branch:
             checkout = subprocess.Popen(['git', 'checkout', repo_branch])
-            checkout.wait()
+            checkout.communicate()
         if repo_commit:
             checkout = subprocess.Popen(['git', 'checkout', repo_commit])
-            checkout.wait()
+            checkout.communicate()
         if remove_gitdir and os.path.isdir('/.git'):
             shutil.rmtree('.git/')
         if not checkout_dir:
