@@ -28,6 +28,7 @@ class TestActor(RunActor):
         
 
 class Launchtest(unittest.TestCase):
+    _multiprocess_can_split_ = True
 
     def setUp(self):
         vers=str(sys.version_info[0])+"."+str(sys.version_info[1])
