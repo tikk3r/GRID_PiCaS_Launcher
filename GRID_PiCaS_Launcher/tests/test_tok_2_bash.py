@@ -9,6 +9,10 @@ from GRID_PiCaS_Launcher import couchdb
 from GRID_PiCaS_Launcher.tok_to_bash import export_tok_keys
 import sys
 
+import GRID_PiCaS_Launcher
+BASE_DIR = GRID_PiCaS_Launcher.__file__.split('__init__')[0]
+
+
 
 class tok2bashtest(unittest.TestCase):
 
@@ -22,7 +26,7 @@ class tok2bashtest(unittest.TestCase):
         self.usr=creds['user']
         self.pwd=creds['password']
         self.dbn=str('sksp_unittest')
-        self.test_tokvarile='GRID_PiCaS_Launcher/tests/test_tok_var.json'
+        self.test_tokvarile=BASE_DIR+'/GRID_PiCaS_Launcher/tests/test_tok_var.json'
         server = couchdb.Server("https://picas-lofar.grid.surfsara.nl:6984")
         server.resource.credentials = (self.usr,self.pwd)
         self.db= server[self.dbn]
