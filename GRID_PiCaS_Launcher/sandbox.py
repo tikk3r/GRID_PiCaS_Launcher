@@ -34,12 +34,13 @@ class Sandbox(object):
             repo_branch = None
             repo_commit = None
             repo_loc = cfg['git']['url']
+            checkout_dir = cfg['git'].get('checkout_dir', None)
             if 'branch' in cfg['git'].keys():
                 repo_branch = cfg['git']['branch']
             if 'commit' in cfg['git']:
                 repo_commit = cfg['git']['commit']
             self._pull_git_repository(repo_location=repo_loc, repo_branch=repo_branch,
-                    repo_commit=repo_commit)
+                    repo_commit=repo_commit, checkout_dir=checkout_dir)
         
     @staticmethod
     def _pull_git_repository(repo_location=None, repo_branch=None, repo_commit=None,
