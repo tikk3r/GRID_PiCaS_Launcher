@@ -38,6 +38,7 @@ class tok2bashtest(unittest.TestCase):
                                         "test_attachment":"test_attachment",
                                         "ATTACH":"test_attachment2"}}
         os.chdir(BASE_DIR)
+        os.chdir('..')
         with open(self.test_tokvarile,'w') as f:
             json.dump(variable_data, f)
         set_token_field(self.token_id,'string1','test_string',self.dbn,self.usr,self.pwd)

@@ -12,6 +12,7 @@ class testSandbox(unittest.TestCase):
 
         def setUp(self):
             os.chdir(BASE_DIR)
+            os.chdir('..')
 
         def test_checkout_commit(self):
             pre_run_dir = os.getcwd()
