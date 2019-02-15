@@ -28,6 +28,7 @@ from GRID_PiCaS_Launcher.get_picas_credentials import picas_cred
 import subprocess
 import shutil
 import glob
+import warnings
 
 #picas imports
 from GRID_PiCaS_Launcher.picas.actors import RunActor
@@ -54,12 +55,13 @@ class ExampleActor(RunActor):
         self.modifier = modifier
         self.client = iterator.client
 
-    def create_sandbox(self, key='sandbox.json'):
-        if key not in token['_attachments'].keys():
-            print("WARNING: No sandbox configuration file")
+    def create_sandbox(self, json_payload=None):
+        if not json_payload:
+            json_payload = self.config
+        if 'sandbox' not in json_payload.keys():
+            warnings.warn("No sandbox configuration")
             return
-        cfg_file = token['_attachments'][key]
-        sbx = sandbox.Sandbox(config_file=cfg_file)
+        sbx = sandbox.Sandbox(config_file=json_payload['sandbox'])
         sbx.build_sandbox()
 
     def get_image(self,config=None):
