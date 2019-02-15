@@ -86,7 +86,7 @@ function upload_results_cal2(){
        tar -cvf Output/calib_solutions.tar prefactor/results/cal_values/* prefactor/results/inspection/*
    elif [ -d "prefactor/cal_results/"   ];then
               tar -cvf Output/calib_solutions.tar prefactor/cal_results/*npy prefactor/results/*h5
-   else;
+   else
        echo "WARNING: Could not fild results"
    fi
 
