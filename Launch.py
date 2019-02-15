@@ -61,7 +61,7 @@ class ExampleActor(RunActor):
         if 'sandbox' not in json_payload.keys():
             warnings.warn("No sandbox configuration")
             return
-        sbx = sandbox.Sandbox(config_file=json_payload['sandbox'])
+        sbx = sandbox.Sandbox(config_json=json_payload['sandbox'])
         sbx.build_sandbox()
 
     def get_image(self,config=None):

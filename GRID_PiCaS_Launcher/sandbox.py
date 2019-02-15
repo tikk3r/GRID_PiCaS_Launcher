@@ -8,9 +8,11 @@ class Sandbox(object):
     """A class that builds the sandbox from a json file, or 
     alternatively downloads it"""
 
-    def __init__(self,config_file=None, location=None):
+    def __init__(self,config_file=None, config_json=None, location=None):
         if config_file:
             self.config = self._get_field_from_cfgfile(config_file)
+        elif config_json:
+            self.config = config_json
         elif location:
             self.location = location 
         else:
