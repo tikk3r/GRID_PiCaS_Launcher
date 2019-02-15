@@ -10,6 +10,9 @@ DUMMY_CONFIG = BASE_DIR+"/tests/sandbox.json"
 #TODO: confirm that the branch and commit are correct using internal function
 class testSandbox(unittest.TestCase):
 
+        def setUp(self):
+            os.chdir(BASE_DIR)
+
         def test_checkout_commit(self):
             pre_run_dir = os.getcwd()
             s=Sandbox(config_file=DUMMY_CONFIG)
