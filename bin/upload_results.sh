@@ -82,8 +82,8 @@ function upload_results_cal2(){
    ls prefactor/cal_results/*npy 
    ls  prefactor/results/*h5
 
-   if [ -d "prefactor/results/cal_values" ];then
-       tar -cvf Output/calib_solutions.tar prefactor/results/cal_values/* prefactor/results/inspection/*
+   if [ -d prefactor/rundir/Pre-Facet*/results/cal_values ];then
+       tar -cvf Output/calib_solutions.tar prefactor/rundir/Pre-Facet*/results/cal_values/* prefactor/rundir/Pre-Facet*/results/inspection/*
    elif [ -d "prefactor/cal_results/"   ];then
               tar -cvf Output/calib_solutions.tar prefactor/cal_results/*npy prefactor/results/*h5
    else
