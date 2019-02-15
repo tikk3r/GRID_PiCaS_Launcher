@@ -62,7 +62,7 @@ class ExampleActor(RunActor):
             warnings.warn("No sandbox configuration")
             return
         sbx = sandbox.Sandbox(config_json=json_payload['sandbox'])
-        sbx.build_sandbox()
+        #sbx.build_sandbox() Not needed
 
     def get_image(self,config=None):
         """get_image: Downloads the image in the cwd
@@ -112,7 +112,8 @@ class ExampleActor(RunActor):
 
         self.download_sandbox(token) ##Will be removed!
         self.create_sandbox()
-        subprocess.call(["chmod","a+x","master.sh"])
+        with open(os.devnull, 'w') as FNULL:
+            subprocess.call(["chmod","a+x","master.sh"], stdout=FNULL, stderr=subprocess.STDOUT)
 
         export_dict_to_env(self.client.db, variables, self.token_name)
 
