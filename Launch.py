@@ -48,6 +48,7 @@ from GRID_PiCaS_Launcher.singularity import parse_json_payload
 #from tok_to_bash import  export_tok_keys
 from GRID_PiCaS_Launcher import sandbox
 import pdb
+from multiprocessing import Process
 
 class ExampleActor(RunActor):
     def __init__(self, iterator, modifier):
@@ -111,7 +112,10 @@ class ExampleActor(RunActor):
             self.get_image()
 
         self.download_sandbox(token) ##Will be removed!
-        self.create_sandbox()
+        p = Process(target=self.create_sandbox)
+        p.start()
+        print("Creating Sandbox")
+        p.join()
         with open(os.devnull, 'w') as FNULL:
             subprocess.call(["chmod","a+x","master.sh"], stdout=FNULL, stderr=subprocess.STDOUT)
 
