@@ -31,6 +31,7 @@ before_install:
    - sudo apt-get install -y singularity-container
    - singularity --version
    - pip install pyyaml
+   - pip install nose-cov
    - pip install codecov
 script: #Putting GRID_PiCaS_Launcher into the pythonpath by force
    - export PYTHONPATH=$PWD:$PYTHONPATH
