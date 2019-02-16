@@ -40,12 +40,16 @@ class Sandbox(object):
                 repo_branch = cfg['git']['branch']
             if 'commit' in cfg['git']:
                 repo_commit = cfg['git']['commit']
-            self._pull_git_repository(repo_location=repo_loc, repo_branch=repo_branch,
-                    repo_commit=repo_commit, checkout_dir=checkout_dir)
+            kwargs = {'repo_location':repo_loc, 'repo_branch':repo_branch, 'repo_commit':repo_commit, 'checkout_dir':checkout_dir}
+            p = Process(target=self._pull_git_repository, kwargs=kwargs)
+            p.start()
+            p.join()
+#            self._pull_git_repository(repo_location=repo_loc, repo_branch=repo_branch,
+#                    repo_commit=repo_commit, checkout_dir=checkout_dir)
         
     @staticmethod
     def _pull_git_repository(repo_location=None, repo_branch=None, repo_commit=None,
-                             checkout_dir=None, remove_gitdir=True):
+                             checkout_dir=None, remove_gitdir=False):
         """Internal function that checks out a specific commit or branch of a 
         repository. By default it does so in the current directory. """
         if not checkout_dir:
