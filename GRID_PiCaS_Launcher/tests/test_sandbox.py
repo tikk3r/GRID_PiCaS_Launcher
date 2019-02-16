@@ -8,7 +8,9 @@ import GRID_PiCaS_Launcher
 BASE_DIR = GRID_PiCaS_Launcher.__file__.split('__init__')[0]
 DUMMY_CONFIG = BASE_DIR+"/tests/sandbox.json"
 #TODO: confirm that the branch and commit are correct using internal function
+
 class testSandbox(unittest.TestCase):
+        _multiprocess_can_split_ = True
 
         def setUp(self):
             os.chdir(BASE_DIR+"/..")

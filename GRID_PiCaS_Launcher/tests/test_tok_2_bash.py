@@ -15,6 +15,7 @@ BASE_DIR = GRID_PiCaS_Launcher.__file__.split('__init__')[0]
 
 
 class tok2bashtest(unittest.TestCase):
+    _multiprocess_can_split_ = True
 
     def setUp(self):
         vers=str(sys.version_info[0])+"."+str(sys.version_info[1])
