@@ -48,7 +48,7 @@ class testSandbox(unittest.TestCase):
                     checkout_dir='test_sbx2')
             self.assertTrue(os.getcwd() == pre_run_dir)
             self.assertTrue(os.path.isdir(pre_run_dir+"/test_sbx2"))
-            print(os.listdir((pre_run_dir+"/test_sbx3")))
+            print(os.listdir((pre_run_dir+"/test_sbx2")))
             print(os.getcwd())     
             self.assertTrue(os.path.exists(pre_run_dir+"/test_sbx2/.git"))
             shutil.rmtree(pre_run_dir+"/test_sbx2")
