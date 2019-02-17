@@ -16,8 +16,8 @@ def main(*arguments):
         pc = picas_cred()      
         set_token_field(arguments[-3],arguments[-2],arguments[-1],pc.database, pc.user, pc.password)
     else:
-        set_token_field(arguments[5],arguments[6],arguments[1],arguments[2],arguments[3],arguments[4])
+        set_token_field(arguments[4],arguments[5],arguments[0],arguments[1],arguments[2],arguments[3])
 
 
 if __name__ == '__main__':
-    main(sys.argv)
+    main(sys.argv[1:])
