@@ -1,4 +1,5 @@
 from GRID_PiCaS_Launcher import couchdb
+from GRID_PiCaS_Launcher.get_picas_credentials import picas_cred
 import os,sys,time
 
 def set_token_field(tok_id,fieldname,value,p_db,p_usr,p_pwd):
@@ -9,13 +10,14 @@ def set_token_field(tok_id,fieldname,value,p_db,p_usr,p_pwd):
     token[fieldname]=value
     db.update([token])
 
+def main(*arguments):
+    arguments = arguments[0]
+    if len(arguments)<=5:
+        pc = picas_cred()      
+        set_token_field(arguments[-3],arguments[-2],arguments[-1],pc.database, pc.user, pc.password)
+    else:
+        set_token_field(arguments[5],arguments[6],arguments[1],arguments[2],arguments[3],arguments[4])
+
 
 if __name__ == '__main__':
-    try:
-        dbn=os.environ['PICAS_DB']
-        usr=os.environ['PICAS_USR']
-        passw=os.environ['PICAS_USR_PWD']
-        set_token_field(sys.argv[-3],sys.argv[-2],sys.argv[-1],dbn,usr,passw)
-    except:
-        set_token_field(sys.argv[5],sys.argv[6],sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4])
- 
+    main(sys.argv)

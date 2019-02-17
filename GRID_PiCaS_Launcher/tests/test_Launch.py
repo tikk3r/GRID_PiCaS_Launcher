@@ -2,6 +2,7 @@ import unittest
 from GRID_PiCaS_Launcher import get_picas_credentials as gpc
 from GRID_PiCaS_Launcher.get_token_field import get_token_field
 from GRID_PiCaS_Launcher.set_token_field import set_token_field
+from GRID_PiCaS_Launcher.set_token_field import main as set_token_main
 from GRID_PiCaS_Launcher.update_token_status import update_status
 import os,sys
 from time import sleep
@@ -54,6 +55,8 @@ class Launchtest(unittest.TestCase):
         self.db.update([tok])
         set_token_field(self.token,'lock',0,self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'string1','1234',self.dbn,self.usr,self.pwd)
+        set_token_main(self.token,'string1','1234',self.dbn,self.usr,self.pwd)
+        set_token_main(self.token,'string1','1234')
         set_token_field(self.token,'done',0,self.dbn,self.usr,self.pwd)
         update_status(self.dbn, self.usr, self.pwd, self.token, 'todo')
         set_token_field(self.token,'SBXloc','https://home.strw.leidenuniv.nl/~apmechev/sandbox_travis.tar',self.dbn,self.usr,self.pwd)
