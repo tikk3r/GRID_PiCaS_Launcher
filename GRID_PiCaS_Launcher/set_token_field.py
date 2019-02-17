@@ -13,10 +13,21 @@ def set_token_field(tok_id,fieldname,value,p_db,p_usr,p_pwd):
 def main(*arguments):
     arguments = arguments[0]
     if len(arguments)<=5:
-        pc = picas_cred()      
-        set_token_field(arguments[-3],arguments[-2],arguments[-1],pc.database, pc.user, pc.password)
+        pc = picas_cred()
+        database = pc.database
+        username =  pc.user
+        password =  pc.password
+        token_id = arguments[-3]
+        fieldname = arguments[-2]
+        value = arguments[-1]
     else:
-        set_token_field(arguments[4],arguments[5],arguments[0],arguments[1],arguments[2],arguments[3])
+        token_id = arguments[0]
+        fieldname = arguments[1]
+        value = arguments[2]
+        database = arguments[3]
+        username = arguments[4]
+        password = arguments[5]
+    set_token_field(token_id, fieldname, value, database, username, password)
 
 
 if __name__ == '__main__':
