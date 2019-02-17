@@ -11,7 +11,8 @@ def set_token_field(tok_id,fieldname,value,p_db,p_usr,p_pwd):
     db.update([token])
 
 def main(*arguments):
-    arguments = arguments[0]
+    if isinstance(arguments[0],list):
+        arguments = arguments[0]
     if len(arguments)<=5:
         pc = picas_cred()
         database = pc.database
