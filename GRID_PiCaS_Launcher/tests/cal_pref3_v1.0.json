@@ -13,6 +13,8 @@
         "wholenode": false
     },
     "Token": {
+        "_id":"CI_cal_",
+        "type":"CI_pref3_cal",
         "status": "queued",
         "times": {},
         "upload": {
@@ -49,11 +51,15 @@
         "scripts": [
             {
                 "prefactor": {
-                    "branch": "version3.0",
+                    "branch": "master",
                     "checkout_dir": "prefactor",
                     "url": "https://github.com/lofar-astron/prefactor.git"
                 }
             }
         ]
+    },
+    "downloader":{"executable":"globus-url-copy",
+        "options":["-rst","-st", "30","-fast","-v"],
+        "extract":"true"
     }
 }

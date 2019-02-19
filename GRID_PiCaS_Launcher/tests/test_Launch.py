@@ -66,17 +66,6 @@ class Launchtest(unittest.TestCase):
         self.Ex=ExampleActor(iterator, self.modifier)
         self.nestedmodifier = NestedTokenModifier()
 
-    def travis_safe_upload(self,att,att_tok):
-        fail=1
-        with open(att,'r') as att_file:
-            while(fail==1):
-                try:
-                    self.db.put_attachment(self.db[self.token], att_file,att_tok)
-                    fail=0
-                except couchdb.http.ResourceConflict:
-                    sleep(1)
-                    fail=1
-
     def find_and_delete(self,string):
         for att in self.db[self.token]['_attachments']:
             if string in att:
