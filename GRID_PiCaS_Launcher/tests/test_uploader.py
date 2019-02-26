@@ -9,7 +9,7 @@ from GRID_PiCaS_Launcher.upload_results import uploader
 class UploadTest(unittest.TestCase):
     
     def setup():
-        self.tmpdir = tempfile.mkdtemp(os.getcwd())
+        self.tmpdir = tempfile.mkdtemp(prefix=os.getcwd()+"/")
         
     def test_tar_uploader(self):
         data = {"upload": {
@@ -22,7 +22,7 @@ class UploadTest(unittest.TestCase):
 
             }}
         try:
-            os.environ('RUNDIR')=self.tmpdir
+            os.environ['RUNDIR']=self.tmpdir
             os.mkdir(self.tmpdir+"/Output")
             self.touch(self.tmpdir+"/Output/a")
             self.touch(self.tmpdir+"/Output/b")
