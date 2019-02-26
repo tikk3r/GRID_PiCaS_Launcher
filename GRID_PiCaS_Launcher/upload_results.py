@@ -2,6 +2,7 @@ from GRID_PiCaS_Launcher  import couchdb
 import os
 import sys
 import time
+import tarfile
 import subprocess
 from GRID_PiCaS_Launcher.picas.clients import CouchClient
 
@@ -10,7 +11,7 @@ import json
 
 
 
-def export_date_to_env(json_data):
+def get_date(json_data):
     upload = json_data.get('upload')
 
     if not upload or not upload.get('add_date'):
@@ -40,7 +41,7 @@ class UploadError(Exception):
 
 class GSIUploadError(UploadError):
     """Generic Upload Error using GSITools"""
-    def __init__(self, message, errors, return_code):
+    def __init__(self, message, return_code, errors=""):
         self.return_code = return_code
         super(GSIUploadError, self).__init__(message, errors)
 
@@ -65,30 +66,62 @@ class uploader(object):
     def __init__(self):
         pass
 
-    def _check_valid_location(self, location):
-        raise NotImplementedError("Implement this for concrete uploader")
-
-    def _ls_file(self,file_uri):
-        raise NotImplementedError("Implement this for concrete uploader")
-
-    def upload(self,src, dest):
-        raise NotImplementedError("Implement this for concrete uploader")
-
-    def delete(self,location):
-        raise NotImplementedError("Implement this for concrete uploader")
-
-
-class GSIUploader(uploader):
-    def __init__(self):
-        _uberftp_result = subprocess.call(['which','uberftp'])
-        _globus_result = subprocess.call(['which','globus-url-copy'])
-        if _uberftp_result !=0 or _globus_result !=0:
-            raise RuntimeError("Either uberftp or globus-url-copy are not installed")
-
-    def _ls_file(self, file_uri):
-        _file_loc = subprocess.Popen(['uberftp','-ls',file_uri], stdout=subprocess.PIPE,
-                                     stderr=subprocess.PIPE)
-        out, err= _file_loc.communicate()
+    def _communicate(self, subprocess_popen, raise_exception=None):
+        """Helper function to process the subprocess.Popen output"""
+        out, err = subprocess_popen.communicate()
         if not err:
             return out
+        if raise_exception:
+            raise raise_exception(err, -1)
+
+    def upload(self):
+        utput_dir = os.environ['RUNDIR']+"/Output"
+        return_dir = os.getcwd()
+        try:
+            os.chdir(output_dir)
+            if self.context.get('gzip'):
+                upload_file = self.compress()
+            else:
+                upload_file = self.tarball()
+            self._upload(upload_file)
+        finally:
+            os.chdir(return_dir)
+
+    def compress(self):
+        with tarfile.open('upload.tar.gz', mode='w:gz') as archive:
+                archive.add(os.getcwd(), recursive=True)
+        return "{0}/{1}".format(os.getcwd(),"upload.tar.gz")
+
+    def tarball(self):
+        with tarfile.open('upload.tar', mode='w') as archive:
+                archive.add(os.getcwd(), recursive=True)
+        return "{0}/{1}".format(os.getcwd(), "upload.tar")             
+    
+    def _upload(self):
+        raise NotImplementedError("Implement this for concrete uploader")
+
+class GSIUploader(uploader):
+    def __init__(self, context):
+        """Gets the 'upload' Dict as context and uploads file to GSIFTP location"""
+        if 'upload' in context:
+            context = context['upload']
+        self.context = context
+        _uberftp_result = subprocess.call(['which','uberftp'])
+        _globus_result = subprocess.call(['which','globus-url-copy'])
+        self._date = get_date(self.context)
+
+        self._path= "{0}/{1}".format(self.context['location'], self.context['template'])
+        if _uberftp_result !=0 or _globus_result !=0:
+            raise RuntimeError("Either uberftp or globus-url-copy are not installed")
+        self.upload()
         
+    def _upload(self, upload_file):
+        if self.context.get('overwrite'):
+            command = ['globus-url-copy', '-sync', '-sync-level', '3', upload_file, self._path]
+        else:
+            command = ['globus-url-copy',upload_file, self._path]
+        _upload_file = subprocess.Popen(command,
+                                        stdout=subprocess.PIPE,  stderr=subprocess.PIPE)
+        return self._communicate(_upload_file, GSIUploadError)
+        
+
