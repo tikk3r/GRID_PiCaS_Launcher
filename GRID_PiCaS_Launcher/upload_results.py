@@ -10,6 +10,15 @@ from datetime import datetime
 import json
 
 
+if '__enter__' not in dir(tarfile.TarFile): #Patch for python2.6
+    class tarfile(tarfile.TarFile):
+        def __enter__(self):
+            return self
+        def __exit__(self,type, value, traceback):
+            if type is None:
+                    self.close()
+
+
 
 def get_date(json_data):
     upload = json_data.get('upload')
@@ -101,13 +110,9 @@ class uploader(object):
             os.chdir(return_dir)
 
     def compress(self):
-        try:
-            archive = tarfile.open('upload.tar.gz', mode='w:gz')
+        with tarfile.open('upload.tar.gz', mode='w:gz') as archive:
             archive.add(os.getcwd(), recursive=True, arcname='')
-            archive.close()
-            return "{0}/{1}".format(os.getcwd(),"upload.tar.gz")
-        except Exception as e:
-            raise Exception(str(e))
+        return "{0}/{1}".format(os.getcwd(),"upload.tar.gz")
 
     def tarball(self):
         with tarfile.open('upload.tar', mode='w') as archive:
