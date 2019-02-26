@@ -8,7 +8,7 @@ from GRID_PiCaS_Launcher.upload_results import uploader
 
 class UploadTest(unittest.TestCase):
     
-    def setUp():
+    def setUp(self):
         self.tmpdir = tempfile.mkdtemp(prefix=os.getcwd()+"/")
         
     def test_tar_uploader(self):
