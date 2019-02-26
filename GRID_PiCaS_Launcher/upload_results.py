@@ -75,7 +75,7 @@ class uploader(object):
             raise raise_exception(err, -1)
 
     def upload(self):
-        utput_dir = os.environ['RUNDIR']+"/Output"
+        output_dir = os.environ['RUNDIR']+"/Output"
         return_dir = os.getcwd()
         try:
             os.chdir(output_dir)
@@ -89,13 +89,13 @@ class uploader(object):
 
     def compress(self):
         with tarfile.open('upload.tar.gz', mode='w:gz') as archive:
-                archive.add(os.getcwd(), recursive=True)
+                archive.add(os.getcwd(), recursive=True, arcname='')
         return "{0}/{1}".format(os.getcwd(),"upload.tar.gz")
 
     def tarball(self):
         with tarfile.open('upload.tar', mode='w') as archive:
-                archive.add(os.getcwd(), recursive=True)
-        return "{0}/{1}".format(os.getcwd(), "upload.tar")             
+                archive.add(os.getcwd(), recursive=True, arcname='')
+        return "{0}/{1}".format(os.getcwd(),  "upload.tar")             
     
     def _upload(self):
         raise NotImplementedError("Implement this for concrete uploader")
