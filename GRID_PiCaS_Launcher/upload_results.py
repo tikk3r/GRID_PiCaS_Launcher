@@ -101,9 +101,13 @@ class uploader(object):
             os.chdir(return_dir)
 
     def compress(self):
-        with tarfile.open('upload.tar.gz', mode='w:gz') as archive:
-                archive.add(os.getcwd(), recursive=True, arcname='')
-        return "{0}/{1}".format(os.getcwd(),"upload.tar.gz")
+        try:
+            archive = tarfile.open('upload.tar.gz', mode='w:gz')
+            archive.add(os.getcwd(), recursive=True, arcname='')
+            archive.close()
+            return "{0}/{1}".format(os.getcwd(),"upload.tar.gz")
+        except Exception as e:
+            raise Exception(str(e))
 
     def tarball(self):
         with tarfile.open('upload.tar', mode='w') as archive:
