@@ -63,8 +63,8 @@ def upload_gsi(src_file, dest_location, uploader=None, pattern=None):
 
 
 class uploader(object):
-    def __init__(self):
-        pass
+    def __init__(self, context):
+        self.context = context
 
     def _communicate(self, subprocess_popen, raise_exception=None):
         """Helper function to process the subprocess.Popen output"""
