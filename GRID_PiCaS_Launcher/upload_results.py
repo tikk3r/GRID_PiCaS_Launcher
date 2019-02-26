@@ -64,8 +64,21 @@ def upload_gsi(src_file, dest_location, uploader=None, pattern=None):
 
 class uploader(object):
     def __init__(self, context):
-        self.context = context
+        self.context = self._get_context(context)
 
+    @staticmethod   
+    def _get_context(context):
+        if isinstance(context,str):
+            if os.path.exists(context):
+                tmp_ctx = json.load(open(context))
+            else:
+                tmp_ctx = json.loads(context)
+        else:
+            tmp_ctx = context
+        if 'upload' in tmp_ctx.keys():
+            return tmp_ctx['upload']
+        return tmp_ctx
+        
     def _communicate(self, subprocess_popen, raise_exception=None):
         """Helper function to process the subprocess.Popen output"""
         out, err = subprocess_popen.communicate()
@@ -97,15 +110,13 @@ class uploader(object):
                 archive.add(os.getcwd(), recursive=True, arcname='')
         return "{0}/{1}".format(os.getcwd(),  "upload.tar")             
     
-    def _upload(self):
+    def _upload(self, *args, **kwargs):
         raise NotImplementedError("Implement this for concrete uploader")
 
 class GSIUploader(uploader):
     def __init__(self, context):
         """Gets the 'upload' Dict as context and uploads file to GSIFTP location"""
-        if 'upload' in context:
-            context = context['upload']
-        self.context = context
+        self.context = self._get_context(context)
         _uberftp_result = subprocess.call(['which','uberftp'])
         _globus_result = subprocess.call(['which','globus-url-copy'])
         self._date = get_date(self.context)
