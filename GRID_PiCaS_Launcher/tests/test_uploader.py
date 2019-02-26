@@ -24,10 +24,10 @@ class UploadTest(unittest.TestCase):
         try:
             os.environ['RUNDIR']=self.tmpdir
             os.mkdir(self.tmpdir+"/Output")
-            self.touch(self.tmpdir+"/Output/a")
-            self.touch(self.tmpdir+"/Output/b")
-            self.touch(self.tmpdir+"/Output/c")
-            self.touch(self.tmpdir+"/Output/d")
+            self._touch(self.tmpdir+"/Output/a")
+            self._touch(self.tmpdir+"/Output/b")
+            self._touch(self.tmpdir+"/Output/c")
+            self._touch(self.tmpdir+"/Output/d")
             test_uploader = uploader(data)
             self.assertTrue(test_uploader.context.get('add_date'))
             self.assertTrue(test_uploader.context.get('add_hour'))
