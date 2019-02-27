@@ -17,11 +17,11 @@
         "type":"CI_pref3_cal",
         "status": "queued",
         "times": {},
-        "upload": {
+        "upload":{
             "add_date": true,
             "date_granularity":"hour",
             "gzip": false,
-            "location": "gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/pipelines/test/",
+            "location": "$RESULTS_DIR",
             "remove_prev": false,
             "template": "CI_pref3_cal_$STARTSB_$DATE"
         },

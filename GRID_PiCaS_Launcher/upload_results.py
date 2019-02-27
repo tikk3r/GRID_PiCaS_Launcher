@@ -42,7 +42,13 @@ def get_date(json_data):
     formatted_date = now.strftime(mask)
     return formatted_date
 
-
+def replace_env_vars(s, variables=None):
+    if not variables:
+        return s
+    for variable in variables:
+        s = s.replace("${0}".format(variable), #keeps the $VARIABLE if not in env
+                      os.environ.get(variable,"${0}".format(variable)))
+    return s
 
 class UploadError(Exception):
     def __init__(self, message, errors):
@@ -77,6 +83,15 @@ class uploader(object):
     def __init__(self, context):
         self.context = self._get_context(context)
         self._suffix = '.tar'
+        self._date = get_date(self.context)
+        self._path= "{0}/{1}".format(self.context['location'], self.context['template'])
+        self._path = self._path.replace("$DATE", self._date)
+        if "$" in self._path:
+            if 'variables' in context and '_token_keys' in context['variables']:
+                self._path = replace_env_vars(self._path, context['variables']['_token_keys'])
+            else:
+                warnings.warn("No variables found")
+
     @staticmethod   
     def _get_context(context):
         if isinstance(context,str):
@@ -131,12 +146,10 @@ class GSIUploader(uploader):
         self.context = self._get_context(context)
         _uberftp_result = subprocess.call(['which','uberftp'])
         _globus_result = subprocess.call(['which','globus-url-copy'])
-        self._date = get_date(self.context)
 
-        self._path= "{0}/{1}".format(self.context['location'], self.context['template'])
-        self._path = self._path.replace("$DATE", self._date)
         if _uberftp_result !=0 or _globus_result !=0:
             raise RuntimeError("Either uberftp or globus-url-copy are not installed")
+        super(GSIUploader, self).__init__(context)
         self.upload()
         
     def _remove(self, path):
