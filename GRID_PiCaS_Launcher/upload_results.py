@@ -33,6 +33,8 @@ def get_date(json_data):
         mask = "%Y-%m-%d_%H:%M"
     elif upload.get('date_granularity') == 'month':
         mask = "%Y-%m"
+    elif upload.get('date_granularity') == 'week':
+        mask = "%Y-W%V"
     else:
         mask = "%Y-%m-%d"
 
