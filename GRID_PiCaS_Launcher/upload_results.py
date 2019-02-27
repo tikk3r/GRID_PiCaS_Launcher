@@ -21,23 +21,23 @@ if '__enter__' not in dir(tarfile.TarFile): #Patch for python2.6
 
 
 def get_date(json_data):
+    """Crom a dictionary context, gets the granularity with which to mask the date"""
     upload = json_data
 
     if not upload or not upload.get('add_date'):
         return ""
-    H, M = "", ""
-
-    if upload.get('add_hour'):
-        H="_%H:"
-        if upload.get('add_minute'):
-            M="%M"
-        else:
-            M="00"
+    
+    if upload.get('date_granularity') == 'hour':
+        mask = "%Y-%m-%d_%H:00"
+    elif upload.get('date_granularity') == 'minute':
+        mask = "%Y-%m-%d_%H:%M"
+    elif upload.get('date_granularity') == 'month':
+        mask = "%Y-%m"
     else:
-        M=""
+        mask = "%Y-%m-%d"
 
     now=datetime.now()
-    formatted_date = now.strftime("%Y-%m-%d{0}{1}".format(H,M))
+    formatted_date = now.strftime(mask)
     return formatted_date
 
 
@@ -138,6 +138,10 @@ class GSIUploader(uploader):
         self.upload()
         
     def _remove(self, path):
+        command = ['uberftp', '-ls',  path]
+        out, err = subprocess.Popen(command,stdout=subprocess.PIPE,  stderr=subprocess.PIPE).communicate()
+        if out =='':
+            return
         command = ['uberftp', '-rm',  path]
         _remove = subprocess.Popen(command,
                                     stdout=subprocess.PIPE,  stderr=subprocess.PIPE)

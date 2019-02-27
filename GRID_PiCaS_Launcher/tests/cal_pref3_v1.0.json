@@ -19,6 +19,7 @@
         "times": {},
         "upload": {
             "add_date": true,
+            "date_granularity":"hour",
             "gzip": false,
             "location": "gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/pipelines/test/",
             "remove_prev": false,
