@@ -8,7 +8,7 @@ from GRID_PiCaS_Launcher.picas.clients import CouchClient
 
 from datetime import datetime                                                                                                               
 import json
-
+import pdb
 
 if '__enter__' not in dir(tarfile.TarFile): #Patch for python2.6
     class tarfile(tarfile.TarFile):
@@ -21,7 +21,7 @@ if '__enter__' not in dir(tarfile.TarFile): #Patch for python2.6
 
 
 def get_date(json_data):
-    upload = json_data.get('upload')
+    upload = json_data
 
     if not upload or not upload.get('add_date'):
         return ""
@@ -74,7 +74,7 @@ def upload_gsi(src_file, dest_location, uploader=None, pattern=None):
 class uploader(object):
     def __init__(self, context):
         self.context = self._get_context(context)
-
+        self._suffix = '.tar'
     @staticmethod   
     def _get_context(context):
         if isinstance(context,str):
@@ -110,6 +110,7 @@ class uploader(object):
             os.chdir(return_dir)
 
     def compress(self):
+        self._suffix = '.tar.gz'
         with tarfile.open('upload.tar.gz', mode='w:gz') as archive:
             archive.add(os.getcwd(), recursive=True, arcname='')
         return "{0}/{1}".format(os.getcwd(),"upload.tar.gz")
@@ -131,15 +132,21 @@ class GSIUploader(uploader):
         self._date = get_date(self.context)
 
         self._path= "{0}/{1}".format(self.context['location'], self.context['template'])
+        self._path = self._path.replace("$DATE", self._date)
         if _uberftp_result !=0 or _globus_result !=0:
             raise RuntimeError("Either uberftp or globus-url-copy are not installed")
         self.upload()
         
+    def _remove(self, path):
+        command = ['uberftp', '-rm',  path]
+        _remove = subprocess.Popen(command,
+                                    stdout=subprocess.PIPE,  stderr=subprocess.PIPE)
+        return self._communicate(_remove, GSIUploadError)
+
     def _upload(self, upload_file):
         if self.context.get('overwrite'):
-            command = ['globus-url-copy', '-sync', '-sync-level', '3', upload_file, self._path]
-        else:
-            command = ['globus-url-copy',upload_file, self._path]
+            self._remove(self._path+self._suffix)
+        command = ['globus-url-copy',upload_file, self._path+self._suffix]
         _upload_file = subprocess.Popen(command,
                                         stdout=subprocess.PIPE,  stderr=subprocess.PIPE)
         return self._communicate(_upload_file, GSIUploadError)
