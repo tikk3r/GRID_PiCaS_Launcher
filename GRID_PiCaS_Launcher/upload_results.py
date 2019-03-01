@@ -43,11 +43,14 @@ def get_date(json_data):
     return formatted_date
 
 def replace_env_vars(s, variables=None):
+    """ Takes a dict of env variables with a prepender $, replaces the instances of these
+    variables in the string with the value in the environemt"""
+    
     if not variables:
         return s
     for variable in variables:
-        s = s.replace("${0}".format(variable), #keeps the $VARIABLE if not in env
-                      os.environ.get(variable,"${0}".format(variable)))
+        s = s.replace(variable, #keeps the $VARIABLE if not in env
+                os.environ.get(variable[1:], variable))
     return s
 
 class UploadError(Exception):
