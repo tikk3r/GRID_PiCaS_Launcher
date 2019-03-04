@@ -80,7 +80,7 @@ class Sandbox(object):
             for f in files:
                 src = os.path.join(checkout_dir_path, f)
                 dest = os.path.join(return_dir,f)
-                shutil.copy(src, dest)
+                shutil.copytree(src, dest)
         os.chdir(return_dir)
     
     @staticmethod
