@@ -73,7 +73,7 @@ class Sandbox(object):
         if repo_commit:
             checkout = subprocess.Popen(['git', 'checkout', repo_commit])
             checkout.communicate()
-        if remove_gitdir and os.path.isdir('/.git'):
+        if remove_gitdir and os.path.isdir('.git'):
             shutil.rmtree('.git/')
         if not checkout_dir:
             files = os.listdir(checkout_dir_path)
