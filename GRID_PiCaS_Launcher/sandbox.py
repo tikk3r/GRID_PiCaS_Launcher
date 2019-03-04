@@ -77,11 +77,12 @@ class Sandbox(object):
             shutil.rmtree('.git/')
         if not checkout_dir:
             files = os.listdir(checkout_dir_path)
+            copy_src = checkout_dir_path+"/*"
 #            shutil.copytree(checkout_dir_path, return_dir)
 #            shell_copy = subprocess.Popen(['cp', '-r',str(checkout_dir_path+'/*').replace("\xe2\x80\x98",""), str(return_dir).replace("\xe2\x80\x98","") ],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 #            print(shell_copy.communicate())
-             out = subprocess.check_output(["cp", "-r", copy_src, return_dir],stderr=subprocess.STDOUT)
-             print(out)
+            out = subprocess.check_output(["cp", "-r", copy_src, return_dir],stderr=subprocess.STDOUT)
+            print(out)
 #            for f in files:
 #                src = os.path.join(checkout_dir_path, f)
 #                dest = os.path.join(return_dir,f)
