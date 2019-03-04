@@ -77,10 +77,11 @@ class Sandbox(object):
             shutil.rmtree('.git/')
         if not checkout_dir:
             files = os.listdir(checkout_dir_path)
-            for f in files:
-                src = os.path.join(checkout_dir_path, f)
-                dest = os.path.join(return_dir,f)
-                shutil.copytree(src, dest)
+            shutil.copytree(checkout_dir_path, return_dir)
+#            for f in files:
+#                src = os.path.join(checkout_dir_path, f)
+#                dest = os.path.join(return_dir,f)
+#                shutil.copytree(src, dest)
         os.chdir(return_dir)
     
     @staticmethod
