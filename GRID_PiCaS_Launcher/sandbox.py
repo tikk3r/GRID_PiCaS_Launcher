@@ -78,7 +78,7 @@ class Sandbox(object):
         if not checkout_dir:
             files = os.listdir(checkout_dir_path)
 #            shutil.copytree(checkout_dir_path, return_dir)
-            shell_copy = subprocess.Popen(['cp', '-r',checkout_dir_path+'/*', return_dir ],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            shell_copy = subprocess.Popen(['cp', '-r',str(checkout_dir_path+'/*').replace("\xe2\x80\x98",""), str(return_dir).replace("\xe2\x80\x98","") ],stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             print(shell_copy.communicate())
 #            for f in files:
 #                src = os.path.join(checkout_dir_path, f)
