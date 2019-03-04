@@ -63,7 +63,7 @@ class ExampleActor(RunActor):
             warnings.warn("No sandbox configuration")
             return
         sbx = sandbox.Sandbox(config_json=json_payload['sandbox'])
-        sbx.build_sandbox()# Not needed
+        sbx.build_sandbox(True)# Not needed
 
     def get_image(self,config=None):
         """get_image: Downloads the image in the cwd
