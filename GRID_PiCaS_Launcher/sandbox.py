@@ -40,7 +40,7 @@ class Sandbox(object):
                 repo_branch = cfg['git']['branch']
             if 'commit' in cfg['git']:
                 repo_commit = cfg['git']['commit']
-            kwargs = {'repo_location':repo_loc, 'repo_branch':repo_branch, 'repo_commit':repo_commit, 'checkout_dir':checkout_dir
+            kwargs = {'repo_location':repo_loc, 'repo_branch':repo_branch, 'repo_commit':repo_commit, 'checkout_dir':checkout_dir,
                      'remove_gitdir':remove_gitdir}
             p = Process(target=self._pull_git_repository, kwargs=kwargs)
             p.start()
