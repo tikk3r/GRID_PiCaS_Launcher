@@ -50,7 +50,7 @@ def export_dict_to_env(db, variable_dictionary, token_id):
                 except KeyError:
                     warnings.warn("WARNING: Picas Variable Missing: "+var)
                     continue
-                export_variable(variable, picas_val)
+                export_variable(var, picas_val)
         elif head == '_attachments':
             for att_file in variable_dictionary['_attachments']:
                 picas_att_name = variable_dictionary['_attachments'][att_file]
