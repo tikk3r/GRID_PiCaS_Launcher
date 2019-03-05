@@ -33,7 +33,7 @@ def export_variable(name, value, overwrite=True):
     if name in os.environ.keys() and not overwrite:
         print("!!!Will not overwrite environment variable {0}".format(name))
         return
-    os.environ[name] = value
+    os.environ[name] = str(value)
 
 def export_dict_to_env(db, variable_dictionary, token_id):
     pc = picas_cred()
