@@ -79,7 +79,7 @@ class Sandbox(object):
             files = os.listdir(checkout_dir_path)
             copy_src = checkout_dir_path+"/*"
 #            shutil.copytree(checkout_dir_path, return_dir)
-            subprocess.Popen("cp -r {} {}".format(copy_src.decode('ascii'), return_dir),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+            subprocess.Popen("cp -r {0} {1}".format(copy_src, return_dir),shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 #            print(shell_copy.communicate())
 #           out = subprocess.check_output(["cp", "-r", copy_src, return_dir],stderr=subprocess.STDOUT)
 #           print(out)
