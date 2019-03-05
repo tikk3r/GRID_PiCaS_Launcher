@@ -43,8 +43,8 @@ def export_dict_to_env(db, variable_dictionary, token_id):
         if head  == "_token_keys":
             for var in variable_dictionary["_token_keys"]:
                 try:
-                    picas_key=str(config_json['variables']["_token_keys"][var])
-                    picas_val =  get_token_field(token_id,var,dbn, un, pwd)
+                    picas_key = str(variable_dictionary["_token_keys"][var])
+                    picas_val = get_token_field(token_id, picas_key, dbn, un, pwd)
                 except KeyError:
                     warnings.warn("WARNING: Picas Variable Missing: "+var)
                     continue

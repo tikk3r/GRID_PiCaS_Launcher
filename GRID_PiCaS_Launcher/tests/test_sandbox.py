@@ -60,7 +60,7 @@ class testSandbox(unittest.TestCase):
             s=Sandbox(config_file=DUMMY_CONFIG)
             s._pull_git_repository(repo_location='https://github.com/apmechev/GRID_Sandbox.git',
                     remove_gitdir=True)
-            self.assertTrue(os.path.exists('.git'))
+            self.assertTrue(not os.path.exists('.git'))
             os.chdir('..')
             shutil.rmtree("testcwd")
 
