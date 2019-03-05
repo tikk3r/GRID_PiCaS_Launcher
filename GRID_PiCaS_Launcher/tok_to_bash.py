@@ -26,6 +26,8 @@ def get_attachment(db,token, filename, savename=None):
 
 
 def export_variable(name, value, overwrite=True):
+    if name[0] == '$':
+        name = name[1:]
     if name.upper()!= name:
         warnings.warn("environmental variable '{0}' not in Uppercase! This may lead to errors".format(name))
     if name in os.environ.keys():
@@ -48,10 +50,6 @@ def export_dict_to_env(db, variable_dictionary, token_id):
                 except KeyError:
                     warnings.warn("WARNING: Picas Variable Missing: "+var)
                     continue
-                if var[0] == "$":
-                    variable = var[1:]
-                else:
-                    variable = var
                 export_variable(variable, picas_val)
         elif head == '_attachments':
             for att_file in variable_dictionary['_attachments']:
