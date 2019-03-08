@@ -150,7 +150,8 @@ class ExampleActor(RunActor):
            pass
 
         #Just attaches all png files in the working directory to the token
-        sols_search=subprocess.Popen(["find",".","-name","*.png","-o","-name","*.fits"],stdout=subprocess.PIPE)
+        rundir = os.environ["RUNDIR"]
+        sols_search=subprocess.Popen(["find","{}/Output".format(rundir),"-name","*.png","-o","-name","*.fits"],stdout=subprocess.PIPE)
         result=sols_search.communicate()[0]
 
         for png in result.split():
