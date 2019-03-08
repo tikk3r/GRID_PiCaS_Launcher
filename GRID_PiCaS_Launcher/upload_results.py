@@ -3,6 +3,7 @@ import os
 import sys
 import time
 import tarfile
+import warnings
 import subprocess
 from GRID_PiCaS_Launcher.picas.clients import CouchClient
 
