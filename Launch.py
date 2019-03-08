@@ -44,6 +44,7 @@ from GRID_PiCaS_Launcher.upload_attachment import upload_attachment
 from GRID_PiCaS_Launcher.tok_to_bash import export_dict_to_env
 from GRID_PiCaS_Launcher.singularity import parse_singularity_link
 from GRID_PiCaS_Launcher.singularity import parse_json_payload 
+from GRID_PiCaS_Launcher.upload_results import GSIUploader
 
 #from tok_to_bash import  export_tok_keys
 from GRID_PiCaS_Launcher import sandbox
@@ -134,6 +135,10 @@ class ExampleActor(RunActor):
         
         out = execute(command,shell=True)
         print('exit status is '+str(out))
+
+        uploader = GSIUploader(token['upload'])
+        uploader.upload()
+
         set_token_field(token['_id'],'output',out[0],self.database,self.user,self.password)
         if out[0]==0:
             set_token_field(token['_id'],'status','done',self.database,self.user,self.password)
