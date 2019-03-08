@@ -47,7 +47,18 @@ class Sandbox(object):
             p.join()
 #            self._pull_git_repository(repo_location=repo_loc, repo_branch=repo_branch,
 #                    repo_commit=repo_commit, checkout_dir=checkout_dir)
-        
+        if 'scripts' in cfg.keys():
+            for script in cfg['scripts']:
+                script_cfg = cfg['scripts'][script.keys()[0]]
+                repo_loc = script_cfg['url']
+                repo_branch = script_cfg.get('branch', None)
+                repo_commit = script_cfg.get('commit', None)
+                checkout_dir = script_cfg.get('checkout_dir', None)
+                kwargs = {'repo_location':repo_loc, 'repo_branch':repo_branch, 'repo_commit':repo_commit, 'checkout_dir':checkout_dir}
+                p = Process(target=self._pull_git_repository, kwargs=kwargs)
+                p.start()
+                p.join()
+
     @staticmethod
     def _pull_git_repository(repo_location=None, repo_branch=None, repo_commit=None,
                              checkout_dir=None, remove_gitdir=False):
