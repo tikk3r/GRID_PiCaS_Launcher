@@ -139,10 +139,10 @@ class ExampleActor(RunActor):
 
         uberftp_exists = subprocess.Popen(['which','uberftp'], stdout=subprocess.PIPE).communicate()[0]
         if uberftp_exists:
-            uploader = GSIUploader(token['upload'])
+            results_uploader = GSIUploader(token['upload'])
         else:
-            uploader = uploader(token['upload'])
-        uploader.upload()
+            results_uploader = uploader(token['upload'])
+        results_uploader.upload()
 
         set_token_field(token['_id'],'output',out[0],self.database,self.user,self.password)
         if out[0]==0:
