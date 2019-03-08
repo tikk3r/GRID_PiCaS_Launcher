@@ -49,7 +49,7 @@ class Sandbox(object):
 #                    repo_commit=repo_commit, checkout_dir=checkout_dir)
         if 'scripts' in cfg.keys():
             for script in cfg['scripts']:
-                script_cfg = script[script.keys()[0]]
+                script_cfg = script[next(iter(script))]
                 repo_loc = script_cfg['url']
                 repo_branch = script_cfg.get('branch', None)
                 repo_commit = script_cfg.get('commit', None)
