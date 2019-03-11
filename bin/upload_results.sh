@@ -1,4 +1,4 @@
 function upload_results(){
 
-python bin/upload_results.py
+python ${JOBDIR}/bin/upload_results.py
 }
