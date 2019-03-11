@@ -23,7 +23,7 @@ if '__enter__' not in dir(tarfile.TarFile): #Patch for python2.6
 
 def get_date(json_data):
     """Crom a dictionary context, gets the granularity with which to mask the date"""
-    upload = json_data
+    upload = json_data['upload']
 
     if not upload or not upload.get('add_date'):
         return ""
@@ -88,7 +88,7 @@ class uploader(object):
         self.context = self._get_context(context)
         self._suffix = '.tar'
         self._date = get_date(self.context)
-        self._path= "{0}/{1}".format(self.context['location'], self.context['template'])
+        self._path= "{0}/{1}".format(self.context['upload']['location'], self.context['upload']['template'])
         self._path = self._path.replace("$DATE", self._date)
         if "$" in self._path:
             if 'variables' in context and '_token_keys' in context['variables']:
@@ -105,8 +105,8 @@ class uploader(object):
                 tmp_ctx = json.loads(context)
         else:
             tmp_ctx = context
-        if 'upload' in tmp_ctx.keys():
-            return tmp_ctx['upload']
+        if 'upload' not in tmp_ctx.keys():
+            raise RuntimeError('no upload field in context')
         return tmp_ctx
         
     def _communicate(self, subprocess_popen, raise_exception=None):
@@ -122,7 +122,7 @@ class uploader(object):
         return_dir = os.getcwd()
         try:
             os.chdir(output_dir)
-            if self.context.get('gzip'):
+            if self.context['upload'].get('gzip'):
                 upload_file = self.compress()
             else:
                 upload_file = self.tarball()
@@ -153,8 +153,8 @@ class GSIUploader(uploader):
 
         if _uberftp_result !=0 or _globus_result !=0:
             raise RuntimeError("Either uberftp or globus-url-copy are not installed")
-        super(GSIUploader, self).__init__(context)
-        self.upload()
+        super(GSIUploader, self).__init__(context) 
+    #    self.upload()
         
     def _remove(self, path):
         command = ['uberftp', '-ls',  path]
@@ -167,8 +167,9 @@ class GSIUploader(uploader):
         return self._communicate(_remove, GSIUploadError)
 
     def _upload(self, upload_file):
-        if self.context.get('overwrite'):
+        if self.context['upload'].get('overwrite'):
             self._remove(self._path+self._suffix)
+        print("Uploading {} to {}".format(upload_file, self._path+self._suffix))
         command = ['globus-url-copy',upload_file, self._path+self._suffix]
         _upload_file = subprocess.Popen(command,
                                         stdout=subprocess.PIPE,  stderr=subprocess.PIPE)
