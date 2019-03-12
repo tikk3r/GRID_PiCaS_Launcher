@@ -111,12 +111,14 @@ class ExampleActor(RunActor):
         self.config = token['config.json']
         variables = self.get_variables_from_config(self.config, variables)
         if 'container' in self.config.keys() or 'singularity' in self.config.keys:
+            set_token_field(token['_id'],'status','pulling_container',self.database,self.user,self.password)
             self.get_image()
 
         self.download_sandbox(token) ##Will be removed!
+        set_token_field(token['_id'],'status','building_sandbox',self.database,self.user,self.password)
         p = Process(target=self.create_sandbox)
         p.start()
-        print("Creating Sandbox")
+        print("Creating Sandbox from config: {0}".format(self.config['sandbox']))
         p.join()
         with open(os.devnull, 'w') as FNULL:
             subprocess.call(["chmod","a+x","master.sh"], stdout=FNULL, stderr=subprocess.STDOUT)
@@ -158,7 +160,8 @@ class ExampleActor(RunActor):
         result=sols_search.communicate()[0]
 
         for png in result.split():
-            upload_attachment(token['_id'],png,self.database,self.user,self.password,name=png)
+            if "/Output/" in png:
+                upload_attachment(token['_id'],png,self.database,self.user,self.password,name=png)
             os.remove(png) 
         self.client.modify_token(self.modifier.close(self.client.db[self.token_name]))
         return
