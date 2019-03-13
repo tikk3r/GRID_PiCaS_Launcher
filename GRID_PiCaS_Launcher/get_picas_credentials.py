@@ -12,6 +12,8 @@ class picas_cred():
                     self.get_picas_creds()
                 else:
                     self.get_picas_creds_from_env()
+        elif not usr and not pwd and not dbn:
+            self.get_picas_creds_from_env()
         else:
             self.user=usr
             self.password=pwd
