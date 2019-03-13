@@ -105,7 +105,9 @@ class ExampleActor(RunActor):
     # Print token information
         variables = {}
         os.environ['TOKEN']=token['_id']
-
+        os.environ['PICAS_USR']=self.user
+        os.environ['PICAS_USR_PWD']=self.password
+        os.environ['PICAS_DB']=self.database
         self.token_name=token['_id']
 
         self.config = token['config.json']
@@ -160,7 +162,7 @@ class ExampleActor(RunActor):
         result=sols_search.communicate()[0]
 
         for png in result.split():
-            if "/Output/" in png:
+            if "/Output/" in png and 'Input' not in png:
                 upload_attachment(token['_id'],png,self.database,self.user,self.password,name=png)
             os.remove(png) 
         self.client.modify_token(self.modifier.close(self.client.db[self.token_name]))
@@ -196,6 +198,7 @@ if __name__ == '__main__':
 
     or 1: picas_token_type. In this case, we get the picas credentials from ~/.picasrc
           or from the environment variables"""
+    print(sys.argv)
     if len(sys.argv) > 4:
         db = str(sys.argv[1])
         username = str(sys.argv[2])
