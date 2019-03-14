@@ -29,9 +29,9 @@ class UploadTest(unittest.TestCase):
             self._touch(self.tmpdir+"/Output/c")
             self._touch(self.tmpdir+"/Output/d")
             test_uploader = uploader(data)
-            self.assertTrue(test_uploader.context.get('add_date'))
-            self.assertTrue(test_uploader.context.get('add_hour'))
-            self.assertTrue(test_uploader.context.get('gzip'))
+            self.assertTrue(test_uploader.context['upload'].get('add_date'))
+            self.assertTrue(test_uploader.context['upload'].get('add_hour'))
+            self.assertTrue(test_uploader.context['upload'].get('gzip'))
             test_uploader.upload()
         except NotImplementedError:
             pass
