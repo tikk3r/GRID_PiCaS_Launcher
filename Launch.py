@@ -162,8 +162,7 @@ class ExampleActor(RunActor):
         result=sols_search.communicate()[0]
 
         for png in result.split():
-            if "/Output/" in png and 'Input' not in png:
-                upload_attachment(token['_id'],png,self.database,self.user,self.password,name=png)
+            upload_attachment(token['_id'],png,self.database,self.user,self.password,name=png)
             os.remove(png) 
         self.client.modify_token(self.modifier.close(self.client.db[self.token_name]))
         return
