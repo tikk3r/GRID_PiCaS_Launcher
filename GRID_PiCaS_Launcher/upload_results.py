@@ -29,9 +29,9 @@ def get_date(json_data):
         return ""
     
     if upload.get('date_granularity') == 'hour':
-        mask = "%Y-%m-%d_%H:00"
+        mask = "%Y-%m-%d_%H-00"
     elif upload.get('date_granularity') == 'minute':
-        mask = "%Y-%m-%d_%H:%M"
+        mask = "%Y-%m-%d_%H-%M"
     elif upload.get('date_granularity') == 'month':
         mask = "%Y-%m"
     elif upload.get('date_granularity') == 'week':
