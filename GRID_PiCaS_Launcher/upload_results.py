@@ -169,7 +169,7 @@ class GSIUploader(uploader):
     def _upload(self, upload_file):
         if self.context['upload'].get('overwrite'):
             self._remove(self._path+self._suffix)
-        print("Uploading {} to {}".format(upload_file, self._path+self._suffix))
+        print("\n{}".format(self._path+self._suffix))
         command = ['globus-url-copy',upload_file, self._path+self._suffix]
         _upload_file = subprocess.Popen(command,
                                         stdout=subprocess.PIPE,  stderr=subprocess.PIPE)

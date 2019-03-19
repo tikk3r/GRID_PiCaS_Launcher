@@ -17,4 +17,5 @@ if uberftp_exists:
     results_uploader = GSIUploader(context)
 else:
     results_uploader = uploader(context)
-results_uploader.upload()    
+
+results_uploader.upload()
