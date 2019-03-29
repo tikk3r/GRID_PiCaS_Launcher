@@ -51,6 +51,12 @@ echo "w_info: Free scratch space = "$freespace"GB"
 
 echo "++++++++++++++++++++++++++++++"
 echo "++++++++++++++++++++++++++++++"
+mkdir $RUNDIR/Output/versions/
 
+singularity inspect --labels $SIMG |tee  $RUNDIR/Output/versions/singularity.labels
+singularity inspect -d $SIMG >> $RUNDIR/Output/versions/singularity.deffile
+singularity exec $SIMG /bin/bash -c 'cd /opt/lofar/DPPP/src && git log |head' >> $RUNDIR/Output/versions/DPPP.version
+singularity exec  $SIMG /bin/bash -c 'wsclean --version' >>  $RUNDIR/Output/versions/wsclean.version
+singularity exec $SIMG /bin/bash -c 'cd /opt/lofar/losoto/build/src && git log |head' >> $RUNDIR/Output/versions/losoto.version
 echo ""
 }
