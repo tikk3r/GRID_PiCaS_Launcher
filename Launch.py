@@ -112,7 +112,7 @@ class ExampleActor(RunActor):
 
         self.config = token['config.json']
         variables = self.get_variables_from_config(self.config, variables)
-        if 'container' in self.config.keys() or 'singularity' in self.config.keys:
+        if 'container' in self.config.keys() or 'singularity' in self.config.keys():
             set_token_field(token['_id'],'status','pulling_container',self.database,self.user,self.password)
             self.get_image()
 
