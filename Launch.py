@@ -88,8 +88,11 @@ class ExampleActor(RunActor):
             variables = {}
         if 'variables' in config.keys():
             _vars = config['variables']
-        for var in _vars:
-            variables[var]=_vars[var]
+            for var in _vars:
+                variables[var]=_vars[var]
+        else:
+            print("No Variables found in the token config. Nothing is put in the environment!")
+            return {}
         return variables
 
     def download_sandbox(self, token):
