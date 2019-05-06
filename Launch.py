@@ -188,6 +188,9 @@ def main(url="https://picas-lofar.grid.surfsara.nl:6984", db=None, username=None
     try:
         actor.run()
     except Exception as e:
+        exc_info = sys.exc_info()
+        traceback.print_exception(*exc_info)
+        del exc_info
         print("Exception occured")
         print(str(e.args))
 #        set_token_field(actor.token_name,'status','error',actor.database,actor.p_usr,actor.password)
