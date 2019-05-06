@@ -71,7 +71,7 @@ class Sandbox(object):
             return_dir = os.getcwd()
             checkout_dir_path = checkout_dir
         if not repo_location:
-            raise RuntimeError("No repository to cone!!")
+            raise RuntimeError("No repository to clone, why is repo_location set to None?")
         with open(os.devnull, 'w') as FNULL:
             clone = subprocess.Popen(
                         ['git', 'clone', repo_location, checkout_dir_path],
