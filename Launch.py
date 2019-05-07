@@ -87,6 +87,7 @@ class ExampleActor(RunActor):
         simg_config = parse_json_payload(config)
         image_location = parse_singularity_link(simg_config['SIMG'],
                                                 simg_config['SIMG_COMMIT'])
+        print(image_location)
         os.environ['SIMG'] = image_location
 
     @staticmethod
