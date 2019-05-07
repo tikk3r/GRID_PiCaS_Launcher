@@ -59,7 +59,7 @@ def pull_image_from_shub(shub_link,commit=None):
         _pull = subprocess.Popen(['singularity','pull',shub_link],stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE)
         out,err= _pull.communicate()
-        if not 'FATAL' in err:
+        if not b'FATAL' in err:
             out = out.decode('ascii')
             img_path = out.split('/n')[-1].split("Done. Container is at: ")[1].strip()
             if os.path.exists(img_path):
@@ -72,7 +72,7 @@ def pull_image_from_shub(shub_link,commit=None):
         _pull = subprocess.Popen(['singularity','pull',"{0}@{1}".format(shub_link, commit)],stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE)
         out,err= _pull.communicate()
-        if not 'FATAL' in err:
+        if not b'FATAL' in err:
             out = out.decode('ascii')
             img_path = out.split('/n')[-1].split("Done. Container is at: ")[1].strip()
             if os.path.exists(img_path):
