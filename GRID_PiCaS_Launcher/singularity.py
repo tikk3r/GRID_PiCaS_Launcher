@@ -56,12 +56,13 @@ def pull_image_from_shub(shub_link,commit=None):
     a warning is thrown, however processing continues"""
     logging.info("Pulling image {0} with commit {1}".format(shub_link,commit))
     if not commit:
-        _pull = subprocess.Popen(['singularity','pull',shub_link],stdout=subprocess.PIPE,
+        _pull = subprocess.Popen(['singularity','pull','lofar.simg',shub_link],stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE)
         out,err= _pull.communicate()
         if not err:
             out = out.decode('ascii')
-            img_path = out.split('/n')[-1].split("Done. Container is at: ")[1].strip()
+            #img_path = out.split('/n')[-1].split("Done. Container is at: ")[1].strip()
+            img_path = os.getcwd() + '/lofar.simg'
             if os.path.exists(img_path):
                 return img_path
             else:
