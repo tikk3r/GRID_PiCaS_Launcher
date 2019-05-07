@@ -50,9 +50,9 @@ def download_simg_from_gsiftp(simg_link):
 
 def process_singularity_stderr(stderr):
     err = []
-    for line in stderr.split('\n'):
+    for line in stderr.decode("utf-8").split('\n'):
         if line:
-            if b'WARNING' in line:
+            if 'WARNING' in line:
                 logging.warn(line)
             else:
                 err.append(line)
