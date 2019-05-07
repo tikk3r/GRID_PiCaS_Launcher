@@ -31,6 +31,7 @@ mkdir -p Output
 function setup_run_dir(){
  case "$( hostname -f )" in
     *sara*) export RUNDIR=`mktemp -d -p ${JOBDIR}`; setup_sara_dir ${RUNDIR} ;;
+    *novalocal*) export RUNDIR=`mktemp -d -p ${JOBDIR}`; setup_sara_dir ${RUNDIR} ;;
     *leiden*) setup_leiden_dir ;;
     node[0-9]*) export RUNDIR=`mktemp --directory --tmpdir=/data/lofar/grid_jobs`; setup_sara_dir ${RUNDIR} ;;
     *) echo "Can't find host in list of supported clusters"; exit 11;;
