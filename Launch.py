@@ -203,8 +203,7 @@ if __name__ == '__main__':
     The options are either 1: database, 2:username 3: password and 4: picas_token_type
 
     or 1: picas_token_type. In this case, we get the picas credentials from ~/.picasrc
-          or from the environment variables"""
-    print(sys.argv)
+          or from the environment variables""" 
     if len(sys.argv) > 4:
         db = str(sys.argv[1])
         username = str(sys.argv[2])
