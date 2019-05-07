@@ -84,7 +84,7 @@ def pull_image_from_shub(shub_link,commit=None):
                     return img_path
             else:
                 raise RuntimeError("Tried to download image to {0} but now it isn't there!".format(img_path))
-    raise RuntimeError("Failure to download image from shub location {0}".format(shub_link))
+    #raise RuntimeError("Failure to download image from shub location {0}".format(shub_link))
 
 def put_variables_in_env(json_payload):
     """Takes a json payload from a token and puts the variables in the environment"""
