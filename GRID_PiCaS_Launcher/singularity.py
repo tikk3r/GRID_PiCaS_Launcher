@@ -3,6 +3,7 @@ import sys
 import os
 import hashlib
 import warnings
+import logging
 import json
 import pdb
 
@@ -30,7 +31,7 @@ def parse_singularity_link(simg_url, simg_commit=None):
         return pull_image_from_shub(simg_url, simg_commit)
     if simg_url.split("://")[0] == 'gsiftp':
         return download_simg_from_gsiftp(simg_url) #TODO: If hash is given here, still check if it's ok
-    print("Unknown image location {0}".format(simg_url))
+    logging.warn("Unknown image location {0}".format(simg_url))
 
 def download_simg_from_gsiftp(simg_link):
     """download_simg_from_gsiftp
@@ -38,14 +39,14 @@ def download_simg_from_gsiftp(simg_link):
     :param simg_link: The gsiftp link for the singularity image
     """
     img_name = simg_link.split('/')[-1]
-    print("Downloading image {0}".format(img_name))
+    logging.info("Downloading image {0}".format(img_name))
     _dl = subprocess.Popen(['globus-url-copy', simg_link, img_name], stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     out,err = _dl.communicate()
     if not out and not err:
         return img_name
     else:
-        print("Error downloading image:{0}".format(err))
+        logging.error("Error downloading image:{0}".format(err))
 
 
 
@@ -53,7 +54,7 @@ def pull_image_from_shub(shub_link,commit=None):
     """Using the shub url (shub://...), this module downloads the singularity image
     Optionally, a commit hash can be given. If the downloaded image's hash doesn't match, 
     a warning is thrown, however processing continues"""
-    print("Pulling image {0} with commit {1}".format(shub_link,commit))
+    logging.info("Pulling image {0} with commit {1}".format(shub_link,commit))
     if not commit:
         _pull = subprocess.Popen(['singularity','pull',shub_link],stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE)
@@ -83,7 +84,7 @@ def pull_image_from_shub(shub_link,commit=None):
                     return img_path
             else:
                 raise RuntimeError("Tried to download image to {0} but now it isn't there!".format(img_path))
-
+    raise RuntimeError("Failure to download image from shub location {0}".format(shub_link))
 
 def put_variables_in_env(json_payload):
     """Takes a json payload from a token and puts the variables in the environment"""

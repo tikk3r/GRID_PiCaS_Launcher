@@ -54,7 +54,7 @@ from GRID_PiCaS_Launcher import sandbox
 import pdb
 from multiprocessing import Process
 
-logging.basicConfig(filename='GRID_PiCaS_Launcher.log', filemode='w', level=logging.INFO
+logging.basicConfig(filename='GRID_PiCaS_Launcher.log', filemode='w', level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 class ExampleActor(RunActor):
@@ -97,7 +97,7 @@ class ExampleActor(RunActor):
             logging.info("Getting variables from config file")
             _vars = config['variables']
             for var in _vars:
-                logging.debug("Setting Environment variable {0} to {1}".format(var, _vars[]))
+                logging.debug("Setting Environment variable {0} to {1}".format(var, _vars[var]))
                 variables[var]=_vars[var]
         else:
             logging.warn("No Variables found in the token config. Nothing is put in the environment!")
