@@ -30,6 +30,7 @@ import shutil
 import glob
 import warnings
 import traceback
+import logging
 
 #picas imports
 from GRID_PiCaS_Launcher.picas.actors import RunActor
@@ -53,6 +54,9 @@ from GRID_PiCaS_Launcher import sandbox
 import pdb
 from multiprocessing import Process
 
+logging.basicConfig(filename='GRID_PiCaS_Launcher.log', filemode='w',
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
 class ExampleActor(RunActor):
     def __init__(self, iterator, modifier):
         self.iterator = iterator
@@ -63,7 +67,8 @@ class ExampleActor(RunActor):
         if not json_payload:
             json_payload = self.config
         if 'sandbox' not in json_payload.keys():
-            warnings.warn("No sandbox configuration")
+            logging.warn("No sandbox configuration")
+            logging.warn("json_payload keys are {0}".format(json_payload.keys()))
             return
         sbx = sandbox.Sandbox(config_json=json_payload['sandbox'])
         sbx.build_sandbox(True)# Not needed
@@ -90,9 +95,10 @@ class ExampleActor(RunActor):
         if 'variables' in config.keys():
             _vars = config['variables']
             for var in _vars:
+                logging.debug("Setting Environment variable {0} to {1}".format(var, _vars[]))
                 variables[var]=_vars[var]
         else:
-            print("No Variables found in the token config. Nothing is put in the environment!")
+            logging.warn("No Variables found in the token config. Nothing is put in the environment!")
             return {}
         return variables
 
@@ -196,7 +202,9 @@ def main(url="https://picas-lofar.grid.surfsara.nl:6984", db=None, username=None
         print(str(e.args))
 #        set_token_field(actor.token_name,'status','error',actor.database,actor.p_usr,actor.password)
         set_token_field(actor.token_name,'launcher_status',str(e.args),actor.database,actor.user,actor.password)
-
+    finally:
+        with open("GRID_PiCaS_Launcher.log") as f:
+            print(f)
 
 if __name__ == '__main__':
     """Entry point of the Launcher. 
