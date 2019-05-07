@@ -72,6 +72,8 @@ def pull_image_from_shub(shub_link,commit=None):
         _pull = subprocess.Popen(['singularity','pull',"{0}@{1}".format(shub_link, commit)],stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE)
         out,err= _pull.communicate()
+        print('Out: ', out)
+        print('Err: ', err)
         if not err:
             out = out.decode('ascii')
             img_path = out.split('/n')[-1].split("Done. Container is at: ")[1].strip()
