@@ -2,6 +2,7 @@ import unittest
 from GRID_PiCaS_Launcher.singularity import download_singularity_from_env, parse_singularity_link, download_simg_from_gsiftp, pull_image_from_shub, put_variables_in_env, get_image_file_hash, HiddenPrints
 import os
 import sys
+import logging
 import json
 import GRID_PiCaS_Launcher
 from contextlib import contextmanager
@@ -58,6 +59,7 @@ class testsingularity(unittest.TestCase):
             self.assertTrue(str(e) == "Could not find SIMG in {}")
 
     def test_silent_print(self):
+        logging.getLogger().setLevel(logging.ERROR)
         config = json.load(open(DUMMY_CONFIG))
         put_variables_in_env(config)
         with captured_output() as output:
@@ -65,9 +67,11 @@ class testsingularity(unittest.TestCase):
         (out, err) = output
         self.assertTrue(len(out.getvalue().split("\n")) == 2)
 
+
         with captured_output() as output:
             with HiddenPrints():
                 outfile = download_singularity_from_env()
         (out, err) = output
         self.assertTrue(len(out.getvalue().split("\n"))==1)
+
 
