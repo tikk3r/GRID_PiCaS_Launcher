@@ -48,7 +48,15 @@ def download_simg_from_gsiftp(simg_link):
     else:
         logging.error("Error downloading image:{0}".format(err))
 
-
+def process_singularity_stderr(stderr):
+    err = []
+    for line in stderr.decode("utf-8").split('\n'):
+        if line:
+            if 'WARNING' in line:
+                logging.warn(line)
+            else:
+                err.append(line)
+    return err
 
 def pull_image_from_shub(shub_link,commit=None):
     """Using the shub url (shub://...), this module downloads the singularity image
@@ -59,6 +67,7 @@ def pull_image_from_shub(shub_link,commit=None):
         _pull = subprocess.Popen(['singularity','pull','lofar.simg',shub_link],stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE)
         out,err= _pull.communicate()
+        err = process_singularity_stderr(err)
         if not err:
             out = out.decode('ascii')
             #img_path = out.split('/n')[-1].split("Done. Container is at: ")[1].strip()
@@ -73,8 +82,7 @@ def pull_image_from_shub(shub_link,commit=None):
         _pull = subprocess.Popen(['singularity','pull',"{0}@{1}".format(shub_link, commit)],stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE)
         out,err= _pull.communicate()
-        print('Out: ', out)
-        print('Err: ', err)
+        err = process_singularity_stderr(err)
         if not err:
             out = out.decode('ascii')
             img_path = out.split('/n')[-1].split("Done. Container is at: ")[1].strip()
@@ -87,7 +95,8 @@ def pull_image_from_shub(shub_link,commit=None):
                     return img_path
             else:
                 raise RuntimeError("Tried to download image to {0} but now it isn't there!".format(img_path))
-    #raise RuntimeError("Failure to download image from shub location {0}".format(shub_link))
+        else:   
+            raise RuntimeError("Failure to download image from shub location {0} due to error {1}".format(shub_link, err))
 
 def put_variables_in_env(json_payload):
     """Takes a json payload from a token and puts the variables in the environment"""
