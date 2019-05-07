@@ -34,7 +34,7 @@ before_install:
    - pip install codecov
 script: #Putting GRID_PiCaS_Launcher into the pythonpath by force
    - export PYTHONPATH=$PWD:$PYTHONPATH
-   - nosetests --with-coverage
+   - nosetests --stop --with-coverage
 
 after_success:
    - codecov
