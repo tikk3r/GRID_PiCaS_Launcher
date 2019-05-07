@@ -29,6 +29,7 @@ import subprocess
 import shutil
 import glob
 import warnings
+import traceback
 
 #picas imports
 from GRID_PiCaS_Launcher.picas.actors import RunActor
