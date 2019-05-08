@@ -55,7 +55,7 @@ from GRID_PiCaS_Launcher.upload_results import uploader
 from GRID_PiCaS_Launcher import sandbox
 import pdb
 from multiprocessing import Process
-
+from GRID_PiCaS_Launcher import __file__
 
 class ExampleActor(RunActor):
     def __init__(self, iterator, modifier):
@@ -206,7 +206,7 @@ def main(url="https://picas-lofar.grid.surfsara.nl:6984", db=None, username=None
 #        set_token_field(actor.token_name,'status','error',actor.database,actor.p_usr,actor.password)
         set_token_field(actor.token_name,'launcher_status',str(e.args),actor.database,actor.user,actor.password)
     finally:
-        with open("GRID_PiCaS_Launcher.log") as f:
+        with open("{0}/GRID_PiCaS_Launcher.log".format(__file__.split("__init__")[0])) as f:
             print(f)
 
 if __name__ == '__main__':
