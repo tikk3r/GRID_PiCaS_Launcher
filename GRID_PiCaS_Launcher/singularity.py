@@ -78,7 +78,7 @@ def get_image_path(subprocess_popen):
         raise RuntimeError("Tried to download image to {0} but now it isn't there!".format(img_path))
     
 def get_sing_version():
-    _pull = subprocess.Popen(['singularity','--version'], stdout=subprocess,PIPE,
+    _pull = subprocess.Popen(['singularity','--version'], stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
     return _pull.communicate()[0]
 
