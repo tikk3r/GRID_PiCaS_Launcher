@@ -35,7 +35,7 @@ before_install:
 script: #Putting GRID_PiCaS_Launcher into the pythonpath by force
    - export PYTHONPATH=$PWD:$PYTHONPATH
    - nosetests --stop --with-coverage
-
+   - cat GRID_PiCaS_Launcher.log
 after_success:
    - codecov
  
