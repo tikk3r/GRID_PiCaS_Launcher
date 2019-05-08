@@ -7,7 +7,7 @@ import json
 import pdb
 import glob
 
-from GRID_PiCaS_Launcher.logging import logger
+from GRID_PiCaS_Launcher.launcher_logging import logger
 
 
 def download_singularity_from_env():

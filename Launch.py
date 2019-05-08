@@ -39,7 +39,7 @@ from GRID_PiCaS_Launcher.picas.iterators import BasicViewIterator
 from GRID_PiCaS_Launcher.picas.modifiers import BasicTokenModifier
 from GRID_PiCaS_Launcher.picas.executers import execute
 
-from GRID_PiCaS_Launcher.logging import logger
+from GRID_PiCaS_Launcher.launcher_logging import logger
 
 #token imports
 from GRID_PiCaS_Launcher.update_token_status import update_status
