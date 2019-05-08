@@ -61,6 +61,12 @@ def process_singularity_stderr(stderr):
                 err.append(line)
     return err
 
+def get_newest_file():
+    list_of_files =  glob.glob(os.getcwd()+"/*.sif")+glob.glob(os.getcwd()+"/*.simg")
+    if not list_of_files:
+        raise OSError(".sif or .simg files not found in CWD")
+    latest_file = max(list_of_files, key=os.path.getctime)
+    return latest_file
 
 def get_image_path(subprocess_popen):
     out,err = subprocess_popen.communicate()
@@ -71,7 +77,7 @@ def get_image_path(subprocess_popen):
             img_path = out.split('/n')[-1].split("Done. Container is at: ")[1].strip()
         else:
             logger.info("No path to container found, likely using singularity 3.0+")
-            img_path = ""
+            img_path = get_newest_file() 
     if err:
         raise RuntimeError("Error {0} occurred when pulling container".format(err))
     if os.path.exists(img_path):
