@@ -3,10 +3,12 @@ import sys
 import os
 import hashlib
 import warnings
-import logging
 import json
 import pdb
 import glob
+
+from GRID_PiCaS_Launcher.logging import logger
+
 
 def download_singularity_from_env():
     """download_singularity_from_env
@@ -32,7 +34,7 @@ def parse_singularity_link(simg_url, simg_commit=None):
         return pull_image_from_shub(simg_url, simg_commit)
     if simg_url.split("://")[0] == 'gsiftp':
         return download_simg_from_gsiftp(simg_url) #TODO: If hash is given here, still check if it's ok
-    logging.warn("Unknown image location {0}".format(simg_url))
+    logger.warn("Unknown image location {0}".format(simg_url))
 
 def download_simg_from_gsiftp(simg_link):
     """download_simg_from_gsiftp
@@ -40,21 +42,21 @@ def download_simg_from_gsiftp(simg_link):
     :param simg_link: The gsiftp link for the singularity image
     """
     img_name = simg_link.split('/')[-1]
-    logging.info("Downloading image {0}".format(img_name))
+    logger.info("Downloading image {0}".format(img_name))
     _dl = subprocess.Popen(['globus-url-copy', simg_link, img_name], stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     out,err = _dl.communicate()
     if not out and not err:
         return img_name
     else:
-        logging.error("Error downloading image:{0}".format(err))
+        logger.error("Error downloading image:{0}".format(err))
 
 def process_singularity_stderr(stderr):
     err = []
     for line in stderr.decode("utf-8").split('\n'):
         if line:
             if 'WARNING' in line:
-                logging.warn(line)
+                logger.warn(line)
             else:
                 err.append(line)
     return err
@@ -68,7 +70,7 @@ def get_image_path(subprocess_popen):
         if 'Done.' in out:
             img_path = out.split('/n')[-1].split("Done. Container is at: ")[1].strip()
         else:
-            logging.info("No path to container found, likely using singularity 3.0+")
+            logger.info("No path to container found, likely using singularity 3.0+")
             img_path = ""
     if err:
         raise RuntimeError("Error {0} occurred when pulling container".format(err))
@@ -86,8 +88,8 @@ def pull_image_from_shub(shub_link,commit=None):
     """Using the shub url (shub://...), this module downloads the singularity image
     Optionally, a commit hash can be given. If the downloaded image's hash doesn't match, 
     a warning is thrown, however processing continues"""
-    logging.info("Pulling image {0} with commit {1}".format(shub_link,commit))
-    logging.info("Using: {0}".format(get_sing_version()))
+    logger.info("Pulling image {0} with commit {1}".format(shub_link,commit))
+    logger.info("Using: {0}".format(get_sing_version()))
     if not commit:
         _pull = subprocess.Popen(['singularity','pull',shub_link],stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE) 
@@ -98,7 +100,7 @@ def pull_image_from_shub(shub_link,commit=None):
     if commit:
         img_hash = get_image_file_hash(img_path)
         if img_hash != commit:
-            logging.warn("The image commit and the hash on singularityhub are not the same!\n The pulled image has a hash of {0} instead of {1}".format(img_hash, commit))
+            logger.warn("The image commit and the hash on singularityhub are not the same!\n The pulled image has a hash of {0} instead of {1}".format(img_hash, commit))
     return img_path       
 
 def put_variables_in_env(json_payload):

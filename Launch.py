@@ -30,7 +30,7 @@ import shutil
 import glob
 import warnings
 import traceback
-import logging
+
 
 #picas imports
 from GRID_PiCaS_Launcher.picas.actors import RunActor
@@ -38,6 +38,8 @@ from GRID_PiCaS_Launcher.picas.clients import CouchClient
 from GRID_PiCaS_Launcher.picas.iterators import BasicViewIterator
 from GRID_PiCaS_Launcher.picas.modifiers import BasicTokenModifier
 from GRID_PiCaS_Launcher.picas.executers import execute
+
+from GRID_PiCaS_Launcher.logging import logger
 
 #token imports
 from GRID_PiCaS_Launcher.update_token_status import update_status
@@ -54,8 +56,6 @@ from GRID_PiCaS_Launcher import sandbox
 import pdb
 from multiprocessing import Process
 
-logging.basicConfig(filename='GRID_PiCaS_Launcher.log', filemode='w', level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 class ExampleActor(RunActor):
     def __init__(self, iterator, modifier):
@@ -67,8 +67,8 @@ class ExampleActor(RunActor):
         if not json_payload:
             json_payload = self.config
         if 'sandbox' not in json_payload.keys():
-            logging.warn("No sandbox configuration")
-            logging.warn("json_payload keys are {0}".format(json_payload.keys()))
+            logger.warn("No sandbox configuration")
+            logger.warn("json_payload keys are {0}".format(json_payload.keys()))
             return
         sbx = sandbox.Sandbox(config_json=json_payload['sandbox'])
         sbx.build_sandbox(True)# Not needed
@@ -83,7 +83,7 @@ class ExampleActor(RunActor):
         """
         if not config:
             config = self.config
-        logging.info("getting image from {0}".format(config))
+        logger.info("getting image from {0}".format(config))
         simg_config = parse_json_payload(config)
         image_location = parse_singularity_link(simg_config['SIMG'],
                                                 simg_config['SIMG_COMMIT'])
@@ -94,13 +94,13 @@ class ExampleActor(RunActor):
         if not variables:
             variables = {}
         if 'variables' in config.keys():
-            logging.info("Getting variables from config file")
+            logger.info("Getting variables from config file")
             _vars = config['variables']
             for var in _vars:
-                logging.debug("Setting Environment variable {0} to {1}".format(var, _vars[var]))
+                logger.debug("Setting Environment variable {0} to {1}".format(var, _vars[var]))
                 variables[var]=_vars[var]
         else:
-            logging.warn("No Variables found in the token config. Nothing is put in the environment!")
+            logger.warn("No Variables found in the token config. Nothing is put in the environment!")
             return {}
         return variables
 
@@ -121,7 +121,8 @@ class ExampleActor(RunActor):
         os.environ['PICAS_USR_PWD']=self.password
         os.environ['PICAS_DB']=self.database
         self.token_name=token['_id']
-
+        logger.info("Working on token {0} from databse {1} as user {2}".format(
+            self.token_name, self.database, self.user))
         self.config = token['config.json']
         variables = self.get_variables_from_config(self.config, variables)
         if 'container' in self.config.keys() or 'singularity' in self.config.keys():
