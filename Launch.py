@@ -82,7 +82,7 @@ class ExampleActor(RunActor):
 
         if rc == 0:
             if 'gsiftp' not in location and 'strw' not in location:
-                location='gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/sandbox/'+location
+                location='gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/diskonly/sandbox/'+location
             self.download_sandbox('globus-url-copy',location)
         else:
             if 'strw' in location :
