@@ -39,7 +39,7 @@ def export_variable(name, value, overwrite=True):
 
 def export_dict_to_env(db, variable_dictionary, token_id):
     pc = picas_cred()
-    dbn, un, pwd = pc.database, pc.user, pc.password
+    dbn, un, pwd = db.metadata()['db_name'] , pc.user, pc.password
     config_json = get_token_field(token_id,'config.json',dbn, un, pwd)
     for head in variable_dictionary:
         if head  == "_token_keys":
