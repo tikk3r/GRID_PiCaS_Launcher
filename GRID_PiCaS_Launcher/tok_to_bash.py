@@ -37,7 +37,7 @@ def export_variable(name, value, overwrite=True):
         return
     os.environ[name] = str(value)
 
-def export_dict_to_env(db, variable_dictionary, token_id, db_name=None)
+def export_dict_to_env(db, variable_dictionary, token_id, db_name=None):
     pc = picas_cred(dbn=db_name)
     dbn, un, pwd = pc.database , pc.user, pc.password
     config_json = get_token_field(token_id,'config.json',dbn, un, pwd)
