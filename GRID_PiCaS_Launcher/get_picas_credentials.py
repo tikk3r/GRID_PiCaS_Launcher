@@ -7,7 +7,7 @@ class picas_cred():
     def __init__(self,source=None,usr=None,pwd=None,dbn=None):
         if source:
             self.get_picas_creds_from_file(pic_file=source) 
-        elif usr=None or pwd==None and dbn!=None:
+        elif usr==None or pwd==None and dbn!=None:
                 if isfile(expanduser('~/.picasrc')):
                     self.get_picas_creds()
                 else:
