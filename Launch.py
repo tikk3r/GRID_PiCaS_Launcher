@@ -138,7 +138,7 @@ class ExampleActor(RunActor):
         with open(os.devnull, 'w') as FNULL:
             subprocess.call(["chmod","a+x","master.sh"], stdout=FNULL, stderr=subprocess.STDOUT)
 
-        export_dict_to_env(self.client.db, variables, self.token_name)
+        export_dict_to_env(self.client.db, variables, self.token_name, dbn=self.database)
 
         print("Working on token: " + token['_id'])
         ## Read tokvar values from token and write to bash variables if not already exist! Save attachments and export abs filename to variable
