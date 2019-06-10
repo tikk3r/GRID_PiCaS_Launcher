@@ -7,13 +7,14 @@ class picas_cred():
     def __init__(self,source=None,usr=None,pwd=None,dbn=None):
         if source:
             self.get_picas_creds_from_file(pic_file=source) 
-        elif usr==None or pwd==None and dbn!=None:
+        elif usr==None and pwd==None:
                 if isfile(expanduser('~/.picasrc')):
                     self.get_picas_creds()
                 else:
                     self.get_picas_creds_from_env()
-                self.database=dbn
-        elif not usr and not pwd and not dbn:
+                if dbn:
+                    self.database=dbn
+        elif usr==None and pwd==None and dbn==None:
             self.get_picas_creds_from_env()
         else:
             self.user=usr
