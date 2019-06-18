@@ -167,9 +167,9 @@ class ExampleActor(RunActor):
         os.chdir(RUNDIR)
         try:
            logsout = "logs_out"
-           upload_attachment(token['_id'], logsout, p_creds)
+           upload_attachment(token_id=token['_id'], attachment=logsout, picas_credentials=p_creds)
            logserr = "logs_.err"
-           upload_attachment(token['_id'], logserr, p_creds)
+           upload_attachment(token_id=token['_id'], attachment=logserr, picas_credentials=p_creds)
         except:
            pass
 
@@ -178,7 +178,7 @@ class ExampleActor(RunActor):
         result=sols_search.communicate()[0]
 
         for png in result.split():
-            upload_attachment(token['_id'], png, p_creds)
+            upload_attachment(token_id=token['_id'], attachment=png, picas_credentials=p_credspicas_credentials=)
             os.remove(png) 
         self.client.modify_token(self.modifier.close(self.client.db[self.token_name]))
         return

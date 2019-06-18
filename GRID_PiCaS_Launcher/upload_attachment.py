@@ -3,12 +3,15 @@ import os,sys,time
 from GRID_PiCaS_Launcher.picas.clients import CouchClient
 
 
-def upload_attachment(tok_id, attachment, p_creds, name=None):
+def upload_attachment(token_id=tok_id, attachment=attachment,
+                      picas_credentials=p_creds, name=None):
     server = couchdb.Server(url="https://picas-lofar.grid.surfsara.nl:6984")
-    p_usr, p_pwd, p_db = p_creds.user, p_creds.password, p_creds.database
+    p_usr, p_pwd, p_db = (picas_credentials.user,
+                          picas_credentials.password,
+                          picas_credentials.database)
     server.resource.credentials = (p_usr,p_pwd)
     db = server[p_db]
-    token=db[tok_id]
+    token=db[token_id]
     currdate=time.strftime("%d/%m/%Y_%H.%M.%S_")
     client = CouchClient(url="https://picas-lofar.grid.surfsara.nl:6984", db=p_db, username=p_usr, password=p_pwd)
     if not name:
