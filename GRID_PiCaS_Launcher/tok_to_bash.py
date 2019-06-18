@@ -49,8 +49,7 @@ def export_key_to_env(variable, token_id, pc):
     export_variable(var, picas_val)
     return None
 
-def export_attachment_to_env(att_file, token_id, db):
-    picas_att_name = variable_dictionary['_attachments'][att_file]
+def export_attachment_to_env(att_file, picas_att_name, token_id, db):
     token = db[token_id]
     get_attachment(db,token,picas_att_name,savename=picas_att_name) #TODO: Add savename as an option
     export_variable(att_file, picas_att_name)
@@ -66,7 +65,9 @@ def export_dict_to_env(db, variable_dictionary, token_id, db_name=None):
                 export_key_to_env(var, token_id, pc) 
         elif head == '_attachments':
             for att_file in variable_dictionary['_attachments']:
-                export_attachment_to_env(att_file, token_id, db)
+                export_attachment_to_env(att_file, 
+                        variable_dictionary['_attachments'][att_file],
+                        token_id, db)
 
 
 def export_tok_keys(cfgfile='tokvar.json',token=None):
