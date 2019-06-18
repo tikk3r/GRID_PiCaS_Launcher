@@ -44,7 +44,7 @@ def export_key_to_env(variable, variables, token_id, pc):
         picas_key = str(variables[variable])
         picas_val = get_token_field(token_id, picas_key, dbn, un, pwd)
     except KeyError:
-        warnings.warn("WARNING: Picas Variable Missing: "+var)
+        warnings.warn("WARNING: Picas Variable Missing: "+variable)
         return None
     export_variable(variable, picas_val)
     return None
