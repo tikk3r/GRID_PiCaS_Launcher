@@ -37,6 +37,25 @@ def export_variable(name, value, overwrite=True):
         return
     os.environ[name] = str(value)
 
+
+def export_key_to_env(variable, token_id, pc):
+    dbn, un, pwd = pc.database , pc.user, pc.password
+    try:
+        picas_key = str(variable_dictionary["_token_keys"][variable])
+        picas_val = get_token_field(token_id, picas_key, dbn, un, pwd)
+    except KeyError:
+        warnings.warn("WARNING: Picas Variable Missing: "+var)
+        return None
+    export_variable(var, picas_val)
+    return None
+
+def export_attachment_to_env(att_file, token_id, db):
+    picas_att_name = variable_dictionary['_attachments'][att_file]
+    token = db[token_id]
+    get_attachment(db,token,picas_att_name,savename=picas_att_name) #TODO: Add savename as an option
+    export_variable(att_file, picas_att_name)
+
+
 def export_dict_to_env(db, variable_dictionary, token_id, db_name=None):
     pc = picas_cred(dbn=db_name)
     dbn, un, pwd = pc.database , pc.user, pc.password
@@ -44,21 +63,10 @@ def export_dict_to_env(db, variable_dictionary, token_id, db_name=None):
     for head in variable_dictionary:
         if head  == "_token_keys":
             for var in variable_dictionary["_token_keys"]:
-                try:
-                    picas_key = str(variable_dictionary["_token_keys"][var])
-                    picas_val = get_token_field(token_id, picas_key, dbn, un, pwd)
-                except KeyError:
-                    warnings.warn("WARNING: Picas Variable Missing: "+var)
-                    continue
-                export_variable(var, picas_val)
+                export_key_to_env(var, token_id, pc) 
         elif head == '_attachments':
             for att_file in variable_dictionary['_attachments']:
-                picas_att_name = variable_dictionary['_attachments'][att_file]
-                token = db[token_id]
-                get_attachment(db,token,picas_att_name,
-                        savename=picas_att_name) #TODO: Add savename as an option
-                export_variable(att_file, picas_att_name)
-
+                export_attachment_to_env(att_file, token_id, db)
 
 
 def export_tok_keys(cfgfile='tokvar.json',token=None):
