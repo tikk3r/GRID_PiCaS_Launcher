@@ -178,7 +178,7 @@ class ExampleActor(RunActor):
         result=sols_search.communicate()[0]
 
         for png in result.split():
-            upload_attachment(token['_id'], png, self.database, p_creds)
+            upload_attachment(token['_id'], png, p_creds)
             os.remove(png) 
         self.client.modify_token(self.modifier.close(self.client.db[self.token_name]))
         return
