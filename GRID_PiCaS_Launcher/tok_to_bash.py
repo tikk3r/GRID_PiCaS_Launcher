@@ -6,7 +6,7 @@ import json
 from GRID_PiCaS_Launcher  import couchdb
 from GRID_PiCaS_Launcher.get_token_field import get_token_field
 from GRID_PiCaS_Launcher.set_token_field import set_token_field
-from GRID_PiCaS_Launcher.get_picas_credentials import picas_cred
+from GRID_PiCaS_Launcher.get_picas_credentials import PicasCred
 
 
 def get_attachment(db,token, filename, savename=None):
@@ -56,7 +56,7 @@ def export_attachment_to_env(att_file, picas_att_name, token_id, db):
 
 
 def export_dict_to_env(db, variable_dictionary, token_id, db_name=None):
-    pc = picas_cred(dbn=db_name)
+    pc = PicasCred(dbn=db_name)
     dbn, un, pwd = pc.database , pc.user, pc.password
     config_json = get_token_field(token_id,'config.json',dbn, un, pwd)
     for head in variable_dictionary:

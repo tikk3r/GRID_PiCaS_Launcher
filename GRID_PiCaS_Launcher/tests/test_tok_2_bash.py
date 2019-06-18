@@ -22,7 +22,7 @@ class tok2bashtest(unittest.TestCase):
         if vers == '2.6':
             vers = '2.6.0'
         self.token_id='travis_getSBX_test'+vers
-        pc=gpc.picas_cred()
+        pc=gpc.PicasCred()
         creds=pc.return_credentials()  
         self.usr=creds['user']
         self.pwd=creds['password']

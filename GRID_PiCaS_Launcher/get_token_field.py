@@ -1,5 +1,5 @@
 from GRID_PiCaS_Launcher import couchdb
-from GRID_PiCaS_Launcher.get_picas_credentials import picas_cred
+from GRID_PiCaS_Launcher.get_picas_credentials import PicasCred
 import os,sys
  
 
@@ -15,7 +15,7 @@ def main(*args):
     if len(args)==6:
         value=get_token_field(args[4],args[5],args[1],args[2],args[3])
     else:
-        pc = picas_cred()
+        pc = PicasCred()
         dbn = pc.database
         usr = pc.user
         passw = pc.password

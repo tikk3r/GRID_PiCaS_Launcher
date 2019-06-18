@@ -1,13 +1,13 @@
 #!/bin/env python 
 from GRID_PiCaS_Launcher.get_token_field import get_token_field
-from GRID_PiCaS_Launcher.get_picas_credentials import picas_cred
+from GRID_PiCaS_Launcher.get_picas_credentials import PicasCred
 import os
 import subprocess
 from GRID_PiCaS_Launcher.upload_results import uploader, GSIUploader
 
 token = os.environ["TOKEN"]
 
-pc = picas_cred()
+pc = PicasCred()
 upload_data = get_token_field(token, 'upload', pc.database, pc.user,  pc.password)
 context = get_token_field(token, 'config.json', pc.database, pc.user,  pc.password)
 context['upload'] = upload_data

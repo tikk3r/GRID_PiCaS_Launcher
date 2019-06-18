@@ -24,7 +24,7 @@ print("!!!!!!!!!!!!!!!!!!!!!!")
 import sys,os
 import time
 from GRID_PiCaS_Launcher import couchdb
-from GRID_PiCaS_Launcher.get_picas_credentials import picas_cred
+from GRID_PiCaS_Launcher.get_picas_credentials import PicasCred
 import subprocess
 import shutil
 import glob
@@ -220,7 +220,7 @@ if __name__ == '__main__':
         username = str(sys.argv[2])
         password = str(sys.argv[3])
     else:
-        pc = picas_cred()
+        pc = PicasCred()
         db = pc.database
         username = pc.user
         password = pc.password
