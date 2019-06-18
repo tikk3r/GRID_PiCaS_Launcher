@@ -61,7 +61,7 @@ def export_dict_to_env(db, variable_dictionary, token_id, db_name=None):
     config_json = get_token_field(token_id,'config.json',dbn, un, pwd)
     for head in variable_dictionary:
         if head  == "_token_keys":
-            vriables = variable_dictionary["_token_keys"][variable]
+            variables = variable_dictionary["_token_keys"]
             for var in variable_dictionary["_token_keys"]:
                 export_key_to_env(var, variables, token_id, pc) 
         elif head == '_attachments':
