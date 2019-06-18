@@ -46,7 +46,7 @@ def export_key_to_env(variable, variables, token_id, pc):
     except KeyError:
         warnings.warn("WARNING: Picas Variable Missing: "+var)
         return None
-    export_variable(var, picas_val)
+    export_variable(variable, picas_val)
     return None
 
 def export_attachment_to_env(att_file, picas_att_name, token_id, db):
