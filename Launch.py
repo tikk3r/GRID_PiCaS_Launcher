@@ -117,9 +117,12 @@ class ExampleActor(RunActor):
     # Print token information
         variables = {}
         os.environ['TOKEN']=token['_id']
-        os.environ['PICAS_USR']=self.user
-        os.environ['PICAS_USR_PWD']=self.password
-        os.environ['PICAS_DB']=self.database
+        p_creds = PicasCred()
+        p_creds.user = self.user
+        p_creds.password = self.password
+        p_creds.database = self.database
+        p_creds.put_picas_creds_in_env()
+
         self.token_name=token['_id']
         logger.info("Working on token {0} from databse {1} as user {2}".format(
             self.token_name, self.database, self.user))
@@ -164,9 +167,9 @@ class ExampleActor(RunActor):
         os.chdir(RUNDIR)
         try:
            logsout = "logs_out"
-           upload_attachment(token['_id'],logsout,self.database,self.user,self.password)
+           upload_attachment(token['_id'], logsout, p_creds)
            logserr = "logs_.err"
-           upload_attachment(token['_id'],logserr,self.database,self.user,self.password)
+           upload_attachment(token['_id'], logserr, p_creds)
         except:
            pass
 
@@ -175,7 +178,7 @@ class ExampleActor(RunActor):
         result=sols_search.communicate()[0]
 
         for png in result.split():
-            upload_attachment(token['_id'],png,self.database,self.user,self.password,name=png)
+            upload_attachment(token['_id'], png, self.database, p_creds)
             os.remove(png) 
         self.client.modify_token(self.modifier.close(self.client.db[self.token_name]))
         return

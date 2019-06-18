@@ -3,8 +3,9 @@ import os,sys,time
 from GRID_PiCaS_Launcher.picas.clients import CouchClient
 
 
-def upload_attachment(tok_id,attachment,p_db,p_usr,p_pwd,name=None):
+def upload_attachment(tok_id, attachment, p_creds, name=None):
     server = couchdb.Server(url="https://picas-lofar.grid.surfsara.nl:6984")
+    p_usr, p_pwd, p_db = p_creds.user, p_creds.password, p_creds.database
     server.resource.credentials = (p_usr,p_pwd)
     db = server[p_db]
     token=db[tok_id]
