@@ -38,10 +38,10 @@ def export_variable(name, value, overwrite=True):
     os.environ[name] = str(value)
 
 
-def export_key_to_env(variable, token_id, pc):
+def export_key_to_env(variable, variables, token_id, pc):
     dbn, un, pwd = pc.database , pc.user, pc.password
     try:
-        picas_key = str(variable_dictionary["_token_keys"][variable])
+        picas_key = str(variables[variable])
         picas_val = get_token_field(token_id, picas_key, dbn, un, pwd)
     except KeyError:
         warnings.warn("WARNING: Picas Variable Missing: "+var)
@@ -61,8 +61,9 @@ def export_dict_to_env(db, variable_dictionary, token_id, db_name=None):
     config_json = get_token_field(token_id,'config.json',dbn, un, pwd)
     for head in variable_dictionary:
         if head  == "_token_keys":
+            vriables = variable_dictionary["_token_keys"][variable]
             for var in variable_dictionary["_token_keys"]:
-                export_key_to_env(var, token_id, pc) 
+                export_key_to_env(var, variables, token_id, pc) 
         elif head == '_attachments':
             for att_file in variable_dictionary['_attachments']:
                 export_attachment_to_env(att_file, 
