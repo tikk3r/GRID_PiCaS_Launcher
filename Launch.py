@@ -111,17 +111,25 @@ class ExampleActor(RunActor):
             return None
         sbx = sandbox.Sandbox(location=location)
         sbx.download_sandbox()
- 
+
+    def upload_logs(self, logs_dir):
+        os.chdir(logs_dir)
+        logsout = "logs_out"
+        logserr = "logs_.err"
+        if os.path.isfile(logsout):
+            upload_attachment(token_id=self.token_name, attachment=logsout, picas_credentials=self.p_creds)
+        if os.path.isfile(logserr):
+            upload_attachment(token_id=self.token_name, attachment=logsout, picas_credentials=self.p_creds)
 
     def process_token(self, key, token):
     # Print token information
         variables = {}
         os.environ['TOKEN']=token['_id']
-        p_creds = PicasCred()
-        p_creds.user = self.user
-        p_creds.password = self.password
-        p_creds.database = self.database
-        p_creds.put_picas_creds_in_env()
+        self.p_creds = PicasCred()
+        self.p_creds.user = self.user
+        self.p_creds.password = self.password
+        self.p_creds.database = self.database
+        self.p_creds.put_picas_creds_in_env()
 
         self.token_name=token['_id']
         logger.info("Working on token {0} from databse {1} as user {2}".format(
@@ -136,14 +144,14 @@ class ExampleActor(RunActor):
         set_token_field(token['_id'],'status','building_sandbox',self.database,self.user,self.password)
         p = Process(target=self.create_sandbox)
         p.start()
-        print("Creating Sandbox from config: {0}".format(self.config['sandbox']))
+        logger.info("Creating Sandbox from config: {0}".format(self.config['sandbox']))
         p.join()
         with open(os.devnull, 'w') as FNULL:
             subprocess.call(["chmod","a+x","master.sh"], stdout=FNULL, stderr=subprocess.STDOUT)
 
         export_dict_to_env(self.client.db, variables, self.token_name, db_name=self.database)
 
-        print("Working on token: " + token['_id'])
+        logger.info("Working on token: " + token['_id'])
         ## Read tokvar values from token and write to bash variables if not already exist! Save attachments and export abs filename to variable
 
         set_token_field(token['_id'],'status','launched',self.database,self.user,self.password)
@@ -152,26 +160,20 @@ class ExampleActor(RunActor):
         #The launched script is simply master.sh with token and picas authen stored in env vars
         #master.sh takes the variables straight from the token. 
         command = "/usr/bin/time -v ./master.sh 2> logs_.err 1> logs_out"
-        print("executing "+command)
+        logger.info("executing "+command)
         
         out = execute(command,shell=True)
-        print('exit status is '+str(out))
-
+        logger.info('master.sh exit status is '+str(out))
 
         set_token_field(token['_id'],'output',out[0],self.database,self.user,self.password)
         if out[0]==0:
             set_token_field(token['_id'],'status','done',self.database,self.user,self.password)
+            logger.info("Job exited OK")
         else:
             set_token_field(token['_id'],'status','error',self.database,self.user,self.password)
-        
-        os.chdir(RUNDIR)
-        try:
-           logsout = "logs_out"
-           upload_attachment(token_id=token['_id'], attachment=logsout, picas_credentials=p_creds)
-           logserr = "logs_.err"
-           upload_attachment(token_id=token['_id'], attachment=logserr, picas_credentials=p_creds)
-        except:
-           pass
+            logger.error("Job exited with status {}".format(out[0]))
+
+        self.upload_logs(RUNDIR)
 
         #Just attaches all png files in the working directory to the token
         sols_search=subprocess.Popen(["find",".","-name","*.png","-o","-name","*.fits"],stdout=subprocess.PIPE)
@@ -183,11 +185,16 @@ class ExampleActor(RunActor):
             upload_attachment(token_id=token['_id'], attachment=png, picas_credentials=p_creds)
             os.remove(png) 
         self.client.modify_token(self.modifier.close(self.client.db[self.token_name]))
-        return
+        with open("{0}/GRID_PiCaS_Launcher.log".format(__file__.split("__init__")[0])) as f:
+            print(f.read())
+        return 
 
         
 
 def main(url="https://picas-lofar.grid.surfsara.nl:6984", db=None, username=None, password=None, view='todo'):
+    """The main function locks a token from a CouchDB view and executes
+    process_token on the token which builds sandbox and runs scripts
+    """
     # setup connection to db
     client = CouchClient(url=url, db=db, username=username, password=password)
     # Create token modifier
@@ -212,7 +219,7 @@ def main(url="https://picas-lofar.grid.surfsara.nl:6984", db=None, username=None
         set_token_field(actor.token_name,'launcher_status',str(e.args),actor.database,actor.user,actor.password)
     finally:
         with open("{0}/GRID_PiCaS_Launcher.log".format(__file__.split("__init__")[0])) as f:
-            print(f)
+            print(f.read())
 
 if __name__ == '__main__':
     """Entry point of the Launcher. 

@@ -6,3 +6,4 @@ LOG_FILE = "{0}/GRID_PiCaS_Launcher.log".format(
 logging.basicConfig(filename=LOG_FILE, filemode='w', level=logging.INFO,
                 format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger()
+
