@@ -182,7 +182,7 @@ class ExampleActor(RunActor):
         for png in result.split():
             if isinstance(png, bytes):
                 png = png.decode()
-            upload_attachment(token_id=token['_id'], attachment=png, picas_credentials=p_creds)
+            upload_attachment(token_id=token['_id'], attachment=png, picas_credentials=self.p_creds)
             os.remove(png) 
         self.client.modify_token(self.modifier.close(self.client.db[self.token_name]))
         with open("{0}/GRID_PiCaS_Launcher.log".format(__file__.split("__init__")[0])) as f:
