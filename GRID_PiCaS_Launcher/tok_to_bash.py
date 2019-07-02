@@ -41,6 +41,7 @@ def export_variable(name, value, overwrite=True):
 def export_key_to_env(variable, variables, token_id, pc):
     dbn, un, pwd = pc.database , pc.user, pc.password
     try:
+        logging.debug("Exporting Variable {}".format(variable))
         picas_key = str(variables[variable])
         picas_val = get_token_field(token_id, picas_key, dbn, un, pwd)
     except KeyError:
@@ -59,14 +60,15 @@ def export_dict_to_env(db, variable_dictionary, token_id, db_name=None):
     pc = PicasCred(dbn=db_name)
     dbn, un, pwd = pc.database , pc.user, pc.password
     config_json = get_token_field(token_id,'config.json',dbn, un, pwd)
-    for head in variable_dictionary:
-        if head  == "_token_keys":
-            variables = variable_dictionary["_token_keys"]
-            for var in variable_dictionary["_token_keys"]:
-                export_key_to_env(var, variables, token_id, pc) 
-        elif head == '_attachments':
-            for att_file in variable_dictionary['_attachments']:
-                export_attachment_to_env(att_file, 
+    if "_token_keys" in variable_dictionary.keys():
+        variables = variable_dictionary["_token_keys"]
+        logging.info("Exporting Variables from _token_keys")
+        for var in variable_dictionary["_token_keys"]:
+            export_key_to_env(var, variables, token_id, pc) 
+    if '_attachments' in variable_dictionary.keys(): 
+        logging.info("Exporting Attachments")
+        for att_file in variable_dictionary['_attachments']:
+          export_attachment_to_env(att_file, 
                         variable_dictionary['_attachments'][att_file],
                         token_id, db)
 
