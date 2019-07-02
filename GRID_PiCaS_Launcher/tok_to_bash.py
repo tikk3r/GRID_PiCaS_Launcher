@@ -3,6 +3,7 @@ import sys
 import os
 import warnings
 import json
+import logging
 from GRID_PiCaS_Launcher  import couchdb
 from GRID_PiCaS_Launcher.get_token_field import get_token_field
 from GRID_PiCaS_Launcher.set_token_field import set_token_field
@@ -61,10 +62,10 @@ def export_dict_to_env(db, variable_dictionary, token_id, db_name=None):
     dbn, un, pwd = pc.database , pc.user, pc.password
     config_json = get_token_field(token_id,'config.json',dbn, un, pwd)
     if "_token_keys" in variable_dictionary.keys():
-        variables = variable_dictionary["_token_keys"]
         logging.info("Exporting Variables from _token_keys")
         for var in variable_dictionary["_token_keys"]:
-            export_key_to_env(var, variables, token_id, pc) 
+            export_key_to_env(var, variable_dictionary["_token_keys"],
+                    token_id, pc) 
     if '_attachments' in variable_dictionary.keys(): 
         logging.info("Exporting Attachments")
         for att_file in variable_dictionary['_attachments']:
