@@ -42,7 +42,7 @@ def export_variable(name, value, overwrite=True):
 def export_key_to_env(variable, variables, token_id, pc):
     dbn, un, pwd = pc.database , pc.user, pc.password
     try:
-        logging.debug("Exporting Variable {}".format(variable))
+        logging.debug("Exporting Variable {0}".format(variable))
         picas_key = str(variables[variable])
         picas_val = get_token_field(token_id, picas_key, dbn, un, pwd)
     except KeyError:
