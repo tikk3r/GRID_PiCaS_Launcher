@@ -30,7 +30,7 @@ import shutil
 import glob
 import warnings
 import traceback
-
+import logging
 
 #picas imports
 from GRID_PiCaS_Launcher.picas.actors import RunActor
@@ -67,8 +67,8 @@ class ExampleActor(RunActor):
         if not json_payload:
             json_payload = self.config
         if 'sandbox' not in json_payload.keys():
-            logger.warn("No sandbox configuration")
-            logger.warn("json_payload keys are {0}".format(json_payload.keys()))
+            logging.warn("No sandbox configuration")
+            logging.warn("json_payload keys are {0}".format(json_payload.keys()))
             return
         sbx = sandbox.Sandbox(config_json=json_payload['sandbox'])
         sbx.build_sandbox(True)# Not needed
@@ -83,7 +83,7 @@ class ExampleActor(RunActor):
         """
         if not config:
             config = self.config
-        logger.info("getting image from {0}".format(config))
+        logging.info("getting image from {0}".format(config))
         simg_config = parse_json_payload(config)
         image_location = parse_singularity_link(simg_config['SIMG'],
                                                 simg_config['SIMG_COMMIT'])
@@ -94,13 +94,13 @@ class ExampleActor(RunActor):
         if not variables:
             variables = {}
         if 'variables' in config.keys():
-            logger.info("Getting variables from config file")
+            logging.info("Getting variables from config file")
             _vars = config['variables']
             for var in _vars:
-                logger.debug("Setting Environment variable {0} to {1}".format(var, _vars[var]))
+                logging.debug("Setting Environment variable {0} to {1}".format(var, _vars[var]))
                 variables[var]=_vars[var]
         else:
-            logger.warn("No Variables found in the token config. Nothing is put in the environment!")
+            logging.warn("No Variables found in the token config. Nothing is put in the environment!")
             return {}
         return variables
 
@@ -132,7 +132,7 @@ class ExampleActor(RunActor):
         self.p_creds.put_picas_creds_in_env()
 
         self.token_name=token['_id']
-        logger.info("Working on token {0} from databse {1} as user {2}".format(
+        logging.info("Working on token {0} from databse {1} as user {2}".format(
             self.token_name, self.database, self.user))
         self.config = token['config.json']
         variables = self.get_variables_from_config(self.config, variables)
@@ -144,14 +144,14 @@ class ExampleActor(RunActor):
         set_token_field(token['_id'],'status','building_sandbox',self.database,self.user,self.password)
         p = Process(target=self.create_sandbox)
         p.start()
-        logger.info("Creating Sandbox from config: {0}".format(self.config['sandbox']))
+        logging.info("Creating Sandbox from config: {0}".format(self.config['sandbox']))
         p.join()
         with open(os.devnull, 'w') as FNULL:
             subprocess.call(["chmod","a+x","master.sh"], stdout=FNULL, stderr=subprocess.STDOUT)
 
         export_dict_to_env(self.client.db, variables, self.token_name, db_name=self.database)
 
-        logger.info("Working on token: " + token['_id'])
+        logging.info("Working on token: " + token['_id'])
         ## Read tokvar values from token and write to bash variables if not already exist! Save attachments and export abs filename to variable
 
         set_token_field(token['_id'],'status','launched',self.database,self.user,self.password)
@@ -160,18 +160,18 @@ class ExampleActor(RunActor):
         #The launched script is simply master.sh with token and picas authen stored in env vars
         #master.sh takes the variables straight from the token. 
         command = "/usr/bin/time -v ./master.sh 2> logs_.err 1> logs_out"
-        logger.info("executing "+command)
+        logging.info("executing "+command)
         
         out = execute(command,shell=True)
-        logger.info('master.sh exit status is '+str(out))
+        logging.info('master.sh exit status is '+str(out))
 
         set_token_field(token['_id'],'output',out[0],self.database,self.user,self.password)
         if out[0]==0:
             set_token_field(token['_id'],'status','done',self.database,self.user,self.password)
-            logger.info("Job exited OK")
+            logging.info("Job exited OK")
         else:
             set_token_field(token['_id'],'status','error',self.database,self.user,self.password)
-            logger.error("Job exited with status {}".format(out[0]))
+            logging.error("Job exited with status {}".format(out[0]))
 
         self.upload_logs(RUNDIR)
 
