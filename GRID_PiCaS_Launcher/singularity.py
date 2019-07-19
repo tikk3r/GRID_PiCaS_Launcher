@@ -1,3 +1,4 @@
+import requests
 import subprocess
 import sys
 import os
@@ -6,6 +7,10 @@ import warnings
 import json
 import pdb
 import glob
+try:
+    from urllib import urlretrieve
+except ImportError:
+    from urllib.request import urlretrieve
 
 from GRID_PiCaS_Launcher.launcher_logging import logger
 
@@ -21,6 +26,25 @@ def download_singularity_from_env():
     simg_commit = os.environ.get('SIMG_COMMIT', None)
     return parse_singularity_link(simg_url, simg_commit)
 
+def convert_shub_to_http(shub_url, shub_commit=None, repo_base_url='https://lofar-webdav.grid.sara.nl/software/shub_mirror/'):
+    """Converts the singularity hub URL to a webdav hosted url"""
+    shub_url = shub_url.split("shub://")[1]
+    shub_user = shub_url.split('/')[0]
+    shub_collection = shub_url.split('/')[1].split(':')[0]
+    shub_image = shub_url.split(':')[1]
+    shub_http_url = "{0}/{1}/{2}/{3}".format(repo_base_url, shub_user, shub_collection, shub_image)
+    if shub_commit:
+        shub_http_url = "{0}@{1}".format(shub_http_url, shub_commit)
+    shub_http_url = "{0}.sif".format(shub_http_url)
+    return shub_http_url
+
+def check_if_http_sif(http_url):
+    """Checks if a valid link to the image exists without actually downloading it"""
+    r = requests.head(http_url)
+    if 'Content-Length' in r.headers and int(r.headers['Content-Length'])>1000:
+        return True
+    return False
+
 def parse_singularity_link(simg_url, simg_commit=None):
     """parse_singularity_link
 
@@ -30,7 +54,10 @@ def parse_singularity_link(simg_url, simg_commit=None):
     :param simg_commit: Optional commit hash for singularity hub
     :type simg_commit: str
     """
-    if simg_url.split("://")[0] == 'shub':
+    if simg_url.split("://")[0] == 'shub': #TODO: Check gsi storage if file exists before invoking shub
+        http_link = convert_shub_to_http(shub_url=simg_url, shub_commit=simg_commit)
+        if check_if_http_sif(http_link):
+            return download_simg_from_http(http_link,'lofar.sif') 
         return pull_image_from_shub(simg_url, simg_commit)
     if simg_url.split("://")[0] == 'gsiftp':
         return download_simg_from_gsiftp(simg_url) #TODO: If hash is given here, still check if it's ok
@@ -50,6 +77,13 @@ def download_simg_from_gsiftp(simg_link):
         return img_name
     else:
         logger.error("Error downloading image:{0}".format(err))
+
+def download_simg_from_http(simg_link, sif_name=None):
+    if not sif_name:
+        sif_name = simg_link.split('/')[-1]
+    urlretrieve(simg_link, sif_name)
+    return os.getcwd()+'/'+sif_name
+
 
 def process_singularity_stderr(stderr):
     err = []

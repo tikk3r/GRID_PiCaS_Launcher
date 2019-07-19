@@ -17,7 +17,7 @@
         "type":"CI_pref3_cal",
         "status": "queued",
         "times": {},
-        "upload":{
+        "upload": {
             "add_date": true,
             "date_granularity":"hour",
             "gzip": false,
@@ -41,7 +41,7 @@
     "container": {
         "singularity": {
             "SIMG": "shub://tikk3r/lofar-grid-hpccloud:lofar",
-            "SIMG_COMMIT": "24e3f7bf5d4213b4f166c329f29acbfc"
+            "SIMG_COMMIT": "e82d3dbdf6f18d0fe00c1ef97c3305a0a15f5eb6"
         }
     },
     "sandbox": {
