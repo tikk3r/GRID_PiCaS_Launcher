@@ -60,30 +60,36 @@ class Sandbox(object):
                 p.join()
 
     @staticmethod
-    def _pull_git_repository(repo_location=None, repo_branch=None, repo_commit=None,
-                             checkout_dir=None, remove_gitdir=False):
-        """Internal function that checks out a specific commit or branch of a 
-        repository. By default it does so in the current directory. """
-        if not checkout_dir:
-            return_dir = os.getcwd()
-            checkout_dir_path = tempfile.mkdtemp(prefix=os.getcwd()+'/')
-        else:
-            return_dir = os.getcwd()
-            checkout_dir_path = checkout_dir
-        if not repo_location:
-            raise RuntimeError("No repository to clone, why is repo_location set to None?")
-        with open(os.devnull, 'w') as FNULL:
-            clone = subprocess.Popen(
-                        ['git', 'clone', repo_location, checkout_dir_path],
-                        stdout=FNULL, stderr=subprocess.STDOUT)
-            clone.wait()
-        os.chdir(checkout_dir_path)
+    def __checkout_commit_or_branch(repo_commit=None, repo_branch=None):
         if repo_branch:
             checkout = subprocess.Popen(['git', 'checkout', repo_branch])
             checkout.communicate()
         if repo_commit:
             checkout = subprocess.Popen(['git', 'checkout', repo_commit])
             checkout.communicate()
+
+    @staticmethod
+    def _pull_git_repository(repo_location=None, repo_branch=None, repo_commit=None,
+                             checkout_dir=None, remove_gitdir=False):
+        """Internal function that checks out a specific commit or branch of a 
+        repository. By default it does so in the current directory. """
+        return_dir = os.getcwd()
+        checkout_dir_path = checkout_dir
+
+        if not checkout_dir_path:
+            checkout_dir_path = tempfile.mkdtemp(prefix=os.getcwd()+'/')
+        if not repo_location:
+            raise RuntimeError("No repository to clone, why is repo_location set to None?")
+
+        with open(os.devnull, 'w') as FNULL:
+            clone = subprocess.Popen(
+                        ['git', 'clone', repo_location, checkout_dir_path],
+                        stdout=FNULL, stderr=subprocess.STDOUT)
+            clone.wait()
+
+        os.chdir(checkout_dir_path)
+        self.__checkout_commit_or_branch(repo_commit, repo_branch)
+
         if remove_gitdir and os.path.isdir('.git'):
             shutil.rmtree('.git/')
         if not checkout_dir:
