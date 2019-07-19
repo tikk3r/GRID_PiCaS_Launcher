@@ -139,8 +139,7 @@ class ExampleActor(RunActor):
         if 'container' in self.config.keys() or 'singularity' in self.config.keys():
             set_token_field(token['_id'],'status','pulling_container',self.database,self.user,self.password)
             self.get_image()
-
-        self.download_sandbox(token) ##Will be removed!
+ 
         set_token_field(token['_id'],'status','building_sandbox',self.database,self.user,self.password)
         p = Process(target=self.create_sandbox)
         p.start()
@@ -176,17 +175,20 @@ class ExampleActor(RunActor):
         self.upload_logs(RUNDIR)
 
         #Just attaches all png files in the working directory to the token
-        sols_search=subprocess.Popen(["find",".","-name","*.png","-o","-name","*.fits"],stdout=subprocess.PIPE)
-        result=sols_search.communicate()[0]
+        self.find_and_upload_files()
+        self.find_and_upload_files("*.fits")
 
-        for png in result.split():
-            if isinstance(png, bytes):
-                png = png.decode()
-            upload_attachment(token_id=token['_id'], attachment=png, picas_credentials=self.p_creds)
-            os.remove(png) 
         self.client.modify_token(self.modifier.close(self.client.db[self.token_name]))
         return 
 
+    def find_and_upload_files(self, filepattern="*.png"):
+        sols_search = subprocess.Popen(["find",".","-name",filepattern] ,stdout=subprocess.PIPE)
+        result = sols_search.communicate()[0]
+        for filename in result.split():
+            if isinstance(filename, bytes):
+                filename = filename.decode()
+            upload_attachment(token_id=self.token_name, attachment=filename, picas_credentials=self.p_creds)
+            os.remove(filename)
         
 
 def main(url="https://picas-lofar.grid.surfsara.nl:6984", db=None, username=None, password=None, view='todo'):
