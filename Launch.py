@@ -59,10 +59,16 @@ from GRID_PiCaS_Launcher import __file__
 
 class ExampleActor(RunActor):
     def __init__(self, iterator, modifier):
+        self.RUNDIR = os.getcwd() 
         self.iterator = iterator
         self.modifier = modifier
         self.client = iterator.client
-
+        self.p_creds = PicasCred()
+        self.p_creds.user = self.user
+        self.p_creds.password = self.password
+        self.p_creds.database = self.database    
+        self.p_creds.put_picas_creds_in_env()    
+    
     def create_sandbox(self, json_payload=None):
         if not json_payload:
             json_payload = self.config
@@ -125,13 +131,8 @@ class ExampleActor(RunActor):
     # Print token information
         variables = {}
         os.environ['TOKEN']=token['_id']
-        self.p_creds = PicasCred()
-        self.p_creds.user = self.user
-        self.p_creds.password = self.password
-        self.p_creds.database = self.database
-        self.p_creds.put_picas_creds_in_env()
 
-        self.token_name=token['_id']
+        self.token_name = token['_id']
         logging.info("Working on token {0} from databse {1} as user {2}".format(
             self.token_name, self.database, self.user))
         self.config = token['config.json']
@@ -145,6 +146,7 @@ class ExampleActor(RunActor):
         p.start()
         logging.info("Creating Sandbox from config: {0}".format(self.config['sandbox']))
         p.join()
+
         with open(os.devnull, 'w') as FNULL:
             subprocess.call(["chmod","a+x","master.sh"], stdout=FNULL, stderr=subprocess.STDOUT)
 
@@ -154,8 +156,6 @@ class ExampleActor(RunActor):
         ## Read tokvar values from token and write to bash variables if not already exist! Save attachments and export abs filename to variable
 
         set_token_field(token['_id'],'status','launched',self.database,self.user,self.password)
-        RUNDIR=os.getcwd() 
-
         #The launched script is simply master.sh with token and picas authen stored in env vars
         #master.sh takes the variables straight from the token. 
         command = "/usr/bin/time -v ./master.sh 2> logs_.err 1> logs_out"
@@ -170,9 +170,9 @@ class ExampleActor(RunActor):
             logging.info("Job exited OK")
         else:
             set_token_field(token['_id'],'status','error',self.database,self.user,self.password)
-            logging.error("Job exited with status {}".format(out[0]))
+            logging.error("Job exited with status {0}".format(out[0]))
 
-        self.upload_logs(RUNDIR)
+        self.upload_logs(self.RUNDIR)
 
         #Just attaches all png files in the working directory to the token
         self.find_and_upload_files()
