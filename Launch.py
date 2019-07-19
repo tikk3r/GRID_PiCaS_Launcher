@@ -63,12 +63,15 @@ class ExampleActor(RunActor):
         self.iterator = iterator
         self.modifier = modifier
         self.client = iterator.client
+
+    def run(self):
         self.p_creds = PicasCred()
         self.p_creds.user = self.user
         self.p_creds.password = self.password
         self.p_creds.database = self.database    
         self.p_creds.put_picas_creds_in_env()    
-    
+        super(ExampleActor,self).run()
+
     def create_sandbox(self, json_payload=None):
         if not json_payload:
             json_payload = self.config
