@@ -86,6 +86,8 @@ def upload_gsi(src_file, dest_location, uploader=None, pattern=None):
 class uploader(object):
     def __init__(self, context):
         self.context = self._get_context(context)
+        if 'upload' not in self.context.keys():
+            raise RuntimeError('no upload field in context')
         self._suffix = '.tar'
         self._date = get_date(self.context)
         self._path= "{0}/{1}".format(self.context['upload']['location'], self.context['upload']['template'])
@@ -105,8 +107,6 @@ class uploader(object):
                 tmp_ctx = json.loads(context)
         else:
             tmp_ctx = context
-        if 'upload' not in tmp_ctx.keys():
-            raise RuntimeError('no upload field in context')
         return tmp_ctx
         
     def _communicate(self, subprocess_popen, raise_exception=None):
