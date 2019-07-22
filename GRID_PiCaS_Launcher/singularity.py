@@ -79,7 +79,7 @@ def download_simg_from_gsiftp(simg_link):
 
 def download_simg_from_http(simg_link, sif_name=None):
     if not sif_name:
-        sif_name = simg_link.split('/')[-1]
+        sif_name = simg_link.split('/')[-1].split("?")[0]
     urlretrieve(simg_link, sif_name)
     return os.getcwd()+'/'+sif_name
 
