@@ -67,7 +67,7 @@ def download_simg_from_gsiftp(simg_link):
 
     :param simg_link: The gsiftp link for the singularity image
     """
-    img_name = simg_link.split('/')[-1]
+    img_name = simg_link.split('/')[-1].split("?")[0]
     logger.info("Downloading image {0}".format(img_name))
     _dl = subprocess.Popen(['globus-url-copy', simg_link, img_name], stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
