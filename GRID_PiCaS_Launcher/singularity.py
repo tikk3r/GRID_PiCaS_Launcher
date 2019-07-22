@@ -34,7 +34,7 @@ def convert_shub_to_http(shub_url, shub_commit=None, repo_base_url='https://lofa
     shub_http_url = "{0}/{1}/{2}/{3}".format(repo_base_url, shub_user, shub_collection, shub_image)
     if shub_commit:
         shub_http_url = "{0}@{1}".format(shub_http_url, shub_commit)
-    shub_http_url = "{0}.sif".format(shub_http_url)
+    shub_http_url = "{0}.sif?action=show".format(shub_http_url)
     return shub_http_url
 
 def check_if_http_sif(http_url):
