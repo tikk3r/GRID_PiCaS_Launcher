@@ -97,6 +97,7 @@ class ExampleActor(RunActor):
         image_location = parse_singularity_link(simg_config['SIMG'],
                                                 simg_config['SIMG_COMMIT'])
         os.environ['SIMG'] = image_location
+        os.environ['SIMG_COMMIT'] = simg_config['SIMG_COMMIT']
 
     @staticmethod
     def get_variables_from_config(config, variables=None):
