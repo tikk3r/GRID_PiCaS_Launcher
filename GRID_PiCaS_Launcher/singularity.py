@@ -1,4 +1,3 @@
-import requests
 import subprocess
 import sys
 import os
@@ -8,9 +7,9 @@ import json
 import pdb
 import glob
 try:
-    from urllib import urlretrieve
+    from urllib import urlretrieve, urlopen
 except ImportError:
-    from urllib.request import urlretrieve
+    from urllib.request import urlretrieve, urlopen
 
 from GRID_PiCaS_Launcher.launcher_logging import logger
 
@@ -40,8 +39,8 @@ def convert_shub_to_http(shub_url, shub_commit=None, repo_base_url='https://lofa
 
 def check_if_http_sif(http_url):
     """Checks if a valid link to the image exists without actually downloading it"""
-    r = requests.head(http_url)
-    if 'Content-Length' in r.headers and int(r.headers['Content-Length'])>1000:
+    r = urlopen(http_url)
+    if 'Content-Length' in r.info() and int(r.info()['Content-Length'])>1000:
         return True
     return False
 

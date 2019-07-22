@@ -126,18 +126,17 @@ class ExampleActor(RunActor):
         logsout = "logs_out"
         logserr = "logs_.err"
         if os.path.isfile(logsout):
-            upload_attachment(token_id=self.token_name, attachment=logsout, picas_credentials=self.p_creds)
+            upload_attachment(token_id=self.token_id, attachment=logsout, picas_credentials=self.p_creds)
         if os.path.isfile(logserr):
-            upload_attachment(token_id=self.token_name, attachment=logsout, picas_credentials=self.p_creds)
+            upload_attachment(token_id=self.token_id, attachment=logsout, picas_credentials=self.p_creds)
 
     def process_token(self, key, token):
     # Print token information
-        variables = {}
         os.environ['TOKEN']=token['_id']
 
-        self.token_name = token['_id']
+        self.token_id = token['_id']
         logging.info("Working on token {0} from databse {1} as user {2}".format(
-            self.token_name, self.database, self.user))
+            self.token_id, self.database, self.user))
         self.config = token['config.json']
         variables = self.get_variables_from_config(self.config, variables)
         if 'container' in self.config.keys() or 'singularity' in self.config.keys():
@@ -153,7 +152,7 @@ class ExampleActor(RunActor):
         with open(os.devnull, 'w') as FNULL:
             subprocess.call(["chmod","a+x","master.sh"], stdout=FNULL, stderr=subprocess.STDOUT)
 
-        export_dict_to_env(self.client.db, variables, self.token_name, db_name=self.database)
+        export_dict_to_env(self.client.db, variables, self.token_id, db_name=self.database)
 
         logging.info("Working on token: " + token['_id'])
         ## Read tokvar values from token and write to bash variables if not already exist! Save attachments and export abs filename to variable
@@ -180,9 +179,7 @@ class ExampleActor(RunActor):
         #Just attaches all png files in the working directory to the token
         self.find_and_upload_files()
         self.find_and_upload_files("*.fits")
-
-        self.client.modify_token(self.modifier.close(self.client.db[self.token_name]))
-        return 
+        self.client.modify_token(self.modifier.close(self.client.db[self.token_id])) 
 
     def find_and_upload_files(self, filepattern="*.png"):
         sols_search = subprocess.Popen(["find",".","-name",filepattern] ,stdout=subprocess.PIPE)
@@ -190,7 +187,7 @@ class ExampleActor(RunActor):
         for filename in result.split():
             if isinstance(filename, bytes):
                 filename = filename.decode()
-            upload_attachment(token_id=self.token_name, attachment=filename, picas_credentials=self.p_creds)
+            upload_attachment(token_id=self.token_id, attachment=filename, picas_credentials=self.p_creds)
             os.remove(filename)
         
 
@@ -218,8 +215,8 @@ def main(url="https://picas-lofar.grid.surfsara.nl:6984", db=None, username=None
         del exc_info
         print("Exception occured")
         print(str(e.args))
-#        set_token_field(actor.token_name,'status','error',actor.database,actor.p_usr,actor.password)
-        set_token_field(actor.token_name,'launcher_status',str(e.args),actor.database,actor.user,actor.password)
+#        set_token_field(actor.token_id,'status','error',actor.database,actor.p_usr,actor.password)
+        set_token_field(actor.token_id,'launcher_status',str(e.args),actor.database,actor.user,actor.password)
     finally:
         with open("{0}/GRID_PiCaS_Launcher.log".format(__file__.split("__init__")[0])) as f:
             print(f.read())
