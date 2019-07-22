@@ -138,7 +138,7 @@ class ExampleActor(RunActor):
         logging.info("Working on token {0} from databse {1} as user {2}".format(
             self.token_id, self.database, self.user))
         self.config = token['config.json']
-        variables = self.get_variables_from_config(self.config, variables)
+        variables = self.get_variables_from_config(self.config)
         if 'container' in self.config.keys() or 'singularity' in self.config.keys():
             set_token_field(token['_id'],'status','pulling_container',self.database,self.user,self.password)
             self.get_image()
