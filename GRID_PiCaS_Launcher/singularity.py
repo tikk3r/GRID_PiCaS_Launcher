@@ -15,6 +15,7 @@ except ImportError:
 
 from GRID_PiCaS_Launcher.launcher_logging import logger
 
+ssl._create_default_https_context = ssl._create_unverified_context
 
 def download_singularity_from_env():
     """download_singularity_from_env
@@ -41,8 +42,7 @@ def convert_shub_to_http(shub_url, shub_commit=None, repo_base_url='https://lofa
 
 def check_if_http_sif(http_url):
     """Checks if a valid link to the image exists without actually downloading it"""
-    context = ssl._create_unverified_context()
-    r = urlopen(http_url, context=context)
+    r = urlopen(http_url)
     if 'Content-Length' in r.info() and int(r.info()['Content-Length'])>1000:
         return True
     return False
@@ -83,8 +83,7 @@ def download_simg_from_gsiftp(simg_link):
 def download_simg_from_http(simg_link, sif_name=None):
     if not sif_name:
         sif_name = simg_link.split('/')[-1].split("?")[0]
-    context = ssl._create_unverified_context()
-    urlretrieve(simg_link, sif_name, context=context)
+    urlretrieve(simg_link, sif_name)
     return os.getcwd()+'/'+sif_name
 
 
