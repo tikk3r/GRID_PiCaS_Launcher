@@ -6,6 +6,8 @@ import warnings
 import json
 import pdb
 import glob
+import ssl
+
 try:
     from urllib import urlretrieve, urlopen
 except ImportError:
@@ -39,7 +41,8 @@ def convert_shub_to_http(shub_url, shub_commit=None, repo_base_url='https://lofa
 
 def check_if_http_sif(http_url):
     """Checks if a valid link to the image exists without actually downloading it"""
-    r = urlopen(http_url)
+    context = ssl._create_unverified_context()
+    r = urlopen(http_url, context=context)
     if 'Content-Length' in r.info() and int(r.info()['Content-Length'])>1000:
         return True
     return False
@@ -80,7 +83,8 @@ def download_simg_from_gsiftp(simg_link):
 def download_simg_from_http(simg_link, sif_name=None):
     if not sif_name:
         sif_name = simg_link.split('/')[-1].split("?")[0]
-    urlretrieve(simg_link, sif_name)
+    context = ssl._create_unverified_context()
+    urlretrieve(simg_link, sif_name, context=context)
     return os.getcwd()+'/'+sif_name
 
 
