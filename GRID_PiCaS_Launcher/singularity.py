@@ -15,7 +15,8 @@ except ImportError:
 
 from GRID_PiCaS_Launcher.launcher_logging import logger
 
-ssl._create_default_https_context = ssl._create_unverified_context
+if sys.version_info.major == 3 and sys.version_info.minor <5 :
+    ssl._create_default_https_context = ssl._create_unverified_context
 
 def download_singularity_from_env():
     """download_singularity_from_env
