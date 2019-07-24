@@ -83,7 +83,7 @@ def download_simg_from_gsiftp(simg_link):
         return img_name
     else:
         logger.error("Error downloading image:{0}".format(err))
-@retry(Exception, treis=4)
+@retry(Exception, tries=4)
 def download_simg_from_http(simg_link, sif_name=None):
     if not sif_name:
         sif_name = simg_link.split('/')[-1].split("?")[0]
