@@ -14,6 +14,8 @@ except ImportError:
     from urllib.request import urlretrieve, urlopen
 
 from GRID_PiCaS_Launcher.launcher_logging import logger
+from GRID_PiCaS_Launcher.retry import retry
+
 
 if sys.version_info[0] == 3 and sys.version_info[1] == 4 :
     ssl._create_default_https_context = ssl._create_unverified_context
@@ -41,6 +43,7 @@ def convert_shub_to_http(shub_url, shub_commit=None, repo_base_url='https://lofa
     shub_http_url = "{0}.sif?action=show".format(shub_http_url)
     return shub_http_url
 
+@retry(Exception, tries=6)
 def check_if_http_sif(http_url):
     """Checks if a valid link to the image exists without actually downloading it"""
     r = urlopen(http_url)
@@ -80,7 +83,7 @@ def download_simg_from_gsiftp(simg_link):
         return img_name
     else:
         logger.error("Error downloading image:{0}".format(err))
-
+@retry(Exception, treis=4)
 def download_simg_from_http(simg_link, sif_name=None):
     if not sif_name:
         sif_name = simg_link.split('/')[-1].split("?")[0]
