@@ -22,6 +22,15 @@ def retry(ExceptionToCheck, tries=4, delay=3, backoff=2, logger=None):
     :type logger: logging.Logger instance
     """
     def deco_retry(f):
+        
+        def handle_exception(exc, logger, mdelay):
+            msg = "%s, Retrying in %d seconds..." % (str(exc), mdelay)
+            if logger:
+                logger.warning(msg)
+            else:
+                print(msg)
+            time.sleep(mdelay)
+            return
 
         @wraps(f)
         def f_retry(*args, **kwargs):
@@ -29,13 +38,8 @@ def retry(ExceptionToCheck, tries=4, delay=3, backoff=2, logger=None):
             while mtries > 1:
                 try:
                     return f(*args, **kwargs)
-                except ExceptionToCheck as e:
-                    msg = "%s, Retrying in %d seconds..." % (str(e), mdelay)
-                    if logger:
-                        logger.warning(msg)
-                    else:
-                        print(msg)
-                    time.sleep(mdelay)
+                except ExceptionToCheck as exp:
+                    handle_exception(exp, logger, mdelay)
                     mtries -= 1
                     mdelay *= backoff
             return f(*args, **kwargs)
