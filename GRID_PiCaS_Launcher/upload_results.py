@@ -120,26 +120,24 @@ class uploader(object):
     def upload(self):
         output_dir = os.environ['RUNDIR']+"/Output"
         return_dir = os.getcwd()
+        compress = self.context['upload'].get('gzip')
+        os.chdir(output_dir)
         try:
-            os.chdir(output_dir)
-            if self.context['upload'].get('gzip'):
-                upload_file = self.compress()
-            else:
-                upload_file = self.tarball()
+            upload_file = self.tarball(compress=compress)
             self._upload(upload_file)
         finally:
             os.chdir(return_dir)
 
-    def compress(self):
-        self._suffix = '.tar.gz'
-        with tarfile.open('upload.tar.gz', mode='w:gz') as archive:
-            archive.add(os.getcwd(), recursive=True, arcname='')
-        return "{0}/{1}".format(os.getcwd(),"upload.tar.gz")
-
-    def tarball(self):
-        with tarfile.open('upload.tar', mode='w') as archive:
+    def tarball(self, compress=False):
+        if compress:
+            mode = 'w:gz'
+            self._suffix = '.tar.gz'
+        else:
+            mode = 'w'
+            self._suffix = '.tar'
+        with tarfile.open('upload.{}'.format(self._suffix), mode=mode) as archive:
                 archive.add(os.getcwd(), recursive=True, arcname='')
-        return "{0}/{1}".format(os.getcwd(),  "upload.tar")             
+        return "{0}/{1}".format(os.getcwd(),  "upload.{0}".format(self._suffix))
     
     def _upload(self, *args, **kwargs):
         raise NotImplementedError("Implement this for concrete uploader")
