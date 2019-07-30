@@ -77,7 +77,8 @@ class Launchtest(unittest.TestCase):
         set_token_field(self.token,'status','todo',self.dbn,self.usr,self.pwd)
         set_token_field(self.token,'hostname','',self.dbn,self.usr,self.pwd)
         self.client.modify_token(self.modifier.add_output(self.db[self.token],{'output':0}))
-        self.assertTrue(get_token_field(self.token,'output',self.dbn,self.usr,self.pwd)==0)
+        pc = gpc.PicasCred(usr=self.usr, pwd=self.pwd, dbn=self.dbn) 
+        self.assertTrue(get_token_field(self.token,'output', pc)==0)
         set_token_field(self.token,'string1','1234',self.dbn,self.usr,self.pwd)
         self.find_and_delete("png")
         self.client.modify_token(self.modifier.unlock(self.db[self.token]))
@@ -86,32 +87,34 @@ class Launchtest(unittest.TestCase):
         
 
     def test_lock_token(self):
-        self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)==0)
+        pc = gpc.PicasCred(usr=self.usr, pwd=self.pwd, dbn=self.dbn)
+        self.assertTrue(get_token_field(self.token,'lock', pc)==0)
         try:
             self.TestActor.run() 
         except Exception as e:
             self.assertTrue(e.args[0]==self.token)
             self.key=e.args[0]
             self.tok=e.args[1]
-        self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)>0)
+        self.assertTrue(get_token_field(self.token,'lock', pc)>0)
         set_token_field(self.token,'lock',0,self.dbn,self.usr,self.pwd)
         self.nestedmodifier.lock(self.token, self.client.db)
-        self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)>0)
+        self.assertTrue(get_token_field(self.token,'lock', pc)>0)
         self.nestedmodifier.unlock(self.token, self.client.db)
-        self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)==0)
+        self.assertTrue(get_token_field(self.token,'lock', pc)==0)
         self.nestedmodifier.close(self.token, self.client.db)
-        self.assertTrue(get_token_field(self.token,'done',self.dbn,self.usr,self.pwd)>0)
+        self.assertTrue(get_token_field(self.token,'done', pc)>0)
 #        self.nestedmodifier.add_output(self.token, self.client.db, 12) #This doesn't work??
-#        self.assertTrue(get_token_field(self.token,'output',self.dbn,self.usr,self.pwd)==12)
+#        self.assertTrue(get_token_field(self.token,'output', pc)==12)
         self.nestedmodifier.set_error(self.token, self.client.db)
-        self.assertTrue(get_token_field(self.token,'done',self.dbn,self.usr,self.pwd)==-1)
-        self.assertTrue(get_token_field(self.token,'lock',self.dbn,self.usr,self.pwd)==-1)
+        self.assertTrue(get_token_field(self.token,'done', pc)==-1)
+        self.assertTrue(get_token_field(self.token,'lock', pc)==-1)
         self.nestedmodifier.unclose(self.token, self.client.db)
-        self.assertTrue(get_token_field(self.token,'done',self.dbn,self.usr,self.pwd)==0)
+        self.assertTrue(get_token_field(self.token,'done', pc)==0)
 
     def test_failed_sbx(self):
         set_token_field(self.token,'SBXloc','ftp://ftp.strw.leidenuniv.nl/pub/apmechev/travis_ci_tests/sanddbox_travis.tar',self.dbn,self.usr,self.pwd) 
         tok=self.db[self.token]
+        pc = gpc.PicasCred(usr=self.usr, pwd=self.pwd, dbn=self.dbn)
         try:
             self.Ex.process_token(self.token,tok) 
         except Exception as e:
@@ -123,7 +126,7 @@ class Launchtest(unittest.TestCase):
             export_tok_keys('xtokvar.json',{'_id':self.token})
         except Exception as e:
             self.assertTrue('tokvar read error'  in str(e))
-            self.assertTrue(get_token_field(self.token,'output',self.dbn,self.usr,self.pwd)==-2)
+            self.assertTrue(get_token_field(self.token,'output', pc)==-2)
 
     def test_failed_sbx(self):
         tok=self.db[self.token]
@@ -135,11 +138,12 @@ class Launchtest(unittest.TestCase):
             print(str(e))
 
     def test_scrub(self): 
-        scrubs = get_token_field(self.token,'scrub_count',self.dbn,self.usr,self.pwd)
+        pc = gpc.PicasCred(usr=self.usr, pwd=self.pwd, dbn=self.dbn)
+        scrubs = get_token_field(self.token,'scrub_count', pc)
         self.client.modify_token(self.modifier.scrub(self.db[self.token]))
-        self.assertTrue(scrubs+1 == int(get_token_field(self.token,'scrub_count',self.dbn,self.usr,self.pwd)))
+        self.assertTrue(scrubs+1 == int(get_token_field(self.token,'scrub_count', pc)))
         _ = self.nestedmodifier.scrub(self.token, self.client.db)
-        self.assertTrue(scrubs+2 == int(get_token_field(self.token,'scrub_count',self.dbn,self.usr,self.pwd)))
+        self.assertTrue(scrubs+2 == int(get_token_field(self.token,'scrub_count', pc)))
         
         set_token_field(self.token,'scrub_count',scrubs,self.dbn,self.usr,self.pwd)
 

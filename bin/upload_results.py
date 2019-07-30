@@ -8,8 +8,8 @@ from GRID_PiCaS_Launcher.upload_results import uploader, GSIUploader
 token = os.environ["TOKEN"]
 
 pc = PicasCred()
-upload_data = get_token_field(token, 'upload', pc.database, pc.user,  pc.password)
-context = get_token_field(token, 'config.json', pc.database, pc.user,  pc.password)
+upload_data = get_token_field(token, 'upload', pc)
+context = get_token_field(token, 'config.json', pc)
 context['upload'] = upload_data
 uberftp_exists = subprocess.Popen(['which','uberftp'], stdout=subprocess.PIPE).communicate()[0]
 

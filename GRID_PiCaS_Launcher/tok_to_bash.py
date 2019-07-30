@@ -44,7 +44,7 @@ def export_key_to_env(variable, variables, token_id, pc):
     try:
         logging.debug("Exporting Variable {0}".format(variable))
         picas_key = str(variables[variable])
-        picas_val = get_token_field(token_id, picas_key, dbn, un, pwd)
+        picas_val = get_token_field(token_id, picas_key, pc) 
     except KeyError:
         warnings.warn("WARNING: Picas Variable Missing: "+variable)
         return None
@@ -60,7 +60,7 @@ def export_attachment_to_env(att_file, picas_att_name, token_id, db):
 def export_dict_to_env(db, variable_dictionary, token_id, db_name=None):
     pc = PicasCred(dbn=db_name)
     dbn, un, pwd = pc.database , pc.user, pc.password
-    config_json = get_token_field(token_id,'config.json',dbn, un, pwd)
+    config_json = get_token_field(token_id,'config.json', pc)
     if "_token_keys" in variable_dictionary.keys():
         logging.info("Exporting Variables from _token_keys")
         for var in variable_dictionary["_token_keys"]:
