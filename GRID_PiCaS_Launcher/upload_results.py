@@ -135,7 +135,7 @@ class uploader(object):
         else:
             mode = 'w'
             self._suffix = '.tar'
-        with tarfile.open('upload.{}'.format(self._suffix), mode=mode) as archive:
+        with tarfile.open('upload.{0}'.format(self._suffix), mode=mode) as archive:
                 archive.add(os.getcwd(), recursive=True, arcname='')
         return "{0}/{1}".format(os.getcwd(),  "upload.{0}".format(self._suffix))
     
