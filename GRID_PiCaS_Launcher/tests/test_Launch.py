@@ -122,6 +122,7 @@ class Launchtest(unittest.TestCase):
 
     def test_missing_tokvar(self): 
         from GRID_PiCaS_Launcher.tok_to_bash import  export_tok_keys
+        pc = gpc.PicasCred(usr=self.usr, pwd=self.pwd, dbn=self.dbn)
         try:
             export_tok_keys('xtokvar.json',{'_id':self.token})
         except Exception as e:
