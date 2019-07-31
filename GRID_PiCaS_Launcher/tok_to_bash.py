@@ -97,8 +97,8 @@ def export_tok_keys(cfgfile="tokvar.json", token=None):
         raise Exception("tokvar read error {0}".format(str(e)))
 
     server = couchdb.Server("https://picas-lofar.grid.surfsara.nl:6984")
-    server.resource.credentials = (un, pwd)
-    db = server[dbn]
+    server.resource.credentials = (pc.user, pc.password)
+    db = server[pc.database]
     export_dict_to_env(db, tokvar, token["_id"])
 
 
