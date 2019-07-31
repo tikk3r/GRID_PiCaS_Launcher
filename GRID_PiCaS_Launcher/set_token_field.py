@@ -7,7 +7,7 @@ def set_token_field(tok_id, fieldname, value, pcreds):
     """Sets the fields of a token to a specified value, 
     authentication is done through a picas_creds object"""
     server = couchdb.Server(url="https://picas-lofar.grid.surfsara.nl:6984")
-    server.resource.credentials = (pcrads.user, pcreds.password)
+    server.resource.credentials = (pcreds.user, pcreds.password)
     db = server[pcreds.database]
     token = db[tok_id]
     token[fieldname] = value
