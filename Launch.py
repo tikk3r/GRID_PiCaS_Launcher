@@ -168,9 +168,7 @@ class ExampleActor(RunActor):
             token["_id"],
             "status",
             "building_sandbox",
-            self.database,
-            self.user,
-            self.password,
+            self.pc
         )
         p = Process(target=self.create_sandbox)
         p.start()
