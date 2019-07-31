@@ -1,23 +1,24 @@
 from GRID_PiCaS_Launcher import couchdb
 from GRID_PiCaS_Launcher.get_picas_credentials import PicasCred
-import os,sys,time
+import os, sys, time
 
-def set_token_field(tok_id,fieldname,value,p_db,p_usr,p_pwd):
+
+def set_token_field(tok_id, fieldname, value, pcreds):
+    """Sets the fields of a token to a specified value, 
+    authentication is done through a picas_creds object"""
     server = couchdb.Server(url="https://picas-lofar.grid.surfsara.nl:6984")
-    server.resource.credentials = (p_usr,p_pwd)
-    db = server[p_db]
-    token=db[tok_id]
-    token[fieldname]=value
+    server.resource.credentials = (pcrads.user, pcreds.password)
+    db = server[pcreds.database]
+    token = db[tok_id]
+    token[fieldname] = value
     db.update([token])
 
+
 def main(*arguments):
-    if isinstance(arguments[0],list):
+    if isinstance(arguments[0], list):
         arguments = arguments[0]
-    if len(arguments)<=5:
+    if len(arguments) <= 5:
         pc = PicasCred()
-        database = pc.database
-        username =  pc.user
-        password =  pc.password
         token_id = arguments[-3]
         fieldname = arguments[-2]
         value = arguments[-1]
@@ -28,8 +29,9 @@ def main(*arguments):
         database = arguments[3]
         username = arguments[4]
         password = arguments[5]
-    set_token_field(token_id, fieldname, value, database, username, password)
+        pc = PicasCred(usr=username, pwd=password, dbn=database)
+    set_token_field(token_id, fieldname, value, pc)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(sys.argv[1:])

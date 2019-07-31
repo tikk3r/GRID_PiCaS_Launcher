@@ -42,8 +42,8 @@ class tok2bashtest(unittest.TestCase):
         os.chdir('..')
         with open(self.test_tokvarile,'w') as f:
             json.dump(variable_data, f)
-        set_token_field(self.token_id,'string1','test_string',self.dbn,self.usr,self.pwd)
-        set_token_field(self.token_id,'integer1',1234,self.dbn,self.usr,self.pwd)
+        set_token_field(self.token_id,'string1','test_string',pc)
+        set_token_field(self.token_id,'integer1',1234,pc)
         if os.path.isfile('test_attachment'): os.remove('test_attachment')
 
     def travis_safe_upload(self,att,att_tok):
