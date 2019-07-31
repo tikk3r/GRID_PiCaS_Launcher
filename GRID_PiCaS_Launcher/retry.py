@@ -2,6 +2,18 @@ import time
 from functools import wraps
 
 
+def handle_exception(exc, logger, mdelay):
+    """Handles exception by printing its message 
+    and waiting a delay"""
+    msg = "%s, Retrying in %d seconds..." % (str(exc), mdelay)
+    if logger:
+        logger.warning(msg)
+    else:
+        print(msg)
+    time.sleep(mdelay)
+    return
+
+
 def retry(ExceptionToCheck, tries=4, delay=3, backoff=2, logger=None):
     """Retry calling the decorated function using an exponential backoff.
 
@@ -21,17 +33,8 @@ def retry(ExceptionToCheck, tries=4, delay=3, backoff=2, logger=None):
     :param logger: logger to use. If None, print
     :type logger: logging.Logger instance
     """
-    def deco_retry(f):
-        
-        def handle_exception(exc, logger, mdelay):
-            msg = "%s, Retrying in %d seconds..." % (str(exc), mdelay)
-            if logger:
-                logger.warning(msg)
-            else:
-                print(msg)
-            time.sleep(mdelay)
-            return
 
+    def deco_retry(f):
         @wraps(f)
         def f_retry(*args, **kwargs):
             mtries, mdelay = tries, delay
@@ -47,4 +50,3 @@ def retry(ExceptionToCheck, tries=4, delay=3, backoff=2, logger=None):
         return f_retry  # true decorator
 
     return deco_retry
-
