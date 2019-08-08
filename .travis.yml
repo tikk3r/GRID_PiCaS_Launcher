@@ -8,7 +8,7 @@ python:
   - "3.6"
 # command to install dependencies
 before_install:
-   - pip install pyyaml
+    #   - pip install pyyaml
    - pip install codecov
 script:
    - nosetests --with-coverage
