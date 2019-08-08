@@ -74,7 +74,7 @@ class ExampleActor(RunActor):
         if 'SBXloc' in token.keys():
             location=token['SBXloc']
         else:
-            location="gsiftp://gridftp.grid.sara.nl:2811/pnfs/grid.sara.nl/data/lofar/user/sksp/spectroscopy-migrated/sandbox/sandbox_"+str(sys.argv[2])+"_"+str(token['OBSID'])+".tar"
+            raise RuntimeError("No sandbox Location given: The token needs a SBXloc key") 
     
         print("Sandbox Location= "+str(location))
     
@@ -149,6 +149,7 @@ class ExampleActor(RunActor):
 
 def main():
     # setup connection to db
+    print("You are using an unsupported version of the GRID_PiCaS_Launcher (v0.6). ")
     db_name = sys.argv[1]
     client = CouchClient(url="https://picas-lofar.grid.surfsara.nl:6984", db=str(sys.argv[1]), username=str(sys.argv[2]), password=str(sys.argv[3]))
     # Create token modifier
