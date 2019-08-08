@@ -1,6 +1,6 @@
 language: python
 python:
-  - "2.6"
+    #- "2.6"
   - "2.7"
   - "3.3"
   - "3.4"
@@ -8,7 +8,7 @@ python:
   - "3.6"
 # command to install dependencies
 before_install:
-    #   - pip install pyyaml
+   - pip install pyyaml
    - pip install codecov
 script:
    - nosetests --with-coverage
