@@ -13,14 +13,6 @@
 
 import sys
 
-print("!!!!!!!!!!!!!!!!!!!!!")
-print("!!!!!!!!!!!!!!!!!!!!!")
-print("If you're seeing this, you're using the default GRID_PiCaS_Launcher branch")
-print("This is no longer the master branch or the (working) version 0.1")
-print("If anything fails or acts weird, then place this line in your launcher script")
-print("'git checkout v0.1 '")
-print("!!!!!!!!!!!!!!!!!!!!!!")
-print("!!!!!!!!!!!!!!!!!!!!!!")
 # python imports
 import sys, os
 import time

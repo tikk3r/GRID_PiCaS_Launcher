@@ -10,8 +10,7 @@ def get_token_field(tok_id,fieldname, picas_cred):
     server.resource.credentials = (picas_cred.user, picas_cred.password)
     db = server[picas_cred.database]
     token=db[tok_id]
-    return  token[fieldname]
-
+    return  token.get(fieldname)
 
 def main(*args):
     if len(args)==6:
