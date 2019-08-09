@@ -6,17 +6,16 @@
 
 function print_job_info(){
 
-echo "j_info: Run Directory is "${RUNDIR}
-echo "PWD is $(pwd)"
+tlog info "job_info: Run Directory is "${RUNDIR}
+tlog info "PWD is $(pwd)"
 
-echo "j_info: Pipeline Step is ${PIPELINE_STEP}"
-echo "j_info:" "INITIALIZATION OF JOB ARGUMENTS"
-echo "j_info: jobdir = " ${JOBDIR}
-echo "j_info: startSB = " ${STARTSB}
-echo "j_info: numSB = " ${NUMSB}
-echo "j_info: parset = " ${PARSET}
-echo "j_info: OBSID =" ${OBSID}
-
+tlog info "job_info: Pipeline Step is ${PIPELINE_STEP}"
+tlog info "job_info:" "INITIALIZATION OF JOB ARGUMENTS"
+tlog info "job_info: jobdir = " ${JOBDIR}
+tlog info "job_info: startSB = " ${STARTSB}
+tlog info "job_info: numSB = " ${NUMSB}
+tlog info "job_info: parset = " ${PARSET}
+tlog info "job_info: OBSID =" ${OBSID}
 }
 
 
@@ -27,11 +26,11 @@ echo  "-----------------------------------------------------------------------"
 echo  "Obtain information for the Worker Node and set the LOFAR environment"
 echo  "----------------------------------------------------------------------"
 
-echo "-"
-echo "w_info: hostname = "  $HOSTNAME
-echo "w_info: homedir = " $HOME
-echo "w_info: uname = " $( uname -r )
-echo "w_info: Job directory = " $PWD
+
+tlog info "w_info: hostname = "  $HOSTNAME
+tlog info "w_info: homedir = " $HOME
+tlog info "w_info: uname = " $( uname -r )
+tlog info "w_info: Job directory = " $PWD
 ls -l $PWD
 
 echo "-"
@@ -51,6 +50,12 @@ echo "w_info: Free scratch space = "$freespace"GB"
 
 echo "++++++++++++++++++++++++++++++"
 echo "++++++++++++++++++++++++++++++"
+mkdir $RUNDIR/Output/versions/
 
+singularity inspect --labels $SIMG |tee  $RUNDIR/Output/versions/singularity.labels
+singularity inspect -d $SIMG >> $RUNDIR/Output/versions/singularity.deffile
+singularity exec $SIMG /bin/bash -c 'cd /opt/lofar/DPPP/src && git log |head' >> $RUNDIR/Output/versions/DPPP.version
+singularity exec  $SIMG /bin/bash -c 'wsclean --version' >>  $RUNDIR/Output/versions/wsclean.version
+singularity exec $SIMG /bin/bash -c 'cd /opt/lofar/losoto/build/src && git log |head' >> $RUNDIR/Output/versions/losoto.version
 echo ""
 }

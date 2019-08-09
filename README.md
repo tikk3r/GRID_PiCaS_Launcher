@@ -1,9 +1,10 @@
-[![Build Status](https://travis-ci.org/apmechev/GRID_picastools.svg?branch=master)](https://travis-ci.org/apmechev/GRID_picastools)
-[![codecov Coverage](https://codecov.io/gh/apmechev/GRID_picastools/branch/master/graph/badge.svg?precision=1)](https://codecov.io/gh/apmechev/GRID_picastools)
+[![Build Status](https://travis-ci.org/apmechev/GRID_PiCaS_Launcher.svg?branch=restructure)](https://travis-ci.org/apmechev/GRID_PiCaS_Launcher)
+[![codecov](https://codecov.io/gh/apmechev/GRID_PiCaS_Launcher/branch/restructure/graph/badge.svg)](https://codecov.io/gh/apmechev/GRID_PiCaS_Launcher)
 [![alt text](http://apmechev.com/img/git_repos/GRID_picastools_clones.svg "github clones since 2017-01-25")](https://github.com/apmechev/github_clones_badge)
+[![Maintainability](https://api.codeclimate.com/v1/badges/c12a2cdff58228747e4a/maintainability)](https://codeclimate.com/github/apmechev/GRID_PiCaS_Launcher/maintainability)
 
-GRID_picastools
+
+GRID_PiCaS_Launcher
 =============
 
-List of tools that are used by PiCaS jobs to interface the User scripts with the job tokens. The scripts are responsible for locking job tokens, downloading the user sandbox, and executing the user scripts. The scripts automatically import Token Fields into the BASH environment before running the scripts. Finally, logs and exit status are uploaded to the Job token. 
-
+Tools that build and run a pilot job from a PiCaS Token stored on a CouchDB database. 

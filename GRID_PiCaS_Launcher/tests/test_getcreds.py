@@ -9,9 +9,9 @@ class getcredstest(unittest.TestCase):
         ##Saves the original credentials
         if os.environ['PICAS_USR']!="":
             self.orig_dest='env'
-            self.orig_pc=pc.picas_cred(usr=os.environ['PICAS_USR'],pwd=os.environ['PICAS_USR_PWD'],dbn=os.environ['PICAS_DB'])
+            self.orig_pc=pc.PicasCred(usr=os.environ['PICAS_USR'],pwd=os.environ['PICAS_USR_PWD'],dbn=os.environ['PICAS_DB'])
         else:
-            self.orig_pc=pc.picas_cred(source='~/.picasrc')
+            self.orig_pc=pc.PicasCred(source='~/.picasrc')
             self.orig_dest='file'
         self.d_usr="dummy"
         self.d_pwd="dammy"
@@ -28,7 +28,7 @@ class getcredstest(unittest.TestCase):
         os.environ['PICAS_USR']=self.d_usr
         os.environ['PICAS_USR_PWD']=self.d_pwd
         os.environ['PICAS_DB']=self.d_dbn
-        pc1=pc.picas_cred()
+        pc1=pc.PicasCred()
         pc1.get_picas_creds_from_env()
         self.assertTrue(pc1.user==self.d_usr)
         self.assertTrue(pc1.password==self.d_pwd)
@@ -40,7 +40,7 @@ class getcredstest(unittest.TestCase):
             tf.write('user='+self.d_usr+"\n")
             tf.write('password='+self.d_pwd+"\n")
             tf.write('database='+self.d_dbn+"\n")
-        pc2=pc.picas_cred(source=testfile)
+        pc2=pc.PicasCred(source=testfile)
         pc2.get_picas_creds_from_file(testfile)
         self.assertTrue(pc2.user==self.d_usr)
         self.assertTrue(pc2.password==self.d_pwd)
@@ -50,7 +50,7 @@ class getcredstest(unittest.TestCase):
         os.environ['PICAS_USR']=""
         os.environ['PICAS_USR_PWD']=""
         os.environ['PICAS_DB']=""
-        pc2=pc.picas_cred(usr=self.d_usr,pwd=self.d_pwd,dbn=self.d_dbn)
+        pc2=pc.PicasCred(usr=self.d_usr,pwd=self.d_pwd,dbn=self.d_dbn)
         pc2.put_picas_creds_in_env()       
         self.assertTrue(os.environ['PICAS_USR']==self.d_usr)
         self.assertTrue(os.environ['PICAS_USR_PWD']==self.d_pwd)
@@ -58,9 +58,9 @@ class getcredstest(unittest.TestCase):
 
     def test_put_creds_in_file(self):
         testfile='~/test_picas'
-        pc2=pc.picas_cred(usr=self.d_usr,pwd=self.d_pwd,dbn=self.d_dbn)
+        pc2=pc.PicasCred(usr=self.d_usr,pwd=self.d_pwd,dbn=self.d_dbn)
         pc2.put_creds_in_file(testfile)
-        pc3=pc.picas_cred(source=testfile)  
+        pc3=pc.PicasCred(source=testfile)  
         self.assertTrue(pc3.user==self.d_usr)
         self.assertTrue(pc3.password==self.d_pwd)
         self.assertTrue(pc3.database==self.d_dbn)

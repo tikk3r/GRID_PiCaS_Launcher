@@ -4,3 +4,6 @@ ignore:
 
 coverage:
     round: nearest
+
+codecov:
+    branch: restructure

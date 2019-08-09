@@ -1,0 +1,4 @@
+exclude_patterns:
+-    "GRID_PiCaS_Launcher/couchdb/*"
+-    "GRID_PiCaS_Launcher/picas/*"
+-    "GRID_PiCaS_Launcher/tests/"

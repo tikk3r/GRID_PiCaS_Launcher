@@ -17,7 +17,7 @@ class TokenModifier(object):
         raise NotImplementedError("Lock function not implemented.")
     
     def unlock(self, *args, **kwargs):
-        raise NotImplementedError("Unlock functin not implemented.")
+        raise NotImplementedError("Unlock function not implemented.")
     
     def close(self, *args, **kwargs):
         raise NotImplementedError("Close function not implemented.")
@@ -108,7 +108,7 @@ class BasicTokenModifier(TokenModifier):
         @return the scrubbed token. Should be uploaded to the server to finish 
         the process.
         """
-        if not token.has_key('scrub_count'):
+        if not 'scrub_count' in token.keys():
             token['scrub_count'] = 0
         token['scrub_count'] += 1
         token = self.unlock(token)

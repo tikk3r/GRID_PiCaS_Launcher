@@ -3,36 +3,47 @@ from GRID_PiCaS_Launcher import get_picas_credentials as gpc
 from GRID_PiCaS_Launcher.get_token_field import get_token_field
 from GRID_PiCaS_Launcher.set_token_field import set_token_field
 import os
+import json
 from time import sleep
 from GRID_PiCaS_Launcher import couchdb
 from GRID_PiCaS_Launcher.tok_to_bash import export_tok_keys
 import sys
 
+import GRID_PiCaS_Launcher
+BASE_DIR = GRID_PiCaS_Launcher.__file__.split('__init__')[0]
+
+
+
 class tok2bashtest(unittest.TestCase):
+    _multiprocess_can_split_ = True
 
     def setUp(self):
         vers=str(sys.version_info[0])+"."+str(sys.version_info[1])
         if vers == '2.6':
             vers = '2.6.0'
         self.token_id='travis_getSBX_test'+vers
-        pc=gpc.picas_cred()
+        pc=gpc.PicasCred()
         creds=pc.return_credentials()  
         self.usr=creds['user']
         self.pwd=creds['password']
         self.dbn=str('sksp_unittest')
-        self.test_tokvarile='GRID_PiCaS_Launcher/tests/test_tok_var.cfg'
+        self.test_tokvarile='GRID_PiCaS_Launcher/tests/test_tok_var.json'
         server = couchdb.Server("https://picas-lofar.grid.surfsara.nl:6984")
         server.resource.credentials = (self.usr,self.pwd)
         self.db= server[self.dbn]
+        variable_data ={"_token_keys":{
+                                "$STRING1":"string1", 
+                                "$TOKEN":"_id",
+                                "$INT1":"integer1"},
+                        "_attachments":{
+                                        "test_attachment":"test_attachment",
+                                        "ATTACH":"test_attachment2"}}
+        os.chdir(BASE_DIR)
+        os.chdir('..')
         with open(self.test_tokvarile,'w') as f:
-            f.write('string1: $STRING1'+'\n')
-            f.write('_id: $TOKEN'+'\n')
-            f.write("'_attachments':"+'\n')
-            f.write('     test_attachment: test_attachment'+'\n')
-            f.write('     test_attachment2: $ATTACH'+'\n')
-            f.write('integer1: $INT1'+'\n')
-        set_token_field(self.token_id,'string1','test_string',self.dbn,self.usr,self.pwd)
-        set_token_field(self.token_id,'integer1',1234,self.dbn,self.usr,self.pwd)
+            json.dump(variable_data, f)
+        set_token_field(self.token_id,'string1','test_string',pc)
+        set_token_field(self.token_id,'integer1',1234,pc)
         if os.path.isfile('test_attachment'): os.remove('test_attachment')
 
     def travis_safe_upload(self,att,att_tok):
