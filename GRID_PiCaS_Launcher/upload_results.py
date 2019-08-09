@@ -1,11 +1,19 @@
-from GRID_PiCaS_Launcher  import couchdb
+try:
+    from urllib import urlretrieve, urlopen
+except ImportError:
+    from urllib.request import urlretrieve, urlopen
+         
 import os
+import stat
 import sys
+import zipfile
 import time
 import tarfile
 import warnings
 import subprocess
+from shutil import copyfile, move
 from GRID_PiCaS_Launcher.picas.clients import CouchClient
+from GRID_PiCaS_Launcher  import couchdb
 
 from datetime import datetime                                                                                                               
 import json
@@ -90,7 +98,10 @@ class uploader(object):
             raise RuntimeError('no upload field in context')
         self._suffix = '.tar'
         self._date = get_date(self.context)
-        self._path= "{0}/{1}".format(self.context['upload']['location'], self.context['upload']['template'])
+        if 'location' not in self.context['upload'] or self.context['upload']['location'] != '':
+            self._path= "{0}/{1}".format(self.context['upload']['location'], self.context['upload']['template'])
+        else:
+            self._path = self.context['upload']['template']
         self._path = self._path.replace("$DATE", self._date)
         if "$" in self._path:
             if 'variables' in context and '_token_keys' in context['variables']:
@@ -135,9 +146,9 @@ class uploader(object):
         else:
             mode = 'w'
             self._suffix = '.tar'
-        with tarfile.open('upload.{0}'.format(self._suffix), mode=mode) as archive:
+        with tarfile.open('upload{0}'.format(self._suffix), mode=mode) as archive:
                 archive.add(os.getcwd(), recursive=True, arcname='')
-        return "{0}/{1}".format(os.getcwd(),  "upload.{0}".format(self._suffix))
+        return "{0}/{1}".format(os.getcwd(),  "upload{0}".format(self._suffix))
     
     def _upload(self, *args, **kwargs):
         raise NotImplementedError("Implement this for concrete uploader")
@@ -173,4 +184,34 @@ class GSIUploader(uploader):
                                         stdout=subprocess.PIPE,  stderr=subprocess.PIPE)
         return self._communicate(_upload_file, GSIUploadError)
         
+class RcloneUploader(uploader):
+    """Uploader that downloads rclone and uses it to upload data to the upload location"""
+    def __init__(self, context, macaroon='upload.conf'):
+        self.context = self._get_context(context) 
+        rclone_link = 'https://downloads.rclone.org/rclone-current-linux-amd64.zip'
+        urlretrieve(rclone_link, 'rclone.zip')
+        with zipfile.ZipFile('rclone.zip', 'r') as zip_ref:
+            zip_ref.extractall('rclone')
+            rclone_files = zip_ref.namelist() 
+        rclone_file = None
+        for link in rclone_files:
+            if link.split('/')[1] == 'rclone':
+                rclone_file = "{}/rclone/{}".format(os.getcwd(), link)
+        self._rclone_path = rclone_file
+        st = os.stat(self._rclone_path)
+        os.chmod(self._rclone_path, st.st_mode | stat.S_IEXEC)
+        self.macaroon = macaroon
+        self.macaroon_head = macaroon.split('.conf')[0]
+        copyfile(macaroon, "{}/Output/{}".format(os.environ['RUNDIR'], macaroon))
+        super(RcloneUploader, self).__init__(context)
+
+    def _upload(self, upload_file):
+       print("\n{}".format(self._path+self._suffix))
+       move(upload_file, self._path+self._suffix)
+       command = [self._rclone_path, 'copy', '--config={}'.format(self.macaroon),
+                  self._path+self._suffix, '{}:'.format(self.macaroon_head)]
+       _upload_file = subprocess.Popen(command,
+               stdout=subprocess.PIPE,  stderr=subprocess.PIPE)
+       return self._communicate(_upload_file, GSIUploadError)
+
 
