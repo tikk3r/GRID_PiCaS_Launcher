@@ -92,7 +92,7 @@ class ExampleActor(RunActor):
             simg_config["SIMG"], simg_config["SIMG_COMMIT"]
         )
         os.environ["SIMG"] = image_location
-        os.environ["SIMG_COMMIT"] = simg_config["SIMG_COMMIT"]
+        os.environ["SIMG_COMMIT"] = simg_config["SIMG_COMMIT"] or ""
 
     @staticmethod
     def get_variables_from_config(config, variables=None):
