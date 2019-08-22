@@ -40,8 +40,8 @@
     },
     "container": {
         "singularity": {
-            "SIMG": "shub://tikk3r/lofar-grid-hpccloud:lofar",
-            "SIMG_COMMIT": "e82d3dbdf6f18d0fe00c1ef97c3305a0a15f5eb6"
+            "SIMG": "shub://tikk3r/lofar-grid-hpccloud:lofar_sksp",
+            "SIMG_COMMIT": "28421471dac362afecdfd918e4e2e122"
         }
     },
     "sandbox": {
