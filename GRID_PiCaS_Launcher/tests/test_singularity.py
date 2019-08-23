@@ -41,10 +41,10 @@ class testsingularity(unittest.TestCase):
         self.assertTrue(os.environ['SIMG'] == config['container']['singularity']['SIMG'])
         self.assertTrue(os.environ['SIMG_COMMIT'] == config['container']['singularity']['SIMG_COMMIT'])
         out = download_singularity_from_env()
-        self.assertTrue('lofar@e82d3dbdf6f18d0fe00c1ef97c3305a0a15f5eb6.sif' in out) 
+        self.assertTrue('lofar_sksp@28421471dac362afecdfd918e4e2e122.sif' in out) 
         del os.environ['SIMG_COMMIT']
         out = download_singularity_from_env()
-        self.assertTrue('lofar.sif' in out)
+        self.assertTrue('lofar_sksp.sif' in out)
         del os.environ['SIMG']
         try:
             download_singularity_from_env()
