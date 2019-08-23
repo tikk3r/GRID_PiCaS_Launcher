@@ -93,6 +93,10 @@ class ExampleActor(RunActor):
             export_variable(key, simg_config[key])
         image_location = parse_singularity_link(
             simg_config["SIMG"], simg_config.get("SIMG_COMMIT"))
+        if os.path.isfile(image_location):
+            os.environ['SIMG'] = image_location
+        else:
+           raise IOError("SIMG does not exist!")
          
 
     @staticmethod

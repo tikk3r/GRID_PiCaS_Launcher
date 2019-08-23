@@ -105,8 +105,7 @@ def download_simg_from_gsiftp(simg_link):
     if not out and not err:
         return os.getcwd() + "/" + img_name
     else:
-        logger.error("Error downloading image:{0}".format(err))
-
+        return img_name
 
 @retry(Exception, tries=4)
 def download_simg_from_http(simg_link, sif_name=None):
