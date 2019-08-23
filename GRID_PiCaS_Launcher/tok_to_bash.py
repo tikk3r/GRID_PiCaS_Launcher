@@ -27,6 +27,8 @@ def get_attachment(db, token, filename, savename=None):
 
 
 def export_variable(name, value, overwrite=True):
+    "Exports the variable to the environment, name is the name
+    of the environment variable, and value is its updated value"
     if name[0] == "$":
         name = name[1:]
     if name.upper() != name:

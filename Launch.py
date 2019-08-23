@@ -39,6 +39,7 @@ from GRID_PiCaS_Launcher.update_token_status import update_status
 from GRID_PiCaS_Launcher.set_token_field import set_token_field
 from GRID_PiCaS_Launcher.upload_attachment import upload_attachment
 from GRID_PiCaS_Launcher.tok_to_bash import export_dict_to_env
+from GRID_PiCaS_Launcher.tok_to_bash import export_variable 
 from GRID_PiCaS_Launcher.singularity import parse_singularity_link
 from GRID_PiCaS_Launcher.singularity import parse_json_payload
 from GRID_PiCaS_Launcher.upload_results import GSIUploader
@@ -88,11 +89,11 @@ class ExampleActor(RunActor):
             config = self.config
         logging.info("getting image from {0}".format(config))
         simg_config = parse_json_payload(config)
+        for key in simg_config.keys():
+            export_variable(key, simg_config[key])
         image_location = parse_singularity_link(
-            simg_config["SIMG"], simg_config["SIMG_COMMIT"]
-        )
-        os.environ["SIMG"] = image_location
-        os.environ["SIMG_COMMIT"] = simg_config["SIMG_COMMIT"] or ""
+            simg_config["SIMG"], simg_config.get("SIMG_COMMIT"))
+         
 
     @staticmethod
     def get_variables_from_config(config, variables=None):
