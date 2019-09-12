@@ -77,7 +77,7 @@ def parse_singularity_link(simg_url, simg_commit=None):
     """
     if (
         simg_url.split("://")[0] == "shub"
-    ):  # TODO: Check gsi storage if file exists before invoking shub
+    ):
         http_link = convert_shub_to_http(shub_url=simg_url, shub_commit=simg_commit)
         if check_if_http_sif(http_link):
             return download_simg_from_http(http_link)
@@ -86,6 +86,8 @@ def parse_singularity_link(simg_url, simg_commit=None):
         return download_simg_from_gsiftp(
             simg_url
         )  # TODO: If hash is given here, still check if it's ok
+    if 'http' in simg_url.split("://")[0]:
+        return download_simg_from_http(simg_url)
     logger.warn("Unknown image location {0}".format(simg_url))
 
 
