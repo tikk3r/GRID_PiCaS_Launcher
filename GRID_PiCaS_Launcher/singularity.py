@@ -85,7 +85,7 @@ def parse_singularity_link(simg_url, simg_commit=None):
         return pull_image_from_shub(simg_url, simg_commit)
     if simg_url.split("://")[0] == "gsiftp":
         if simg_commit:
-            simg_url = "{0}@{1}.sif".format(simg_url.split[".sif"][0], simg_commit)
+            simg_url = "{0}@{1}.sif".format(simg_url.split(".sif")[0], simg_commit)
         return download_simg_from_gsiftp(
             simg_url
         )  # TODO: If hash is given here, still check if it's ok
