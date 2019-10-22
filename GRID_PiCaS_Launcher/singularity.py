@@ -37,12 +37,13 @@ def convert_shub_to_http(
     shub_url,
     shub_commit=None,
     repo_base_url="https://lofar-webdav.grid.sara.nl/software/shub_mirror/",
+    protocol='shub://'
 ):
     """Converts the singularity hub URL to a webdav hosted url. Note that the SHUB_COMMIT
     does not refer to the gitHub commit hash, but the image's MD5 hash. If you use the
     github commit hash, this image will not be found and will default to 
     downloading from SingularityHub"""
-    shub_url = shub_url.split("shub://")[1]
+    shub_url = shub_url.split(protocol)[1]
     shub_user = shub_url.split("/")[0]
     shub_collection = shub_url.split("/")[1].split(":")[0]
     shub_image = shub_url.split(":")[1]
@@ -83,6 +84,8 @@ def parse_singularity_link(simg_url, simg_commit=None):
             return download_simg_from_http(http_link)
         return pull_image_from_shub(simg_url, simg_commit)
     if simg_url.split("://")[0] == "gsiftp":
+        if simg_commit:
+            simg_url = "{0}@{1}.sif"simg_url.split[".sif"][0], simg_commit)
         return download_simg_from_gsiftp(
             simg_url
         )  # TODO: If hash is given here, still check if it's ok
