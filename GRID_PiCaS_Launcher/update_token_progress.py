@@ -5,9 +5,12 @@
 
 from GRID_PiCaS_Launcher  import couchdb
 import os,sys,time,subprocess
+from GRID_PiCaS_Launcher.safepopen import SafePopen
 from GRID_PiCaS_Launcher.update_token_status import update_status
 
 start=0
+
+
 def progress_loop(db,uname,paswd,tok_id,outfile='ouptput',parset="Pre-Facet-Calibrator.parset"):
     '''
         Loops while generic pipeline is running and updates the token to the current
@@ -15,7 +18,7 @@ def progress_loop(db,uname,paswd,tok_id,outfile='ouptput',parset="Pre-Facet-Cali
     '''
     #Get the number of steps from the parset and update progress % (+1 for downloading)
 
-    p=subprocess.Popen(['pgrep','-u',os.environ["USER"],'-f','genericpipeline.py'],stdout=subprocess.PIPE)
+    p=SafePopen(['pgrep','-u',os.environ["USER"],'-f','genericpipeline.py'],stdout=subprocess.PIPE)
     running=p.communicate()[0]
     finished_steps=[]
     print(start)
@@ -28,14 +31,14 @@ def progress_loop(db,uname,paswd,tok_id,outfile='ouptput',parset="Pre-Facet-Cali
                 with open(os.environ['RUNDIR']+"/pipeline_step",'w') as f:
                     f.write(st)
                 update_status(db,uname,paswd,tok_id,st)
-        p=subprocess.Popen(['pgrep','-u',os.environ["USER"],'-f','genericpipeline.py'],stdout=subprocess.PIPE)
+        p=SafePopen(['pgrep','-u',os.environ["USER"],'-f','genericpipeline.py'],stdout=subprocess.PIPE)
         running=p.communicate()[0]
         finished_steps=steps
 
 
 
 def get_steps(outfile='output'):
-    p_grep=subprocess.Popen(['grep','Beginning',outfile],stdout=subprocess.PIPE)
+    p_grep=safePopen(['grep','Beginning',outfile],stdout=subprocess.PIPE)
     grep_results=p_grep.communicate()[0].split('\n')
     results=[]
     for line in grep_results:
