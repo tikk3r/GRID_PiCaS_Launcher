@@ -159,18 +159,19 @@ class GSIUploader(uploader):
         self.context = self._get_context(context)
         _uberftp_result = subprocess.call(['which','uberftp'])
         _globus_result = subprocess.call(['which','globus-url-copy'])
+        _gfal_result = subprocess.call(['which','gfal-copy'])
 
-        if _uberftp_result !=0 or _globus_result !=0:
-            raise RuntimeError("Either uberftp or globus-url-copy are not installed")
+        if _uberftp_result !=0 or _globus_result !=0 or _gfal_result != 0:
+            raise RuntimeError("Either uberftp, globus-url-copy or gfal-copy are not installed")
         super(GSIUploader, self).__init__(context) 
     #    self.upload()
         
     def _remove(self, path):
-        command = ['uberftp', '-ls',  path]
+        command = ['gfal-ls',  path]
         out, err = subprocess.Popen(command,stdout=subprocess.PIPE,  stderr=subprocess.PIPE).communicate()
         if out =='':
             return
-        command = ['uberftp', '-rm',  path]
+        command = ['gfal-rm',  path]
         _remove = subprocess.Popen(command,
                                     stdout=subprocess.PIPE,  stderr=subprocess.PIPE)
         return self._communicate(_remove, GSIUploadError)

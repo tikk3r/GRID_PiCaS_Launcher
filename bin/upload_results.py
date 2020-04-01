@@ -16,8 +16,9 @@ if not upload_data:
 context['upload'] = upload_data
 uberftp_exists = subprocess.Popen(['which','uberftp'], stdout=subprocess.PIPE).communicate()[0]
 globus_url_copy_exists = subprocess.Popen(['which','globus-url-copy'], stdout=subprocess.PIPE).communicate()[0]
+gfal_exists = subprocess.Popen(['which', 'gfal-copy'], stdout=subprocess.PIPE).communicate()[0]
 
-if uberftp_exists or globus_url_copy_exists:
+if uberftp_exists or globus_url_copy_exists or gfal_exists:
     results_uploader = GSIUploader(context)
 else:
     results_uploader = uploader(context)
