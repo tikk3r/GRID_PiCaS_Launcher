@@ -162,7 +162,7 @@ class GSIUploader(uploader):
         _gfal_result = subprocess.call(['which','gfal-copy'])
 
         #if _uberftp_result !=0 or _globus_result !=0 or _gfal_result != 0:
-        if _uberftp_result !=0 or _globus_result !=0 or _gfal_result != 0:
+        if _globus_result !=0 or _gfal_result != 0:
             raise RuntimeError("Either globus-url-copy or gfal-copy is not installed")
         super(GSIUploader, self).__init__(context) 
     #    self.upload()
