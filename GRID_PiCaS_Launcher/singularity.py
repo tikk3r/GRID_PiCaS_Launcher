@@ -121,6 +121,16 @@ def download_simg_from_http(simg_link, sif_name=None):
     urlretrieve(simg_link, sif_name)
     return os.getcwd() + "/" + sif_name
 
+def download_from_syspath(simg_path, sif_name=None):
+    """Downloads an image from a local path."""
+    if not sif_name:
+        sif_name = simg_path.split('/')[-1]
+    _dl = subprocess.Popen(['cp', simg_path, sif_name], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = _dl.communicate()
+    if not out and not err:
+        return os.getcwd() + '/' + sif_name
+    else:
+        return sif_name
 
 def process_singularity_stderr(stderr):
     err = []
