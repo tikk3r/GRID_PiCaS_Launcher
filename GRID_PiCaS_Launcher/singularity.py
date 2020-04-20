@@ -76,6 +76,9 @@ def parse_singularity_link(simg_url, simg_commit=None):
     :param simg_commit: Optional commit hash for singularity hub
     :type simg_commit: str
     """
+    if simg_url.startswith('/'):
+        # Local path, attempt normal copy of container.
+        return download_simg_from_syspath(simg_url)
     if (
         simg_url.split("://")[0] == "shub"
     ):
@@ -121,7 +124,7 @@ def download_simg_from_http(simg_link, sif_name=None):
     urlretrieve(simg_link, sif_name)
     return os.getcwd() + "/" + sif_name
 
-def download_from_syspath(simg_path, sif_name=None):
+def download_simg_from_syspath(simg_path, sif_name=None):
     """Downloads an image from a local path."""
     if not sif_name:
         sif_name = simg_path.split('/')[-1]
